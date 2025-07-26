@@ -23,6 +23,7 @@
 #include <cmath>
 #include <functional>
 #include <format>
+#include <print>
 
 #include "quadrature_weights.H"
 
@@ -396,13 +397,13 @@ private:
         if (mode == 0) {
             for (int n = N; n < static_cast<int>(x_leg.size()); ++n) {
                 integral += (kernel_p(fac1 + fac2 * x_leg[n], eta_der, beta_der) +
-                             kernel_p(fac1 - fac2 * x_leg[n], eta_der, beta_der)) * w_leg[k];
+                             kernel_p(fac1 - fac2 * x_leg[n], eta_der, beta_der)) * w_leg[n];
             }
 
         } else {
             for (int n = N; n < static_cast<int>(x_leg.size()); ++n) {
                 integral += (kernel_E(fac1 + fac2 * x_leg[n], eta_der, beta_der) +
-                             kernel_E(fac1 - fac2 * x_leg[n], eta_der, beta_der)) * w_leg[k];
+                             kernel_E(fac1 - fac2 * x_leg[n], eta_der, beta_der)) * w_leg[n];
             }
         }
 
