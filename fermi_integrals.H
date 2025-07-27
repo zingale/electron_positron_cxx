@@ -491,7 +491,6 @@ public:
             d2F_dbeta2 = compute_fermi(0, 2);
         }
 
-        std::cout << "here" << std::endl;
     }
 
 };
