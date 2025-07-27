@@ -91,7 +91,7 @@ T eighth_order_diff(std::function<T(T)> func, T x0, T delta) {
 
 template <typename T>
 std::pair<T, T>
-adaptive_diff(std::function<T(T)> func, T x0, T h, int nlevels=10) {
+adaptive_diff(std::function<T(T)> func, T x0, T h, int nlevels=20) {
     // Perform an adaptive centered-difference estimate to the first
     // derivative using Richardson-extrapolation / Ridders' method.
 
@@ -142,7 +142,7 @@ adaptive_diff(std::function<T(T)> func, T x0, T h, int nlevels=10) {
 
     T _h{h};
 
-    T jump{2.0L};
+    T jump{std::sqrt(2.0L)};
 
     auto _fp = func(x0 + _h);
     auto _fm = func(x0 - _h);
@@ -163,8 +163,8 @@ adaptive_diff(std::function<T(T)> func, T x0, T h, int nlevels=10) {
         // for the current column n, fill in all the rows m > 0
         for (int m = 1; m <= n; ++m) {
 
-            A[m][n] = (std::pow(2.0L * jump, m) * A[m-1][n] - A[m-1][n-1]) /
-                (std::pow(2.0L * jump, m) - 1);
+            A[m][n] = (std::pow(jump * jump, m) * A[m-1][n] - A[m-1][n-1]) /
+                (std::pow(jump * jump, m) - 1);
 
             // estimate the error so far, using the current row
             // and the estimates in the row above us
@@ -191,7 +191,7 @@ adaptive_diff(std::function<T(T)> func, T x0, T h, int nlevels=10) {
 
 template <typename T>
 std::pair<T, T>
-adaptive_diff2(std::function<T(T)> func, T x0, T h, int nlevels=10) {
+adaptive_diff2(std::function<T(T)> func, T x0, T h, int nlevels=20) {
     // This is like adaptive_diff, but for the second derivative.
 
     constexpr int max_levels = 50;
@@ -204,7 +204,7 @@ adaptive_diff2(std::function<T(T)> func, T x0, T h, int nlevels=10) {
 
     T _h{h};
 
-    T jump{2.0L};
+    T jump{std::sqrt(2.0L)};
 
     auto _fp = func(x0 + _h);
     auto _f0 = func(x0);
@@ -227,8 +227,8 @@ adaptive_diff2(std::function<T(T)> func, T x0, T h, int nlevels=10) {
         // for the current column n, fill in all the rows m > 0
         for (int m = 1; m <= n; ++m) {
 
-            A[m][n] = (std::pow(2.0L * jump, m) * A[m-1][n] - A[m-1][n-1]) /
-                (std::pow(2.0L * jump, m) - 1);
+            A[m][n] = (std::pow(jump * jump, m) * A[m-1][n] - A[m-1][n-1]) /
+                (std::pow(jump * jump, m) - 1);
 
             // estimate the error so far, using the current row
             // and the estimates in the row above us
