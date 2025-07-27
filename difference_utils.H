@@ -189,5 +189,69 @@ adaptive_diff(std::function<T(T)> func, T x0, T h, int nlevels=10) {
     return {deriv, err};
 }
 
+template <typename T>
+std::pair<T, T>
+adaptive_diff2(std::function<T(T)> func, T x0, T h, int nlevels=10) {
+    // This is like adaptive_diff, but for the second derivative.
+
+    constexpr int max_levels = 50;
+
+    assert (nlevels < max_levels);
+
+    std::array<std::array<T, max_levels>, max_levels> A{};
+
+    assert (h > 0L);
+
+    T _h{h};
+
+    T jump{2.0L};
+
+    auto _fp = func(x0 + _h);
+    auto _f0 = func(x0);
+    auto _fm = func(x0 - _h);
+
+    A[0][0] = (_fp - 2.0L * _f0 + _fm) / (_h * _h);
+    T deriv = A[0][0];
+
+    auto err = std::numeric_limits<T>::max();
+
+    // loop over columns
+    for (int n = 1; n < nlevels; ++n) {
+        _h /= jump;
+        _fp = func(x0 + _h);
+        _f0 = func(x0);
+        _fm = func(x0 - _h);
+
+        A[0][n] = (_fp - 2.0L * _f0 + _fm) / (_h * _h);
+
+        // for the current column n, fill in all the rows m > 0
+        for (int m = 1; m <= n; ++m) {
+
+            A[m][n] = (std::pow(2.0L * jump, m) * A[m-1][n] - A[m-1][n-1]) /
+                (std::pow(2.0L * jump, m) - 1);
+
+            // estimate the error so far, using the current row
+            // and the estimates in the row above us
+            T err_m = std::max(std::abs(A[m][n] - A[m-1][n]),
+                               std::abs(A[m][n] - A[m-1][n-1]));
+
+            if (err_m < err) {
+                err = err_m;
+                deriv = A[m][n];
+            }
+        }
+
+        // at this point, A(n, n) should be the most accurate estimate
+        // for the derivative, but it's possible that things have
+        // become worse -- let's check
+        if (std::abs(A[n][n] - A[n-1][n-1]) > 2.0 * err) {
+            break;
+        }
+
+    }
+
+    return {deriv, err};
+}
+
 
 #endif
