@@ -327,7 +327,9 @@ int main() {
 
                     RealT _h = (eta == 0) ? h : h * std::abs(eta);
 
-                    // check dF/dβ
+                    // check d²F/dη²
+
+                    // first do a second deriv difference on F
                     auto [diff, err] =
                         fd::adaptive_diff2<RealT>([=] (RealT _eta) -> RealT
                         {
@@ -338,8 +340,20 @@ int main() {
 
                     RealT rel_err = std::abs(f.d2F_deta2 - diff) / std::abs(f.d2F_deta2);
 
-                    std::println("k = {:5.2f}, eta = {:9.3f}, beta = {:9.3g}, d²F/dη² = {:15.8g}, error = {:15.8g}",
-                                 k, eta, beta, f.dF_dbeta, rel_err);
+                    // next do a first order deriv on dF/dη
+                    auto [diff2, err2] =
+                        fd::adaptive_diff<RealT>([=] (RealT _eta) -> RealT
+                        {
+                            FermiIntegral<RealT> _f(k, _eta, beta);
+                            _f.evaluate(1);
+                            return _f.dF_deta;
+                        }, eta, _h);
+
+                    RealT rel_err2 = std::abs(f.d2F_deta2 - diff2) / std::abs(f.d2F_deta2);
+
+
+                    std::println("k = {:5.2f}, eta = {:9.3f}, beta = {:9.3g}, d²F/dη² = {:15.8g}, error (D2F) = {:15.8g}, error (DF') = {:15.8g}",
+                                 k, eta, beta, f.dF_dbeta, rel_err, rel_err2);
                 }
             }
         }
@@ -361,7 +375,9 @@ int main() {
 
                     RealT _h = (beta == 0) ? h : h * std::abs(beta);
 
-                    // check dF/dβ
+                    // check d²F/dβ²
+
+                    // first do a second deriv difference on F
                     auto [diff, err] =
                         fd::adaptive_diff2<RealT>([=] (RealT _beta) -> RealT
                         {
@@ -372,8 +388,19 @@ int main() {
 
                     RealT rel_err = std::abs(f.d2F_dbeta2 - diff) / std::abs(f.d2F_dbeta2);
 
-                    std::println("k = {:5.2f}, eta = {:9.3f}, beta = {:9.3g}, d²F/dβ² = {:15.8g}, error = {:15.8g}",
-                                 k, eta, beta, f.dF_dbeta, rel_err);
+                    // next do a second order deriv on dF/dβ
+                    auto [diff2, err2] =
+                        fd::adaptive_diff<RealT>([=] (RealT _beta) -> RealT
+                        {
+                            FermiIntegral<RealT> _f(k, eta, _beta);
+                            _f.evaluate(1);
+                            return _f.dF_dbeta;
+                        }, beta, _h);
+
+                    RealT rel_err2 = std::abs(f.d2F_dbeta2 - diff2) / std::abs(f.d2F_dbeta2);
+
+                    std::println("k = {:5.2f}, eta = {:9.3f}, beta = {:9.3g}, d²F/dβ² = {:15.8g}, error (D2F) = {:15.8g}, error (DF') = {:15.8g}",
+                                 k, eta, beta, f.dF_dbeta, rel_err, rel_err2);
                 }
             }
         }

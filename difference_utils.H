@@ -97,7 +97,7 @@ namespace fd {
     template <typename T>
     inline
     std::pair<T, T>
-    adaptive_diff(const std::function<T(T)>& func, T x0, T h, int nlevels=20) {
+    adaptive_diff(const std::function<T(T)>& func, T x0, T h, int nlevels=25) {
         // Perform an adaptive centered-difference estimate to the first
         // derivative using Richardson-extrapolation / Ridders' method.
 
@@ -137,10 +137,6 @@ namespace fd {
         // A(m, n) = (4**(m-1) A(m-1, n) - A(m-1, n-1)) / (4**(m-1) - 1)
 
         // Note: we use 0-based indexing below
-
-        constexpr int max_levels = 50;
-
-        assert (nlevels < max_levels);
 
         std::vector<std::vector<T>> A(nlevels, std::vector<T>(nlevels, 0.0L));
         assert (h > 0L);
@@ -197,12 +193,8 @@ namespace fd {
     template <typename T>
     inline
     std::pair<T, T>
-    adaptive_diff2(const std::function<T(T)>& func, T x0, T h, int nlevels=20) {
+    adaptive_diff2(const std::function<T(T)>& func, T x0, T h, int nlevels=25) {
         // This is like adaptive_diff, but for the second derivative.
-
-        constexpr int max_levels = 50;
-
-        assert (nlevels < max_levels);
 
         std::vector<std::vector<T>> A(nlevels, std::vector<T>(nlevels, 0.0L));
 
