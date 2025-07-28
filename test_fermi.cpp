@@ -244,121 +244,138 @@ int main() {
 
     // test finite-difference approximations to derivatives
 
-    RealT h = 0.05L;
+    {
 
-    std::println("dF/dη");
+        RealT h = 0.05L;
 
-    for (auto k : {-0.5L, 0.5L, 1.5L, 2.5L}) {
-        for (auto eta : {-70.0L, 0.0L, 50.0L, 500.0L, 10000.0L}) {
-            for (auto beta : {1.e-7L, 1.e-3L, 30.0L, 100.0L}) {
+        std::println("dF/dη");
 
-                FermiIntegral<RealT> f(k, eta, beta);
-                f.evaluate(2);
+        for (auto k : {-0.5L, 0.5L, 1.5L, 2.5L}) {
+            for (auto eta : {-70.0L, 0.0L, 50.0L, 500.0L, 10000.0L}) {
+                for (auto beta : {1.e-7L, 1.e-3L, 30.0L, 100.0L}) {
 
-                RealT _h = (eta == 0) ? h : h * std::abs(eta);
+                    FermiIntegral<RealT> f(k, eta, beta);
+                    f.evaluate(2);
 
-                // check dF/dη
-                auto [diff, err] =
-                    fd::adaptive_diff<RealT>([=] (RealT _eta) -> RealT
-                    {
-                        FermiIntegral<RealT> _f(k, _eta, beta);
-                        _f.evaluate(0);
-                        return _f.F;
-                    }, eta, _h);
+                    RealT _h = (eta == 0) ? h : h * std::abs(eta);
 
-                RealT rel_err = std::abs(f.dF_deta - diff) / std::abs(f.dF_deta);
+                    // check dF/dη
+                    auto [diff, err] =
+                        fd::adaptive_diff<RealT>([=] (RealT _eta) -> RealT
+                        {
+                            FermiIntegral<RealT> _f(k, _eta, beta);
+                            _f.evaluate(0);
+                            return _f.F;
+                        }, eta, _h);
 
-                std::println("k = {:5.2f}, eta = {:9.3f}, beta = {:9.3g}, dF/dη= {:15.8g}, error = {:15.8g}",
-                             k, eta, beta, f.dF_deta, rel_err);
+                    RealT rel_err = std::abs(f.dF_deta - diff) / std::abs(f.dF_deta);
+
+                    std::println("k = {:5.2f}, eta = {:9.3f}, beta = {:9.3g}, dF/dη= {:15.8g}, error = {:15.8g}",
+                                 k, eta, beta, f.dF_deta, rel_err);
+                }
             }
         }
     }
 
-    std::println();
-    std::println("dF/dβ");
+    {
 
-    for (auto k : {-0.5L, 0.5L, 1.5L, 2.5L}) {
-        for (auto eta : {-70.0L, 0.0L, 50.0L, 500.0L, 10000.0L}) {
-            for (auto beta : {1.e-7L, 1.e-3L, 30.0L, 100.0L}) {
+        RealT h = 0.05L;
 
-                FermiIntegral<RealT> f(k, eta, beta);
-                f.evaluate(2);
+        std::println();
+        std::println("dF/dβ");
 
-                RealT _h = (beta == 0) ? 1.e-4L : h * std::abs(beta);
+        for (auto k : {-0.5L, 0.5L, 1.5L, 2.5L}) {
+            for (auto eta : {-70.0L, 0.0L, 50.0L, 500.0L, 10000.0L}) {
+                for (auto beta : {1.e-7L, 1.e-3L, 30.0L, 100.0L}) {
 
-                // check dF/dβ
-                auto [diff, err] =
-                    fd::adaptive_diff<RealT>([=] (RealT _beta) -> RealT
-                    {
-                        FermiIntegral<RealT> _f(k, eta, _beta);
-                        _f.evaluate(0);
-                        return _f.F;
-                    }, beta, _h);
+                    FermiIntegral<RealT> f(k, eta, beta);
+                    f.evaluate(2);
 
-                RealT rel_err = std::abs(f.dF_dbeta - diff) / std::abs(f.dF_dbeta);
+                    RealT _h = (beta == 0) ? 1.e-4L : h * std::abs(beta);
 
-                std::println("k = {:5.2f}, eta = {:9.3f}, beta = {:9.3g}, dF/dβ = {:15.8g}, error = {:15.8g}",
-                             k, eta, beta, f.dF_dbeta, rel_err);
+                    // check dF/dβ
+                    auto [diff, err] =
+                        fd::adaptive_diff<RealT>([=] (RealT _beta) -> RealT
+                        {
+                            FermiIntegral<RealT> _f(k, eta, _beta);
+                            _f.evaluate(0);
+                            return _f.F;
+                        }, beta, _h);
+
+                    RealT rel_err = std::abs(f.dF_dbeta - diff) / std::abs(f.dF_dbeta);
+
+                    std::println("k = {:5.2f}, eta = {:9.3f}, beta = {:9.3g}, dF/dβ = {:15.8g}, error = {:15.8g}",
+                                 k, eta, beta, f.dF_dbeta, rel_err);
+                }
             }
         }
     }
 
-    std::println();
-    std::println("d²F/dη²");
+    {
 
-    for (auto k : {-0.5L, 0.5L, 1.5L, 2.5L}) {
-        for (auto eta : {-70.0L, 0.0L, 50.0L, 500.0L, 10000.0L}) {
-            for (auto beta : {1.e-7L, 1.e-3L, 30.0L, 100.0L}) {
+        RealT h = 0.05L;
 
-                FermiIntegral<RealT> f(k, eta, beta);
-                f.evaluate(2);
+        std::println();
+        std::println("d²F/dη²");
 
-                RealT _h = (eta == 0) ? h : h * std::abs(eta);
+        for (auto k : {-0.5L, 0.5L, 1.5L, 2.5L}) {
+            for (auto eta : {-70.0L, 0.0L, 50.0L, 500.0L, 10000.0L}) {
+                for (auto beta : {1.e-7L, 1.e-3L, 30.0L, 100.0L}) {
 
-                // check dF/dβ
-                auto [diff, err] =
-                    fd::adaptive_diff2<RealT>([=] (RealT _eta) -> RealT
-                    {
-                        FermiIntegral<RealT> _f(k, _eta, beta);
-                        _f.evaluate(0);
-                        return _f.F;
-                    }, eta, _h);
+                    FermiIntegral<RealT> f(k, eta, beta);
+                    f.evaluate(2);
 
-                RealT rel_err = std::abs(f.d2F_deta2 - diff) / std::abs(f.d2F_deta2);
+                    RealT _h = (eta == 0) ? h : h * std::abs(eta);
 
-                std::println("k = {:5.2f}, eta = {:9.3f}, beta = {:9.3g}, d²F/dη² = {:15.8g}, error = {:15.8g}",
-                             k, eta, beta, f.dF_dbeta, rel_err);
+                    // check dF/dβ
+                    auto [diff, err] =
+                        fd::adaptive_diff2<RealT>([=] (RealT _eta) -> RealT
+                        {
+                            FermiIntegral<RealT> _f(k, _eta, beta);
+                            _f.evaluate(0);
+                            return _f.F;
+                        }, eta, _h);
+
+                    RealT rel_err = std::abs(f.d2F_deta2 - diff) / std::abs(f.d2F_deta2);
+
+                    std::println("k = {:5.2f}, eta = {:9.3f}, beta = {:9.3g}, d²F/dη² = {:15.8g}, error = {:15.8g}",
+                                 k, eta, beta, f.dF_dbeta, rel_err);
+                }
             }
         }
     }
 
-    std::println();
-    std::println("d²F/dβ²");
+    {
 
-    for (auto k : {-0.5L, 0.5L, 1.5L, 2.5L}) {
-        for (auto eta : {-70.0L, 0.0L, 50.0L, 500.0L, 10000.0L}) {
-            for (auto beta : {1.e-7L, 1.e-3L, 30.0L, 100.0L}) {
+        RealT h = 0.05L;
 
-                FermiIntegral<RealT> f(k, eta, beta);
-                f.evaluate(2);
+        std::println();
+        std::println("d²F/dβ²");
 
-                RealT _h = (beta == 0) ? h : h * std::abs(beta);
+        for (auto k : {-0.5L, 0.5L, 1.5L, 2.5L}) {
+            for (auto eta : {-70.0L, 0.0L, 50.0L, 500.0L, 10000.0L}) {
+                for (auto beta : {1.e-7L, 1.e-3L, 30.0L, 100.0L}) {
 
-                // check dF/dβ
-                auto [diff, err] =
-                    fd::adaptive_diff2<RealT>([=] (RealT _beta) -> RealT
-                    {
-                        FermiIntegral<RealT> _f(k, eta, _beta);
-                        _f.evaluate(0);
-                        return _f.F;
-                    }, beta, _h);
+                    FermiIntegral<RealT> f(k, eta, beta);
+                    f.evaluate(2);
 
-                RealT rel_err = std::abs(f.d2F_dbeta2 - diff) / std::abs(f.d2F_dbeta2);
+                    RealT _h = (beta == 0) ? h : h * std::abs(beta);
 
-                std::println("k = {:5.2f}, eta = {:9.3f}, beta = {:9.3g}, d²F/dβ² = {:15.8g}, error = {:15.8g}",
-                             k, eta, beta, f.dF_dbeta, rel_err);
+                    // check dF/dβ
+                    auto [diff, err] =
+                        fd::adaptive_diff2<RealT>([=] (RealT _beta) -> RealT
+                        {
+                            FermiIntegral<RealT> _f(k, eta, _beta);
+                            _f.evaluate(0);
+                            return _f.F;
+                        }, beta, _h);
+
+                    RealT rel_err = std::abs(f.d2F_dbeta2 - diff) / std::abs(f.d2F_dbeta2);
+
+                    std::println("k = {:5.2f}, eta = {:9.3f}, beta = {:9.3g}, d²F/dβ² = {:15.8g}, error = {:15.8g}",
+                                 k, eta, beta, f.dF_dbeta, rel_err);
+                }
             }
         }
     }
-
 }
