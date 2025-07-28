@@ -36,27 +36,27 @@ int main() {
     auto actual_deriv = df1dx<RealT>(x0);
 
     // test the 4th order difference
-    auto deriv4 = fourth_order_diff<RealT>(f1<RealT>, x0, h);
+    auto deriv4 = fd::fourth_order_diff<RealT>(f1<RealT>, x0, h);
 
     std::println("4th order diff, error = {}", std::abs(deriv4 - actual_deriv) / std::abs(actual_deriv));
 
     // test the 6th order difference
-    auto deriv6 = sixth_order_diff<RealT>(f1<RealT>, x0, h);
+    auto deriv6 = fd::sixth_order_diff<RealT>(f1<RealT>, x0, h);
 
     std::println("6th order diff, error = {}", std::abs(deriv6 - actual_deriv) / std::abs(actual_deriv));
 
     // test the 8th order difference
-    auto deriv8 = eighth_order_diff<RealT>(f1<RealT>, x0, h);
+    auto deriv8 = fd::eighth_order_diff<RealT>(f1<RealT>, x0, h);
 
     std::println("8th order diff, error = {}", std::abs(deriv8 - actual_deriv) / std::abs(actual_deriv));
 
     // test the adaptive method
-    auto [deriv_adaptive, err] = adaptive_diff<RealT>(f1<RealT>, x0, h);
+    auto [deriv_adaptive, err] = fd::adaptive_diff<RealT>(f1<RealT>, x0, h);
 
     std::println("adaptive diff, error = {}", std::abs(deriv_adaptive - actual_deriv) / std::abs(actual_deriv));
 
     // test the adaptive second-deriv method
-    auto [deriv_adaptive2, err2] = adaptive_diff2<RealT>(f1<RealT>, x0, h);
+    auto [deriv_adaptive2, err2] = fd::adaptive_diff2<RealT>(f1<RealT>, x0, h);
 
     auto actual_deriv2 = d2f1dx2(x0);
 

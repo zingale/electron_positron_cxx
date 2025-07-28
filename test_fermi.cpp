@@ -259,7 +259,7 @@ int main() {
 
                 // check dF/dη
                 auto [diff, err] =
-                    adaptive_diff<RealT>([=] (RealT _eta) -> RealT
+                    fd::adaptive_diff<RealT>([=] (RealT _eta) -> RealT
                     {
                         FermiIntegral<RealT> _f(k, _eta, beta);
                         _f.evaluate(0);
@@ -288,7 +288,7 @@ int main() {
 
                 // check dF/dβ
                 auto [diff, err] =
-                    adaptive_diff<RealT>([=] (RealT _beta) -> RealT
+                    fd::adaptive_diff<RealT>([=] (RealT _beta) -> RealT
                     {
                         FermiIntegral<RealT> _f(k, eta, _beta);
                         _f.evaluate(0);
@@ -317,7 +317,7 @@ int main() {
 
                 // check dF/dβ
                 auto [diff, err] =
-                    adaptive_diff2<RealT>([=] (RealT _eta) -> RealT
+                    fd::adaptive_diff2<RealT>([=] (RealT _eta) -> RealT
                     {
                         FermiIntegral<RealT> _f(k, _eta, beta);
                         _f.evaluate(0);
@@ -346,7 +346,7 @@ int main() {
 
                 // check dF/dβ
                 auto [diff, err] =
-                    adaptive_diff2<RealT>([=] (RealT _beta) -> RealT
+                    fd::adaptive_diff2<RealT>([=] (RealT _beta) -> RealT
                     {
                         FermiIntegral<RealT> _f(k, eta, _beta);
                         _f.evaluate(0);

@@ -24,6 +24,7 @@
 #include <functional>
 #include <format>
 #include <print>
+#include <ranges>
 
 #include "quadrature_weights.H"
 
@@ -385,8 +386,6 @@ private:
         // mode = 0 means we integrate x**2
         // mode = 1 means we integrate x
 
-        int N = static_cast<int>(x_leg.size() / 2);
-
         // We set the correspondence (a+b)/2 -> 0 and map the (-1,0)
         // and (0,1) intervals separately.
 
@@ -395,15 +394,15 @@ private:
 
         T integral{};
         if (mode == 0) {
-            for (int n = N; n < static_cast<int>(x_leg.size()); ++n) {
-                integral += (kernel_p(fac1 + fac2 * x_leg[n], eta_der, beta_der) +
-                             kernel_p(fac1 - fac2 * x_leg[n], eta_der, beta_der)) * w_leg[n];
+            for (auto [x, w] : std::views::zip(x_leg, w_leg)) {
+                integral += (kernel_p(fac1 + fac2 * x, eta_der, beta_der) +
+                             kernel_p(fac1 - fac2 * x, eta_der, beta_der)) * w;
             }
 
         } else {
-            for (int n = N; n < static_cast<int>(x_leg.size()); ++n) {
-                integral += (kernel_E(fac1 + fac2 * x_leg[n], eta_der, beta_der) +
-                             kernel_E(fac1 - fac2 * x_leg[n], eta_der, beta_der)) * w_leg[n];
+            for (auto [x, w] : std::views::zip(x_leg, w_leg)) {
+                integral += (kernel_E(fac1 + fac2 * x, eta_der, beta_der) +
+                             kernel_E(fac1 - fac2 * x, eta_der, beta_der)) * w;
             }
         }
 
@@ -441,8 +440,8 @@ private:
         // note: the w_lag already have the exp(x) term included
 
         T integral{};
-        for (int n = 0; n < static_cast<int>(x_lag.size()); ++n) {
-            integral += kernel_E(x_lag[n] + a, eta_der, beta_der) * w_lag[n];
+        for (auto [x, w] : std::views::zip(x_lag, w_lag)) {
+            integral += kernel_E(x + a, eta_der, beta_der) * w;
         }
 
         return integral;
