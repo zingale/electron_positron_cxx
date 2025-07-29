@@ -1,7 +1,9 @@
 #ifndef DEGENERACY_PARAMETER_BOUNDS_H
 #define DEGENERACY_PARAMETER_BOUNDS_H
 
+#include <algorithm>
 #include <array>
+#include <print>
 
 namespace bounds {
 
@@ -73,6 +75,64 @@ namespace bounds {
          {2.718e+08, 2.718e+07, 2.718e+06, 2.718e+05, 2.718e+04,      2718,     271.8,     27.06,     1.562,    -5.641}}
     };
 
+    template <typename T>
+    inline
+    std::pair<T, T> get_eta_bounds(T rhoYe0, T temp0, bool include_positrons=true) {
+
+        // find the index into the table such that
+        //   rhoYes[ir] <= rhoYe0 < rhoYe[ir+1]
+        // and likewise for T
+
+        auto ip = std::upper_bound(rhoYes.cbegin(), rhoYes.cend(), rhoYe0);
+        int ir{-1};
+        if (ip != rhoYes.cend()) {
+            ir = std::clamp(static_cast<int>(std::distance(rhoYes.cbegin(), ip)) - 1,
+                              1, static_cast<int>(rhoYes.size())-3);
+        }
+
+        auto ip2 = std::upper_bound(Ts.cbegin(), Ts.cend(), temp0);
+        int it{-1};
+        if (ip2 != Ts.cend()) {
+            it = std::clamp(static_cast<int>(std::distance(Ts.cbegin(), ip2)) - 1,
+                               1, static_cast<int>(Ts.size())-3);
+        }
+
+        std::println("ir, it = {}, {}", ir, it);
+
+        if (it < 0 || ir < 0) {
+            std::println("thermodynamic state (T = {}, rhoYe = {}) out of bounds", temp0, rhoYe0);
+            abort();
+        }
+
+        T eta_min{};
+        T eta_max{};
+        if (include_positrons) {
+            eta_min = std::min(
+                {eta_pos[ir-1][it-1], eta_pos[ir-1][it], eta_pos[ir-1][it+1], eta_pos[ir-1][it+2],
+                 eta_pos[ir][it-1],   eta_pos[ir][it],   eta_pos[ir][it+1],   eta_pos[ir][it+2],
+                 eta_pos[ir+1][it-1], eta_pos[ir+1][it], eta_pos[ir+1][it+1], eta_pos[ir+1][it+2],
+                 eta_pos[ir+2][it-1], eta_pos[ir+2][it], eta_pos[ir+2][it+1], eta_pos[ir+2][it+2]});
+            eta_max = std::max(
+                {eta_pos[ir-1][it-1], eta_pos[ir-1][it], eta_pos[ir-1][it+1], eta_pos[ir-1][it+2],
+                 eta_pos[ir][it-1],   eta_pos[ir][it],   eta_pos[ir][it+1],   eta_pos[ir][it+2],
+                 eta_pos[ir+1][it-1], eta_pos[ir+1][it], eta_pos[ir+1][it+1], eta_pos[ir+1][it+2],
+                 eta_pos[ir+2][it-1], eta_pos[ir+2][it], eta_pos[ir+2][it+1], eta_pos[ir+2][it+2]});
+
+        } else {
+            eta_min = std::min(
+                {eta_ele[ir-1][it-1], eta_ele[ir-1][it], eta_ele[ir-1][it+1], eta_ele[ir-1][it+2],
+                 eta_ele[ir][it-1],   eta_ele[ir][it],   eta_ele[ir][it+1],   eta_ele[ir][it+2],
+                 eta_ele[ir+1][it-1], eta_ele[ir+1][it], eta_ele[ir+1][it+1], eta_ele[ir+1][it+2],
+                 eta_ele[ir+2][it-1], eta_ele[ir+2][it], eta_ele[ir+2][it+1], eta_ele[ir+2][it+2]});
+            eta_max = std::max(
+                {eta_ele[ir-1][it-1], eta_ele[ir-1][it], eta_ele[ir-1][it+1], eta_ele[ir-1][it+2],
+                 eta_ele[ir][it-1],   eta_ele[ir][it],   eta_ele[ir][it+1],   eta_ele[ir][it+2],
+                 eta_ele[ir+1][it-1], eta_ele[ir+1][it], eta_ele[ir+1][it+1], eta_ele[ir+1][it+2],
+                 eta_ele[ir+2][it-1], eta_ele[ir+2][it], eta_ele[ir+2][it+1], eta_ele[ir+2][it+2]});
+        }
+
+        return {eta_min, eta_max};
+    }
 
 }
 
