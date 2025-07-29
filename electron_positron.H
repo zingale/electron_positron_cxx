@@ -16,11 +16,29 @@ public:
     T n_e{};
     T n_pos{};
 
+    T dne_drho{};
+    T dne_dT{};
+
+    T dnp_drho{};
+    T dnp_dT{};
+
     T p_e{};
     T p_pos{};
 
+    T dpe_drho{};
+    T dpe_dT{};
+
+    T dpp_drho{};
+    T dpp_dT{};
+
     T e_e{};
     T e_pos{};
+
+    T dee_drho{};
+    T dee_dT{};
+
+    T dep_drho{};
+    T dep_dT{};
 
     T eta{};
 
@@ -34,12 +52,12 @@ std::ostream& operator<< (std::ostream& os, EOSState<T>& es) {
 
     std::string out{};
     out += std::format("η  = {:20.10g}\n", es.eta);
-    out += std::format("n⁻ = {:20.10g}\n", es.n_e);
-    out += std::format("n⁺ = {:20.10g}\n", es.n_pos);
-    out += std::format("p⁻ = {:20.10g}\n", es.p_e);
-    out += std::format("p⁺ = {:20.10g}\n", es.p_pos);
-    out += std::format("e⁻ = {:20.10g}\n", es.e_e);
-    out += std::format("e⁺ = {:20.10g}\n", es.e_pos);
+    out += std::format("n⁻ = {:20.10g}; ∂n⁻/∂ρ = {:20.10g}; ∂n⁻/∂T = {:20.10g};\n", es.n_e, es.dne_drho, es.dne_dT);
+    out += std::format("n⁺ = {:20.10g}; ∂n⁺/∂ρ = {:20.10g}; ∂n⁺/∂T = {:20.10g};\n", es.n_pos, es.dnp_drho, es.dnp_dT);
+    out += std::format("p⁻ = {:20.10g}; ∂p⁻/∂ρ = {:20.10g}; ∂p⁻/∂T = {:20.10g};\n", es.p_e, es.dpe_drho, es.dpe_dT);
+    out += std::format("p⁺ = {:20.10g}; ∂p⁺/∂ρ = {:20.10g}; ∂p⁺/∂T = {:20.10g};\n", es.p_pos, es.dpp_drho, es.dpp_dT);
+    out += std::format("e⁻ = {:20.10g}; ∂e⁻/∂ρ = {:20.10g}; ∂e⁻/∂T = {:20.10g};\n", es.e_e, es.dee_drho, es.dee_dT);
+    out += std::format("e⁺ = {:20.10g}; ∂e⁺/∂ρ = {:20.10g}; ∂e⁺/∂T = {:20.10g};\n", es.e_pos, es.dep_drho, es.dep_dT);
 
     os << out;
     return os;
@@ -125,28 +143,25 @@ public:
         FermiIntegral<T> f52(2.5L, eta, beta);
         f52.evaluate(1);
 
-        T n_e = coeff * beta32 * (f12.F + beta * f32.F);
-        T p_e = pcoeff * beta52 * (f32.F + 0.5 * beta * f52.F);
+        es.n_e = coeff * beta32 * (f12.F + beta * f32.F);
+        es.p_e = pcoeff * beta52 * (f32.F + 0.5 * beta * f52.F);
 
         // this is (energy / volume, what we usually write as rho e)
         T E_e = ecoeff * beta52 * (f32.F + beta * f52.F);
-
-        T n_pos{};
-        T p_pos{};
-        T E_pos{};
 
         FermiIntegral<T> f12_pos(0.5L, eta_pos, beta);
         FermiIntegral<T> f32_pos(1.5L, eta_pos, beta);
         FermiIntegral<T> f52_pos(2.5L, eta_pos, beta);
 
+        T E_pos{};
         if (include_positrons) {
             f12_pos.evaluate(1);
             f32_pos.evaluate(1);
             f52_pos.evaluate(1);
 
-            n_pos = coeff * beta32 * (f12_pos.F + beta * f32_pos.F);
-            p_pos = pcoeff * beta52 * (f32_pos.F + 0.5 * beta * f52_pos.F);
-            E_pos = ecoeff * beta52 * (f32_pos.F + beta * f52_pos.F) + 2 * rest_mass * n_pos;
+            es.n_pos = coeff * beta32 * (f12_pos.F + beta * f32_pos.F);
+            es.p_pos = pcoeff * beta52 * (f32_pos.F + 0.5 * beta * f52_pos.F);
+            E_pos = ecoeff * beta52 * (f32_pos.F + beta * f52_pos.F) + 2 * rest_mass * es.n_pos;
         }
 
         // compute the derivatives of eta and beta with respect to
@@ -173,14 +188,12 @@ public:
 
         // Compute partials of number density with density and temperature
         // For debugging
-        T dne_drho = dne_deta * deta_drho;
-        T dne_dT = dne_deta * deta_dT + dne_dbeta * dbeta_dT;
+        es.dne_drho = dne_deta * deta_drho;
+        es.dne_dT = dne_deta * deta_dT + dne_dbeta * dbeta_dT;
 
-        T dnp_drho{};
-        T dnp_dT{};
         if (include_positrons) {
-            dnp_drho = dnp_deta * deta_drho;
-            dnp_dT = dnp_deta * deta_dT + dnp_dbeta * dbeta_dT;
+            es.dnp_drho = dnp_deta * deta_drho;
+            es.dnp_dT = dnp_deta * deta_dT + dnp_dbeta * dbeta_dT;
         }
 
         // Compute partials of pressure with density and temperature via the chain rule
@@ -188,19 +201,17 @@ public:
         T dpe_dbeta = 0.25 * pcoeff * beta32 * (10.0 * f32.F + 7.0 * beta * f52.F +
                                                 4.0 * beta * (f32.dF_dbeta + 0.5 * beta * f52.dF_dbeta));
 
-        T dpe_drho = dpe_deta * deta_drho;
-        T dpe_dT = dpe_deta * deta_dT + dpe_dbeta * dbeta_dT;
+        es.dpe_drho = dpe_deta * deta_drho;
+        es.dpe_dT = dpe_deta * deta_dT + dpe_dbeta * dbeta_dT;
 
-        T dpp_drho{};
-        T dpp_dT{};
         if (include_positrons) {
             T dpp_deta = -pcoeff * beta52 * (f32_pos.dF_deta + 0.5 * beta * f52_pos.dF_deta);
             T dpp_dbeta = pcoeff * beta12 * (beta * (2.5 * f32_pos.F + 1.75 * beta * f52_pos.F) +
                                              beta * beta * (f32_pos.dF_dbeta + 0.5 * beta * f52_pos.dF_dbeta) +
                                              2.0 * (f32_pos.dF_deta + 0.5 * beta * f52_pos.dF_deta));
 
-            dpp_drho = dpp_deta * deta_drho;
-            dpp_dT = dpp_deta * deta_dT + dpp_dbeta * dbeta_dT;
+            es.dpp_drho = dpp_deta * deta_drho;
+            es.dpp_dT = dpp_deta * deta_dT + dpp_dbeta * dbeta_dT;
         }
 
         // Compute partials of energy with density and temperature
@@ -220,22 +231,19 @@ public:
                                              beta * beta * (f32_pos.dF_dbeta + beta * f52_pos.dF_dbeta) +
                                              2.0 * (f32_pos.dF_deta + beta * f52_pos.dF_deta));
 
-            dEp_drho = dEp_deta * deta_drho + 2.0 * rest_mass * dnp_drho;
-            dEp_dT = dEp_deta * deta_dT + dEp_dbeta * dbeta_dT + 2.0 * rest_mass * dnp_dT;
+            dEp_drho = dEp_deta * deta_drho + 2.0 * rest_mass * es.dnp_drho;
+            dEp_dT = dEp_deta * deta_dT + dEp_dbeta * dbeta_dT + 2.0 * rest_mass * es.dnp_dT;
         }
 
         // correct energy to be specific energy
-        T e_e = E_e / rho;
-        T dee_drho = (dEe_drho - E_e / rho) / rho;
-        T dee_dT = dEe_dT / rho;
+        es.e_e = E_e / rho;
+        es.dee_drho = (dEe_drho - E_e / rho) / rho;
+        es.dee_dT = dEe_dT / rho;
 
-        T e_pos{};
-        T dep_drho{};
-        T dep_dT{};
         if (include_positrons) {
-            e_pos = E_pos / rho;
-            dep_drho = (dEp_drho - E_pos / rho) / rho;
-            dep_dT = dEp_dT / rho;
+            es.e_pos = E_pos / rho;
+            es.dep_drho = (dEp_drho - E_pos / rho) / rho;
+            es.dep_dT = dEp_dT / rho;
         }
 
         return es;
