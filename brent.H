@@ -11,7 +11,7 @@
 // in Brent 1971)
 
 template <typename T>
-T brent(std::function<T(T)> f, T a, T b, T tol=1.e-100) {
+T brent(std::function<T(T)> f, T a, T b, T atol=1.e-100) {
 
     // we will keep track of 3 points, a, b, and c, such that f(b) *
     // f(c) < 0 and |f(b)| <= |f(c)|.
@@ -56,14 +56,17 @@ T brent(std::function<T(T)> f, T a, T b, T tol=1.e-100) {
         // root should be in [b, c].  a represents the previous value
         // of b, and is used to monitor if we are converging.
 
-        T tol_act = 2 * machine_eps * std::abs(b) + tol;
+        // we create a tolerance that is a combination
+        // of a relative tolerance (twice machine epsilon)
+        // and an absolute tolerance
+        T tol = 2 * machine_eps * std::abs(b) + atol;
 
         // m here is (currently) the increment that when added to b
         // would give bisection
 
         T m = 0.5 * (c - b);
 
-        if (std::abs(m) <= tol_act || fb == 0.0L) {
+        if (std::abs(m) <= tol || fb == 0.0L) {
             // we've converged
             return b;
         }
@@ -71,7 +74,7 @@ T brent(std::function<T(T)> f, T a, T b, T tol=1.e-100) {
         T p{};
         T q{};
 
-        if (std::abs(e) >= tol_act && std::abs(fa) > std::abs(fb)) {
+        if (std::abs(e) >= tol && std::abs(fa) > std::abs(fb)) {
             // attempt interpolation
             if (a == c) {
                 // secant method
@@ -94,7 +97,7 @@ T brent(std::function<T(T)> f, T a, T b, T tol=1.e-100) {
             }
 
             // accept interpolation only if it falls within bounds
-            if (2 * p < std::min(3 * m * q - std::abs(tol_act * q), std::abs(e * q))) {
+            if (2 * p < std::min(3 * m * q - std::abs(tol * q), std::abs(e * q))) {
                 e = d;
                 d = p / q;
             } else {
@@ -110,10 +113,10 @@ T brent(std::function<T(T)> f, T a, T b, T tol=1.e-100) {
 
         a = b;
         fa = fb;
-        if (std::abs(d) > tol_act) {
+        if (std::abs(d) > tol) {
             b += d;
         } else {
-            b += (m > 0 ? tol_act : -tol_act);
+            b += (m > 0 ? tol : -tol);
         }
 
         fb = f(b);
