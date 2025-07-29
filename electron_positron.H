@@ -4,7 +4,7 @@
 #include <iostream>
 #include <format>
 
-#include "brent2.H"
+#include "brent.H"
 #include "degeneracy_parameter_bounds.H"
 #include "fermi_integrals.H"
 #include "fundamental_constants.H"
