@@ -24,7 +24,7 @@ public:
 
     T eta{};
 
-    EOSState() {}
+    EOSState() = default;
 
 };
 
@@ -106,7 +106,137 @@ public:
                            return n_e_net - (n_e - n_pos);
                        },
                        eta_min, eta_max);
+
         es.eta = eta;
+
+        // for positrons
+        T eta_pos = -eta - 2.0L / beta;
+
+        // compute the number density, pressure and energy
+        constexpr T pcoeff = coeff * (2.0 / 3.0) * rest_mass;
+        constexpr T ecoeff = coeff * rest_mass;
+
+        FermiIntegral<T> f12(0.5L, eta, beta);
+        f12.evaluate(1);
+
+        FermiIntegral<T> f32(1.5L, eta, beta);
+        f32.evaluate(1);
+
+        FermiIntegral<T> f52(2.5L, eta, beta);
+        f52.evaluate(1);
+
+        T n_e = coeff * beta32 * (f12.F + beta * f32.F);
+        T p_e = pcoeff * beta52 * (f32.F + 0.5 * beta * f52.F);
+
+        // this is (energy / volume, what we usually write as rho e)
+        T E_e = ecoeff * beta52 * (f32.F + beta * f52.F);
+
+        T n_pos{};
+        T p_pos{};
+        T E_pos{};
+
+        FermiIntegral<T> f12_pos(0.5L, eta_pos, beta);
+        FermiIntegral<T> f32_pos(1.5L, eta_pos, beta);
+        FermiIntegral<T> f52_pos(2.5L, eta_pos, beta);
+
+        if (include_positrons) {
+            f12_pos.evaluate(1);
+            f32_pos.evaluate(1);
+            f52_pos.evaluate(1);
+
+            n_pos = coeff * beta32 * (f12_pos.F + beta * f32_pos.F);
+            p_pos = pcoeff * beta52 * (f32_pos.F + 0.5 * beta * f52_pos.F);
+            E_pos = ecoeff * beta52 * (f32_pos.F + beta * f52_pos.F) + 2 * rest_mass * n_pos;
+        }
+
+        // compute the derivatives of eta and beta with respect to
+        // density and temperature
+        T dne_deta = coeff * beta32 * (f12.dF_deta + beta * f32.dF_deta);
+        T dne_dbeta = 0.5 * coeff * beta12 * (3.0 * f12.F + 5.0 * beta * f32.F +
+                                              2 * beta * (f12.dF_dbeta + beta * f32.dF_dbeta));
+
+        T dnp_deta{};
+        T dnp_dbeta{};
+        if (include_positrons) {
+            dnp_deta = coeff * beta32 * (-f12_pos.dF_deta - beta * f32_pos.dF_deta);
+            dnp_dbeta = 0.5 * coeff / beta12 * (beta * (3.0 * f12_pos.F + 5.0 * beta * f32_pos.F) +
+                                                2.0 * beta * beta * (f12_pos.dF_dbeta +
+                                                                     beta * f32_pos.dF_dbeta) +
+                                                4.0 * (f12_pos.dF_deta + beta * f32_pos.dF_deta));
+        }
+
+        //dbeta_drho = 0.0
+        T dbeta_dT = C::k / rest_mass;
+
+        T deta_drho = C::N_A * Ye / (dne_deta - dnp_deta);
+        T deta_dT = -dbeta_dT * (dne_dbeta - dnp_dbeta) / (dne_deta - dnp_deta);
+
+        // Compute partials of number density with density and temperature
+        // For debugging
+        T dne_drho = dne_deta * deta_drho;
+        T dne_dT = dne_deta * deta_dT + dne_dbeta * dbeta_dT;
+
+        T dnp_drho{};
+        T dnp_dT{};
+        if (include_positrons) {
+            dnp_drho = dnp_deta * deta_drho;
+            dnp_dT = dnp_deta * deta_dT + dnp_dbeta * dbeta_dT;
+        }
+
+        // Compute partials of pressure with density and temperature via the chain rule
+        T dpe_deta = pcoeff * beta52 * (f32.dF_deta + 0.5 * beta * f52.dF_deta);
+        T dpe_dbeta = 0.25 * pcoeff * beta32 * (10.0 * f32.F + 7.0 * beta * f52.F +
+                                                4.0 * beta * (f32.dF_dbeta + 0.5 * beta * f52.dF_dbeta));
+
+        T dpe_drho = dpe_deta * deta_drho;
+        T dpe_dT = dpe_deta * deta_dT + dpe_dbeta * dbeta_dT;
+
+        T dpp_drho{};
+        T dpp_dT{};
+        if (include_positrons) {
+            T dpp_deta = -pcoeff * beta52 * (f32_pos.dF_deta + 0.5 * beta * f52_pos.dF_deta);
+            T dpp_dbeta = pcoeff * beta12 * (beta * (2.5 * f32_pos.F + 1.75 * beta * f52_pos.F) +
+                                             beta * beta * (f32_pos.dF_dbeta + 0.5 * beta * f52_pos.dF_dbeta) +
+                                             2.0 * (f32_pos.dF_deta + 0.5 * beta * f52_pos.dF_deta));
+
+            dpp_drho = dpp_deta * deta_drho;
+            dpp_dT = dpp_deta * deta_dT + dpp_dbeta * dbeta_dT;
+        }
+
+        // Compute partials of energy with density and temperature
+        T dEe_deta = ecoeff * beta52 * (f32.dF_deta + beta * f52.dF_deta);
+        T dEe_dbeta = 0.5 * ecoeff * beta32 * (5.0 * f32.F + 7.0 * beta * f52.F +
+                                               2.0 * beta * (f32.dF_dbeta + beta * f52.dF_dbeta));
+
+        T dEe_drho = dEe_deta * deta_drho;   // dbeta_drho = 0
+        T dEe_dT = dEe_deta * deta_dT + dEe_dbeta * dbeta_dT;
+
+        T dEp_drho{};
+        T dEp_dT{};
+        if (include_positrons) {
+            // these don't include the 2 m_e c**2 n_p part
+            T dEp_deta = -ecoeff * beta52 * (f32_pos.dF_deta + beta * f52_pos.dF_deta);
+            T dEp_dbeta = ecoeff * beta12 * (beta * (2.5 * f32_pos.F + 3.5 * beta * f52_pos.F) +
+                                             beta * beta * (f32_pos.dF_dbeta + beta * f52_pos.dF_dbeta) +
+                                             2.0 * (f32_pos.dF_deta + beta * f52_pos.dF_deta));
+
+            dEp_drho = dEp_deta * deta_drho + 2.0 * rest_mass * dnp_drho;
+            dEp_dT = dEp_deta * deta_dT + dEp_dbeta * dbeta_dT + 2.0 * rest_mass * dnp_dT;
+        }
+
+        // correct energy to be specific energy
+        T e_e = E_e / rho;
+        T dee_drho = (dEe_drho - E_e / rho) / rho;
+        T dee_dT = dEe_dT / rho;
+
+        T e_pos{};
+        T dep_drho{};
+        T dep_dT{};
+        if (include_positrons) {
+            e_pos = E_pos / rho;
+            dep_drho = (dEp_drho - E_pos / rho) / rho;
+            dep_dT = dEp_dT / rho;
+        }
 
         return es;
     }
