@@ -6,3 +6,4 @@
 test_breakpoints
 test_difference
 test_fermi
+test brent

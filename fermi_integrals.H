@@ -495,6 +495,7 @@ public:
 };
 
 template<typename T>
+inline
 std::ostream& operator<< (std::ostream& os, FermiIntegral<T>& f) {
 
     std::string out{};
