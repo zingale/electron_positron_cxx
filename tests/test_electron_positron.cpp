@@ -29,7 +29,7 @@ test_ne_rho_derivs() {
                 }, rho, drho);
 
             real_t err = std::abs(es.dne_drho - deriv) / std::abs(es.dne_drho);
-            std::println("ρ = {:10} T = {:10}, ∂n⁻/∂ρ = {:15.8g}, error = {:15.5g}",
+            std::println("ρ = {:10.3g} T = {:10.3g}, ∂n⁻/∂ρ = {:15.8g}, error = {:15.5g}",
                          rho, T, es.dne_drho, err);
         }
     }
@@ -63,7 +63,7 @@ test_ne_T_derivs() {
             } else {
                 err = std::abs(es.dne_dT - deriv) / std::abs(es.dne_dT);
             }
-            std::println("ρ = {:10} T = {:10}, ∂n⁻/∂T = {:15.8g}, error = {:15.5g}",
+            std::println("ρ = {:10.3g} T = {:10.3g}, ∂n⁻/∂T = {:15.8g}, error = {:15.5g}",
                          rho, T, es.dne_dT, err);
         }
     }
@@ -94,7 +94,7 @@ test_np_rho_derivs() {
                 }, rho, drho);
 
             real_t err = std::abs(es.dnp_drho - deriv) / std::abs(es.dnp_drho);
-            std::println("ρ = {:10} T = {:10}, ∂n⁺/∂ρ = {:15.8g}, error = {:15.5g}",
+            std::println("ρ = {:10.3g} T = {:10.3g}, ∂n⁺/∂ρ = {:15.8g}, error = {:15.5g}",
                          rho, T, es.dnp_drho, err);
         }
     }
@@ -132,7 +132,7 @@ test_np_T_derivs() {
             } else {
                 err = std::abs(es.dnp_dT - deriv) / std::abs(es.dnp_dT);
             }
-            std::println("ρ = {:10} T = {:10}, ∂n⁺/∂T = {:15.8g}, error = {:15.5g}",
+            std::println("ρ = {:10.3g} T = {:10.3g}, ∂n⁺/∂T = {:15.8g}, error = {:15.5g}",
                          rho, T, es.dnp_dT, err);
         }
     }
@@ -160,7 +160,7 @@ test_pe_rho_derivs() {
                 }, rho, drho);
 
             real_t err = std::abs(es.dpe_drho - deriv) / std::abs(es.dpe_drho);
-            std::println("ρ = {:10} T = {:10}, ∂p⁻/∂ρ = {:15.8g}, error = {:15.5g}",
+            std::println("ρ = {:10.3g} T = {:10.3g}, ∂p⁻/∂ρ = {:15.8g}, error = {:15.5g}",
                          rho, T, es.dpe_drho, err);
         }
     }
@@ -194,7 +194,7 @@ test_pe_T_derivs() {
             } else {
                 err = std::abs(es.dpe_dT - deriv) / std::abs(es.dpe_dT);
             }
-            std::println("ρ = {:10} T = {:10}, ∂p⁻/∂T = {:15.8g}, error = {:15.5g}",
+            std::println("ρ = {:10.3g} T = {:10.3g}, ∂p⁻/∂T = {:15.8g}, error = {:15.5g}",
                          rho, T, es.dpe_dT, err);
         }
     }
@@ -225,7 +225,7 @@ test_pp_rho_derivs() {
                 }, rho, drho);
 
             real_t err = std::abs(es.dpp_drho - deriv) / std::abs(es.dpp_drho);
-            std::println("ρ = {:10} T = {:10}, ∂p⁺/∂ρ = {:15.8g}, error = {:15.5g}",
+            std::println("ρ = {:10.3g} T = {:10.3g}, ∂p⁺/∂ρ = {:15.8g}, error = {:15.5g}",
                          rho, T, es.dpp_drho, err);
         }
     }
@@ -263,7 +263,7 @@ test_pp_T_derivs() {
             } else {
                 err = std::abs(es.dpp_dT - deriv) / std::abs(es.dpp_dT);
             }
-            std::println("ρ = {:10} T = {:10}, ∂p⁺/∂T = {:15.8g}, error = {:15.5g}",
+            std::println("ρ = {:10.3g} T = {:10.3g}, ∂p⁺/∂T = {:15.8g}, error = {:15.5g}",
                          rho, T, es.dpp_dT, err);
         }
     }
