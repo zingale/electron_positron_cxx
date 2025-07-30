@@ -1,4 +1,3 @@
-#include <iostream>
 #include <print>
 
 #include "real_type.H"
