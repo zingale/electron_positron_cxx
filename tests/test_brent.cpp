@@ -1,16 +1,15 @@
 #include <print>
-#include "brent.H"
 
+#include "brent.H"
+#include "real_type.H"
 
 int main() {
 
-    using RealT = long double;
+    real_t a = -4.0_rt;
+    real_t b = 4.0_rt / 3.0_rt;
 
-    RealT a = -4.0L;
-    RealT b = 4.0L / 3.0L;
-
-    auto r = brent<RealT>([=] (RealT x) -> RealT
-                          {return (x + 3.0L) * std::pow(x - 1.0L, 2);},
+    auto r = brent<real_t>([=] (real_t x) -> real_t
+                          {return (x + 3.0_rt) * std::pow(x - 1.0_rt, 2);},
         a, b);
 
     std::println("root = {}", r);

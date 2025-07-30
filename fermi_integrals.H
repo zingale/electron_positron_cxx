@@ -26,7 +26,10 @@
 #include <print>
 #include <ranges>
 
+#include "real_type.H"
 #include "quadrature_weights.H"
+
+using namespace literals;
 
 template <typename T>
 class BreakPoints {
@@ -58,103 +61,103 @@ public:
     {
 
         if (eta_order == 0) {
-            D = 3.36091L;
-            sigma = 9.11856e-2L;
+            D = 3.36091_rt;
+            sigma = 9.11856e-2_rt;
 
-            a[0] = 6.77740L;
-            a[1] = 3.76010L;
-            a[2] = 7.56690L;
+            a[0] = 6.77740_rt;
+            a[1] = 3.76010_rt;
+            a[2] = 7.56690_rt;
 
-            b[0] = 1.14180L;
-            b[1] = 9.37188e-2L;
-            b[2] = 1.16953L;
+            b[0] = 1.14180_rt;
+            b[1] = 9.37188e-2_rt;
+            b[2] = 1.16953_rt;
 
-            c[0] = 2.98255L;
-            c[1] = 2.10635e-2L;
-            c[2] = 7.54162e-1L;
+            c[0] = 2.98255_rt;
+            c[1] = 2.10635e-2_rt;
+            c[2] = 7.54162e-1_rt;
 
-            d[0] = 0.0;
-            d[1] = 3.10836e1L;
-            d[2] = 6.65585L;
+            d[0] = 0.0_rt;
+            d[1] = 3.10836e1_rt;
+            d[2] = 6.65585_rt;
 
-            e[0] = 0.0L;
-            e[1] = 1.00557L;
-            e[2] = -1.28190e-1L;
+            e[0] = 0.0_rt;
+            e[1] = 1.00557_rt;
+            e[2] = -1.28190e-1_rt;
 
         } else if (eta_order == 1) {
 
-            D = 4.99551L;
-            sigma = 9.11856e-2L;
+            D = 4.99551_rt;
+            sigma = 9.11856e-2_rt;
 
-            a[0] = 6.77740L;
-            a[1] = 3.76010L;
-            a[2] = 7.56690L;
+            a[0] = 6.77740_rt;
+            a[1] = 3.76010_rt;
+            a[2] = 7.56690_rt;
 
-            b[0] = 1.14180L;
-            b[1] = 9.37188e-2L;
-            b[2] = 1.16953L;
+            b[0] = 1.14180_rt;
+            b[1] = 9.37188e-2_rt;
+            b[2] = 1.16953_rt;
 
-            c[0] = 2.98255L;
-            c[1] = 2.10635e-2L;
-            c[2] = 7.54162L;
+            c[0] = 2.98255_rt;
+            c[1] = 2.10635e-2_rt;
+            c[2] = 7.54162_rt;
 
-            d[0] = 0.0L;
-            d[1] = 3.95015e1L;
-            d[2] = 7.64734L;
+            d[0] = 0.0_rt;
+            d[1] = 3.95015e1_rt;
+            d[2] = 7.64734_rt;
 
-            e[0] = 0.0L;
-            e[1] = 1.00557L;
-            e[2] = -1.28190e-1L;
+            e[0] = 0.0_rt;
+            e[1] = 1.00557_rt;
+            e[2] = -1.28190e-1_rt;
 
         } else if (eta_order == 2) {
 
-            D = 3.93830L;
-            sigma = 9.11856e-2L;
+            D = 3.93830_rt;
+            sigma = 9.11856e-2_rt;
 
-            a[0] = 6.77740L;
-            a[1] = 3.76010L;
-            a[2] = 7.56690L;
+            a[0] = 6.77740_rt;
+            a[1] = 3.76010_rt;
+            a[2] = 7.56690_rt;
 
-            b[0] = 1.14180L;
-            b[1] = 9.37188e-2L;
-            b[2] = 1.16953L;
+            b[0] = 1.14180_rt;
+            b[1] = 9.37188e-2_rt;
+            b[2] = 1.16953_rt;
 
-            c[0] = 2.98255L;
-            c[1] = 2.10635e-2L;
-            c[2] = 7.54162L;
+            c[0] = 2.98255_rt;
+            c[1] = 2.10635e-2_rt;
+            c[2] = 7.54162_rt;
 
-            d[0] = 0.0L;
-            d[1] = 3.14499e1L;
-            d[2] = 6.86346L;
+            d[0] = 0.0_rt;
+            d[1] = 3.14499e1_rt;
+            d[2] = 6.86346_rt;
 
-            e[0] = 0.0L;
-            e[1] = 1.00557L;
-            e[2] = -1.28190e-1L;
+            e[0] = 0.0_rt;
+            e[1] = 1.00557_rt;
+            e[2] = -1.28190e-1_rt;
 
         } else if (eta_order == 3) {
 
-            D = 4.17444L;
-            sigma = 9.11856e-2L;
+            D = 4.17444_rt;
+            sigma = 9.11856e-2_rt;
 
-            a[0] = 6.77740L;
-            a[1] = 3.76010L;
-            a[2] = 7.56690L;
+            a[0] = 6.77740_rt;
+            a[1] = 3.76010_rt;
+            a[2] = 7.56690_rt;
 
-            b[0] = 1.14180L;
-            b[1] = 9.37188e-2L;
-            b[2] = 1.16953L;
+            b[0] = 1.14180_rt;
+            b[1] = 9.37188e-2_rt;
+            b[2] = 1.16953_rt;
 
-            c[0] = 2.98255L;
-            c[1] = 2.10635e-2L;
-            c[2] = 7.54162L;
+            c[0] = 2.98255_rt;
+            c[1] = 2.10635e-2_rt;
+            c[2] = 7.54162_rt;
 
-            d[0] = 0.0L;
-            d[1] = 3.05412e1L;
-            d[2] = 7.88030L;
+            d[0] = 0.0_rt;
+            d[1] = 3.05412e1_rt;
+            d[2] = 7.88030_rt;
 
-            e[0] = 0.0L;
-            e[1] = 1.00557L;
-            e[2] = -1.28190e-1L;
+            e[0] = 0.0_rt;
+            e[1] = 1.00557_rt;
+            e[2] = -1.28190e-1_rt;
 
         } else {
 
@@ -247,8 +250,8 @@ private:
         // in the conversion from x to z).
 
         T xsq = x * x;
-        T sqrt_term = std::sqrt(1.0L + 0.5L * xsq * beta);
-        T num = 2.0L * std::pow(x, 2.0L * k + 1.0L) * sqrt_term;
+        T sqrt_term = std::sqrt(1.0_rt + 0.5_rt * xsq * beta);
+        T num = 2.0_rt * std::pow(x, 2.0_rt * k + 1.0_rt) * sqrt_term;
 
         // this is what we are usually exponentiating
         T delta = xsq - eta;
@@ -257,25 +260,25 @@ private:
         // which is 1.0 / (2.0 * (1.0 + cosh(delta))
         T inv_cosh_term{};
         if (std::abs(delta) < max_exponent) {
-            //inv_cosh_term = 0.5L / (1.0L + std::cosh(delta));
-            inv_cosh_term = 1.0L / (2.0L + std::exp(-delta) + std::exp(delta));
+            //inv_cosh_term = 0.5_rt / (1.0_rt + std::cosh(delta));
+            inv_cosh_term = 1.0_rt / (2.0_rt + std::exp(-delta) + std::exp(delta));
         }
 
         // this is (exp(xsq - eta) - 1.0) / (exp(xsq - eta) + 1.0)
-        T tanh_half_delta = std::tanh(0.5L * delta);
+        T tanh_half_delta = std::tanh(0.5_rt * delta);
 
         T denomi{};
         if (delta < -max_exponent) {
-            denomi = 1.0L;
+            denomi = 1.0_rt;
         } else {
             // inv_exp_delta = np.exp(-delta)
             if (delta > max_exponent) {
-                denomi = 0.0L;
+                denomi = 0.0_rt;
             } else {
                 //T inv_exp_delta = std::exp(-delta);
                 // 1 / (exp(x**2 - eta) + 1) rewritten
-                //denomi = inv_exp_delta / (1.0L + inv_exp_delta);
-                denomi = 1.0L / (1.0L + std::exp(delta));
+                //denomi = inv_exp_delta / (1.0_rt + inv_exp_delta);
+                denomi = 1.0_rt / (1.0_rt + std::exp(delta));
             }
         }
 
@@ -291,7 +294,7 @@ private:
         } else if (eta_der == 0 && beta_der == 1) {
             // this is IB = 2 from Gong et al.
             // this corresponds to eq A.2 in terms of x**2
-            result = 0.5L * std::pow(x, 2.0L * k + 3.0L) / sqrt_term * denomi;
+            result = 0.5_rt * std::pow(x, 2.0_rt * k + 3.0_rt) / sqrt_term * denomi;
 
         } else if (eta_der == 2 && beta_der == 0) {
             // this is IB = 3 from Gong et al.
@@ -301,12 +304,12 @@ private:
         } else if (eta_der == 1 && beta_der == 1) {
             // this is IB = 4 from Gong et al.
             // this corresponds to eq A.4 in terms of x**2
-            result = 0.5L * std::pow(x, 2.0L * k + 3.0L) * inv_cosh_term / sqrt_term;
+            result = 0.5_rt * std::pow(x, 2.0_rt * k + 3.0_rt) * inv_cosh_term / sqrt_term;
 
         } else if (eta_der == 0 && beta_der == 2) {
             // this is IB = 5 from Gong et al.
             // this corresponds to eq A.5 in terms of x**2
-            result = -0.125L * std::pow(x, 2.0L * k + 5.0L) / std::pow(sqrt_term, 3) * denomi;
+            result = -0.125_rt * std::pow(x, 2.0_rt * k + 5.0_rt) / std::pow(sqrt_term, 3) * denomi;
         }
 
         return result;
@@ -319,7 +322,7 @@ private:
 
         // we will work in terms of x
 
-        T sqrt_term = std::sqrt(1.0L + 0.5L * x * beta);
+        T sqrt_term = std::sqrt(1.0_rt + 0.5_rt * x * beta);
         T num = std::pow(x, k) * sqrt_term;
 
         // this is what we are usually exponentiating
@@ -329,24 +332,24 @@ private:
         // which is 1.0 / (2.0 * (1.0 + cosh(delta))
         T inv_cosh_term{};
         if (std::abs(delta) < max_exponent) {
-            //inv_cosh_term = 0.5L / (1.0L + std::cosh(delta));
-            inv_cosh_term = 1.0L / (2.0L + std::exp(-delta) + std::exp(delta));
+            //inv_cosh_term = 0.5_rt / (1.0_rt + std::cosh(delta));
+            inv_cosh_term = 1.0_rt / (2.0_rt + std::exp(-delta) + std::exp(delta));
         }
 
         // this is (exp(x - eta) - 1.0) / (exp(x - eta) + 1.0)
-        T tanh_half_delta = std::tanh(0.5L * delta);
+        T tanh_half_delta = std::tanh(0.5_rt * delta);
 
         T denomi{};
         if (delta < -max_exponent) {
-            denomi = 1.0L;
+            denomi = 1.0_rt;
         } else {
             if (delta > max_exponent) {
-                denomi = 0.0L;
+                denomi = 0.0_rt;
             } else {
                 //T inv_exp_delta = std::exp(-delta);
                 // 1 / (exp(x - eta) + 1) rewritten
-                // denomi = inv_exp_delta / (1.0L + inv_exp_delta);
-                denomi = 1.0L / (1.0L + std::exp(delta));
+                // denomi = inv_exp_delta / (1.0_rt + inv_exp_delta);
+                denomi = 1.0_rt / (1.0_rt + std::exp(delta));
             }
         }
 
@@ -362,7 +365,7 @@ private:
         } else if (eta_der == 0 && beta_der == 1) {
             // this is IB = 2 from Gong et al.
             // this corresponds to eq A.2
-            result = 0.25L * std::pow(x, k + 1.0L) / sqrt_term * denomi;
+            result = 0.25_rt * std::pow(x, k + 1.0_rt) / sqrt_term * denomi;
 
         } else if (eta_der == 2 && beta_der == 0) {
             // this is IB = 3 from Gong et al.
@@ -372,12 +375,12 @@ private:
         } else if (eta_der == 1 && beta_der == 1) {
             // this is IB = 4 from Gong et al.
             // this corresponds to eq A.4
-            result = 0.25L * std::pow(x, k + 1.0L) * inv_cosh_term / sqrt_term;
+            result = 0.25_rt * std::pow(x, k + 1.0_rt) * inv_cosh_term / sqrt_term;
 
         } else if (eta_der == 0 && beta_der == 2) {
             // this is IB = 5 from Gong et al.
             // this corresponds to eq A.5
-            result = -0.0625L * std::pow(x, k + 2.0L) / std::pow(sqrt_term, 3) * denomi;
+            result = -0.0625_rt * std::pow(x, k + 2.0_rt) / std::pow(sqrt_term, 3) * denomi;
         }
 
         return result;
@@ -393,8 +396,8 @@ private:
         // We set the correspondence (a+b)/2 -> 0 and map the (-1,0)
         // and (0,1) intervals separately.
 
-        T fac1 = 0.5L * (a + b);
-        T fac2 = 0.5L * (b - a);
+        T fac1 = 0.5_rt * (a + b);
+        T fac2 = 0.5_rt * (b - a);
 
         T integral{};
         if (mode == 0) {
@@ -410,7 +413,7 @@ private:
             }
         }
 
-        integral *= 0.5L * (b - a);
+        integral *= 0.5_rt * (b - a);
         return integral;
     }
 
