@@ -8,11 +8,15 @@
 #include <print>
 #include <stdexcept>
 
+#include "real_type.H"
+
+using namespace literals;
+
 // Brent's method for root finding (following the original Algol code
 // in Brent 1971)
 
 template <typename T>
-T brent(std::function<T(T)> f, T a, T b, T atol=1.e-100) {
+T brent(std::function<T(T)> f, T a, T b, T atol=1.e-100_rt) {
 
     // we will keep track of 3 points, a, b, and c, such that f(b) *
     // f(c) < 0 and |f(b)| <= |f(c)|.
@@ -24,7 +28,7 @@ T brent(std::function<T(T)> f, T a, T b, T atol=1.e-100) {
     T fa = f(a);
     T fb = f(b);
 
-    if (fa * fb > 0.0) {
+    if (fa * fb > 0.0_rt) {
         throw std::out_of_range("root is not contained in bounds");
     }
 
@@ -65,9 +69,9 @@ T brent(std::function<T(T)> f, T a, T b, T atol=1.e-100) {
         // m here is (currently) the increment that when added to b
         // would give bisection
 
-        T m = 0.5 * (c - b);
+        T m = 0.5_rt * (c - b);
 
-        if (std::abs(m) <= tol || fb == 0.0L) {
+        if (std::abs(m) <= tol || fb == 0.0_rt) {
             // we've converged
             return b;
         }
@@ -80,15 +84,15 @@ T brent(std::function<T(T)> f, T a, T b, T atol=1.e-100) {
             if (a == c) {
                 // secant method
                 T s = fb / fa;
-                p = 2 * m * s;
-                q = 1 - s;
+                p = 2.0_rt * m * s;
+                q = 1.0_rt - s;
             } else {
                 // inverse quadratic interpolation
                 T s = fb / fa;
                 T r = fb / fc;
                 T t = fa / fc;
-                p = s * (2 * m * t * (t - r) - (b - a) * (r - 1));
-                q = (t - 1) * (r - 1) * (s - 1);
+                p = s * (2.0_rt * m * t * (t - r) - (b - a) * (r - 1.0_rt));
+                q = (t - 1.0_rt) * (r - 1.0_rt) * (s - 1.0_rt);
             }
 
             if (p > 0) {
@@ -98,7 +102,7 @@ T brent(std::function<T(T)> f, T a, T b, T atol=1.e-100) {
             }
 
             // accept interpolation only if it falls within bounds
-            if (2 * p < std::min(3 * m * q - std::abs(tol * q), std::abs(e * q))) {
+            if (2.0_rt * p < std::min(3.0_rt * m * q - std::abs(tol * q), std::abs(e * q))) {
                 e = d;
                 d = p / q;
             } else {
@@ -117,11 +121,11 @@ T brent(std::function<T(T)> f, T a, T b, T atol=1.e-100) {
         if (std::abs(d) > tol) {
             b += d;
         } else {
-            b += (m > 0 ? tol : -tol);
+            b += (m > 0.0_rt ? tol : -tol);
         }
 
         fb = f(b);
-        if (fb * fc > 0) {
+        if (fb * fc > 0.0_rt) {
             c = a;
             fc = fa;
             e = d = b - a;

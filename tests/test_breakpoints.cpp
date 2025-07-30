@@ -2,9 +2,13 @@
 
 #include <print>
 
+#include "real_type.H"
+
+using namespace literals;
+
 int main() {
 
-    BreakPoints<long double> b(0);
+    BreakPoints<real_t> b(0);
 
     auto [s1, s2, s3] = b.get_points(100.0);
 

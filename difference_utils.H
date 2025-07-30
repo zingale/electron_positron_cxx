@@ -7,6 +7,10 @@
 #include <limits>
 #include <utility>
 
+#include "real_type.H"
+
+using namespace literals;
+
 namespace fd {
 
     // Some high-order finite-difference approximations for the EOS.
@@ -25,7 +29,7 @@ namespace fd {
 
         for (auto i : {-2, -1, 0, 1, 2}) {
             if (i == 0) {
-                fvals.push_back(0.0L);
+                fvals.push_back(0.0_rt);
                 continue;
             }
 
@@ -34,8 +38,8 @@ namespace fd {
         }
 
         T deriv = ((fvals[0] - fvals[4]) +
-                   8.0L * (-fvals[1] + fvals[3]))
-            / (12L * delta);
+                   8.0_rt * (-fvals[1] + fvals[3]))
+            / (12_rt * delta);
 
         return deriv;
     }
@@ -51,7 +55,7 @@ namespace fd {
 
         for (auto i : {-3, -2, -1, 0, 1, 2, 3}) {
             if (i == 0) {
-                fvals.push_back(0.0L);
+                fvals.push_back(0.0_rt);
                 continue;
             }
 
@@ -78,7 +82,7 @@ namespace fd {
 
         for (auto i : {-4, -3, -2, -1, 0, 1, 2, 3, 4}) {
             if (i == 0) {
-                fvals.push_back(0.0L);
+                fvals.push_back(0.0_rt);
                 continue;
             }
 
@@ -138,17 +142,17 @@ namespace fd {
 
         // Note: we use 0-based indexing below
 
-        std::vector<std::vector<T>> A(nlevels, std::vector<T>(nlevels, 0.0L));
-        assert (h > 0L);
+        std::vector<std::vector<T>> A(nlevels, std::vector<T>(nlevels, 0.0_rt));
+        assert (h > 0_rt);
 
         T _h{h};
 
-        T jump{std::numbers::sqrt2_v<T>};
+        T jump{sqrt2};
 
         auto _fp = func(x0 + _h);
         auto _fm = func(x0 - _h);
 
-        A[0][0] = 0.5L * (_fp - _fm) / _h;
+        A[0][0] = 0.5_rt * (_fp - _fm) / _h;
         T deriv = A[0][0];
 
         auto err = std::numeric_limits<T>::max();
@@ -159,7 +163,7 @@ namespace fd {
             _fp = func(x0 + _h);
             _fm = func(x0 - _h);
 
-            A[0][n] = 0.5L * (_fp - _fm) / _h;
+            A[0][n] = 0.5_rt * (_fp - _fm) / _h;
 
             // for the current column n, fill in all the rows m > 0
             for (int m = 1; m <= n; ++m) {
@@ -196,19 +200,19 @@ namespace fd {
     adaptive_diff2(const std::function<T(T)>& func, T x0, T h, int nlevels=25) {
         // This is like adaptive_diff, but for the second derivative.
 
-        std::vector<std::vector<T>> A(nlevels, std::vector<T>(nlevels, 0.0L));
+        std::vector<std::vector<T>> A(nlevels, std::vector<T>(nlevels, 0.0_rt));
 
-        assert (h > 0L);
+        assert (h > 0_rt);
 
         T _h{h};
 
-        T jump{std::numbers::sqrt2_v<T>};
+        T jump{sqrt2};
 
         auto _fp = func(x0 + _h);
         auto _f0 = func(x0);
         auto _fm = func(x0 - _h);
 
-        A[0][0] = (_fp - 2.0L * _f0 + _fm) / (_h * _h);
+        A[0][0] = (_fp - 2.0_rt * _f0 + _fm) / (_h * _h);
         T deriv = A[0][0];
 
         auto err = std::numeric_limits<T>::max();
@@ -220,7 +224,7 @@ namespace fd {
             _f0 = func(x0);
             _fm = func(x0 - _h);
 
-            A[0][n] = (_fp - 2.0L * _f0 + _fm) / (_h * _h);
+            A[0][n] = (_fp - 2.0_rt * _f0 + _fm) / (_h * _h);
 
             // for the current column n, fill in all the rows m > 0
             for (int m = 1; m <= n; ++m) {
