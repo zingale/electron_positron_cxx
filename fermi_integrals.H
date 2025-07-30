@@ -257,7 +257,8 @@ private:
         // which is 1.0 / (2.0 * (1.0 + cosh(delta))
         T inv_cosh_term{};
         if (std::abs(delta) < max_exponent) {
-            inv_cosh_term = 0.5L / (1.0L + std::cosh(delta));
+            //inv_cosh_term = 0.5L / (1.0L + std::cosh(delta));
+            inv_cosh_term = 1.0L / (2.0L + std::exp(-delta) + std::exp(delta));
         }
 
         // this is (exp(xsq - eta) - 1.0) / (exp(xsq - eta) + 1.0)
@@ -271,9 +272,10 @@ private:
             if (delta > max_exponent) {
                 denomi = 0.0L;
             } else {
-                T inv_exp_delta = std::exp(-delta);
+                //T inv_exp_delta = std::exp(-delta);
                 // 1 / (exp(x**2 - eta) + 1) rewritten
-                denomi = inv_exp_delta / (1.0L + inv_exp_delta);
+                //denomi = inv_exp_delta / (1.0L + inv_exp_delta);
+                denomi = 1.0L / (1.0L + std::exp(delta));
             }
         }
 
@@ -327,7 +329,8 @@ private:
         // which is 1.0 / (2.0 * (1.0 + cosh(delta))
         T inv_cosh_term{};
         if (std::abs(delta) < max_exponent) {
-            inv_cosh_term = 0.5L / (1.0L + std::cosh(delta));
+            //inv_cosh_term = 0.5L / (1.0L + std::cosh(delta));
+            inv_cosh_term = 1.0L / (2.0L + std::exp(-delta) + std::exp(delta));
         }
 
         // this is (exp(x - eta) - 1.0) / (exp(x - eta) + 1.0)
@@ -340,9 +343,10 @@ private:
             if (delta > max_exponent) {
                 denomi = 0.0L;
             } else {
-                T inv_exp_delta = std::exp(-delta);
+                //T inv_exp_delta = std::exp(-delta);
                 // 1 / (exp(x - eta) + 1) rewritten
-                denomi = inv_exp_delta / (1.0L + inv_exp_delta);
+                // denomi = inv_exp_delta / (1.0L + inv_exp_delta);
+                denomi = 1.0L / (1.0L + std::exp(delta));
             }
         }
 

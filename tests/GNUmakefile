@@ -4,9 +4,8 @@ EXECUTABLES := $(SOURCES:.cpp=)
 
 ALL: $(EXECUTABLES)
 
-
 % : %.cpp $(HEADERS)
-	g++ -std=c++23 -Wall -Wextra -Wshadow -Wpedantic -I.. -o $@ $<
+	g++ -O3 -std=c++23 -Wall -Wextra -Wshadow -Wpedantic -I.. -o $@ $<
 
 clean:
 	rm -f $(EXECUTABLES)
