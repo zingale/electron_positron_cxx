@@ -6,6 +6,7 @@
 #include <cmath>
 #include <limits>
 #include <print>
+#include <stdexcept>
 
 // Brent's method for root finding (following the original Algol code
 // in Brent 1971)
@@ -23,7 +24,9 @@ T brent(std::function<T(T)> f, T a, T b, T atol=1.e-100) {
     T fa = f(a);
     T fb = f(b);
 
-    assert (fa * fb < 0);
+    if (fa * fb > 0.0) {
+        throw std::out_of_range("root is not contained in bounds");
+    }
 
     T c = a;
     T fc = fa;

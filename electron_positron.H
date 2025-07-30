@@ -3,11 +3,21 @@
 
 #include <iostream>
 #include <format>
+#include <stdexcept>
 
 #include "brent.H"
 #include "degeneracy_parameter_bounds.H"
 #include "fermi_integrals.H"
 #include "fundamental_constants.H"
+
+// our Fermi integrals will use a dimensionless temperature
+constexpr long double inv_compton_wavelength = C::m_e * C::c_light / C::h;
+constexpr long double rest_mass = C::m_e * C::c_light * C::c_light;
+
+constexpr long double coeff = 8 * std::numbers::pi_v<long double> *
+    std::numbers::sqrt2_v<long double> *
+    inv_compton_wavelength * inv_compton_wavelength * inv_compton_wavelength;
+
 
 template <typename T>
 class EOSState {
@@ -63,6 +73,35 @@ std::ostream& operator<< (std::ostream& os, EOSState<T>& es) {
     return os;
 }
 
+// for the root finding eta
+
+template <typename T>
+T n_e_constraint(T eta, T beta) {
+    FermiIntegral<T> f12(0.5L, eta, beta);
+    f12.evaluate(0);
+
+    FermiIntegral<T> f32(1.5L, eta, beta);
+    f32.evaluate(0);
+
+    T n_e = coeff * beta * std::sqrt(beta) * (f12.F + beta * f32.F);
+    return n_e;
+}
+
+
+template <typename T>
+T n_p_constraint(T eta, T beta) {
+    T eta_pos = -eta - 2.0 / beta;
+
+    FermiIntegral<T> f12_pos(0.5L, eta_pos, beta);
+    f12_pos.evaluate(0);
+
+    FermiIntegral<T> f32_pos(1.5L, eta_pos, beta);
+    f32_pos.evaluate(0);
+
+    T n_pos = coeff * beta * std::sqrt(beta) * (f12_pos.F + beta * f32_pos.F);
+    return n_pos;
+}
+
 
 template <typename T>
 class ElectronPositronEOS {
@@ -80,18 +119,11 @@ public:
 
         T n_e_net = Ye * C::N_A * rho;
 
-        // our Fermi integrals will use a dimensionless temperature
-        constexpr T inv_compton_wavelength = C::m_e * C::c_light / C::h;
-        constexpr T rest_mass = C::m_e * C::c_light * C::c_light;
-
         T beta = C::k * temp / rest_mass;
 
         T beta12 = std::sqrt(beta);
         T beta32 = beta * beta12;
         T beta52 = beta * beta32;
-
-        constexpr T coeff = 8 * std::numbers::pi_v<T> * std::numbers::sqrt2_v<T> *
-            inv_compton_wavelength * inv_compton_wavelength * inv_compton_wavelength;
 
         // compute the degeneracy parameter
         auto [eta_min, eta_max] = bounds::get_eta_bounds(rho * Ye, temp, include_positrons);
@@ -99,31 +131,22 @@ public:
         T eta{};
         bool with_positrons = include_positrons; // don't capture "this"
 
-        eta = brent<T>([=] (T _eta)
-                       {
-                           FermiIntegral<T> f12(0.5L, _eta, beta);
-                           f12.evaluate(0);
-
-                           FermiIntegral<T> f32(1.5L, _eta, beta);
-                           f32.evaluate(0);
-
-                           T n_e = coeff * beta32 * (f12.F + beta * f32.F);
-
-                           T n_pos{};
-                           if (with_positrons) {
-                               T eta_pos = -_eta - 2.0 / beta;
-
-                               FermiIntegral<T> f12_pos(0.5L, eta_pos, beta);
-                               f12_pos.evaluate(0);
-
-                               FermiIntegral<T> f32_pos(1.5L, eta_pos, beta);
-                               f32_pos.evaluate(0);
-
-                               n_pos = coeff * beta32 * (f12_pos.F + beta * f32_pos.F);
-                           }
-                           return n_e_net - (n_e - n_pos);
-                       },
-                       eta_min, eta_max);
+        try {
+            eta = brent<T>([=] (T _eta)
+                {
+                    auto n_e = n_e_constraint(_eta, beta);
+                    T n_pos = (with_positrons) ? n_p_constraint(_eta, beta) : 0.0L;
+                    return n_e_net - (n_e - n_pos);
+                }, eta_min, eta_max);
+        } catch (const std::out_of_range& e) {
+            // try with larger bounds
+            eta = brent<T>([=] (T _eta)
+                {
+                    auto n_e = n_e_constraint(_eta, beta);
+                    T n_pos = (with_positrons) ? n_p_constraint(_eta, beta) : 0.0L;
+                    return n_e_net - (n_e - n_pos);
+                }, -100.0L, 1.e7L);
+        }
 
         es.eta = eta;
 

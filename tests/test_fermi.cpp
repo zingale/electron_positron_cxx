@@ -3,13 +3,7 @@
 
 #include "fermi_integrals.H"
 #include "difference_utils.H"
-
-
-template <typename T>
-T rel_error(T a, T b) {
-    T err = std::abs(a - b) / std::abs(b);
-    return err;
-}
+#include "util.H"
 
 int main() {
 
