@@ -97,8 +97,6 @@ namespace bounds {
                                1, static_cast<int>(Ts.size())-3);
         }
 
-        std::println("ir, it = {}, {}", ir, it);
-
         if (it < 0 || ir < 0) {
             std::println("thermodynamic state (T = {}, rhoYe = {}) out of bounds", temp0, rhoYe0);
             abort();

@@ -36,8 +36,6 @@ T brent(std::function<T(T)> f, T a, T b, T atol=1.e-100) {
     // e is the old value of d
     T e = d;
 
-    T machine_eps = std::numeric_limits<T>::epsilon();
-
     int iter{};
     while (true) {
 
@@ -59,7 +57,7 @@ T brent(std::function<T(T)> f, T a, T b, T atol=1.e-100) {
         // we create a tolerance that is a combination
         // of a relative tolerance (twice machine epsilon)
         // and an absolute tolerance
-        T tol = 2 * machine_eps * std::abs(b) + atol;
+        T tol = 2 * std::numeric_limits<T>::epsilon() * std::abs(b) + atol;
 
         // m here is (currently) the increment that when added to b
         // would give bisection
