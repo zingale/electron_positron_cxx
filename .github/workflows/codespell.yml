@@ -1,6 +1,6 @@
 name: codespell
 
-on: [push, pull_requ1est]
+on: [push, pull_request]
 
 jobs:
   codespell:
