@@ -10,53 +10,21 @@ jobs:
       - name: update
         run: |
           sudo apt-get update -y -qq
-          sudo apt-get install -y \
-                    build-essential \
-                    flex \
-                    bison \
-                    libgmp-dev \
-                    libmpfr-dev \
-                    libmpc-dev \
-                    texinfo \
-                    wget \
-                    curl \
-                    git \
-                    python3 \
-                    libisl-dev
 
-      - name: Clone GCC 15 source
+      - name: install conda
         run: |
-          git clone --depth 1 --branch releases/gcc-15 https://gcc.gnu.org/git/gcc.git gcc-15
+          wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh
+          bash miniconda.sh -b -p $HOME/miniconda
+          echo "$HOME/miniconda/bin" >> $GITHUB_PATH
+          source $HOME/miniconda/bin/activate
 
-      - name: Download prerequisites
-        working-directory: gcc-15
+      - name: install GCC 15
         run: |
-          ./contrib/download_prerequisites
+          conda create -y -n gcc15 gcc_linux-64=15 gxx_linux-64=15
+          conda activate gcc15
 
-      - name: Create build directory
-        run: mkdir gcc-build
-
-      - name: Configure GCC
-        run: |
-          cd gcc-build
-          ../gcc-15/configure \
-            --prefix=$HOME/gcc-15-install \
-            --enable-languages=c,c++ \
-            --disable-multilib
-
-      - name: Build GCC (this may take a while)
-        run: |
-          cd gcc-build
-          make -j$(nproc)
-
-      - name: Install GCC
-        run: |
-          cd gcc-build
-          make install
-
-      - name: Add GCC 15 to PATH
-        run: echo "$HOME/gcc-15-install/bin" >> $GITHUB_PATH
-
+      - name: report GCC version
+        run: gcc --version
 
       - name: Compile problems
         run: |
