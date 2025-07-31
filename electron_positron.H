@@ -23,6 +23,10 @@ template <typename T>
 class EOSState {
 
 public:
+    T rho{};
+    T temp{};
+    T Y_e{};
+
     T n_e{};
     T n_pos{};
 
@@ -60,8 +64,10 @@ template<typename T>
 inline
 std::ostream& operator<< (std::ostream& os, EOSState<T>& es) {
 
-    std::string out{};
-    out += std::format("η  = {:18.10g}\n", es.eta);
+    std::string out{"\n"};
+
+    out += std::format(" ρ = {:18.10g};       T = {:18.10g};      Yₑ = {:18.10g};\n", es.rho, es.temp, es.Y_e);
+    out += std::format(" η = {:18.10g}\n", es.eta);
     out += std::format("n⁻ = {:18.10g};  ∂n⁻/∂ρ = {:18.10g};  ∂n⁻/∂T = {:18.10g};\n", es.n_e, es.dne_drho, es.dne_dT);
     out += std::format("n⁺ = {:18.10g};  ∂n⁺/∂ρ = {:18.10g};  ∂n⁺/∂T = {:18.10g};\n", es.n_pos, es.dnp_drho, es.dnp_dT);
     out += std::format("p⁻ = {:18.10g};  ∂p⁻/∂ρ = {:18.10g};  ∂p⁻/∂T = {:18.10g};\n", es.p_e, es.dpe_drho, es.dpe_dT);
@@ -116,6 +122,10 @@ public:
     EOSState<T> pe_state(T rho, T temp,  T Ye) {
 
         EOSState<T> es;
+
+        es.rho = rho;
+        es.temp = temp;
+        es.Y_e = Ye;
 
         T n_e_net = Ye * C::N_A * rho;
 

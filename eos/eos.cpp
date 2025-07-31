@@ -21,8 +21,6 @@ int main() {
     real_t T = static_cast<real_t>(_T);
     real_t Ye = static_cast<real_t>(_Ye);
 
-    std::println("{} {} {}", rho, T, Ye);
-
     ElectronPositronEOS<real_t> eos;
     auto state = eos.pe_state(rho, T, Ye);
 
