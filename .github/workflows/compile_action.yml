@@ -10,7 +10,7 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update -y -qq
-          sudo apt-get -qq -y install g++
+          sudo apt-get -qq -y install gcc-15
 
       - name: Compile problems
         run: |
