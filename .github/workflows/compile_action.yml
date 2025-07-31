@@ -20,7 +20,7 @@ jobs:
 
       - name: install GCC 15
         run: |
-          conda create -y -n gcc15 gcc_linux-64=15 gxx_linux-64=15
+          conda create -y -n gcc15 -c conda-forge gcc=15.1.0 gxx=15.1.0
           conda activate gcc15
 
       - name: report GCC version
