@@ -61,13 +61,13 @@ inline
 std::ostream& operator<< (std::ostream& os, EOSState<T>& es) {
 
     std::string out{};
-    out += std::format("η  = {:20.10g}\n", es.eta);
-    out += std::format("n⁻ = {:20.10g}; ∂n⁻/∂ρ = {:20.10g}; ∂n⁻/∂T = {:20.10g};\n", es.n_e, es.dne_drho, es.dne_dT);
-    out += std::format("n⁺ = {:20.10g}; ∂n⁺/∂ρ = {:20.10g}; ∂n⁺/∂T = {:20.10g};\n", es.n_pos, es.dnp_drho, es.dnp_dT);
-    out += std::format("p⁻ = {:20.10g}; ∂p⁻/∂ρ = {:20.10g}; ∂p⁻/∂T = {:20.10g};\n", es.p_e, es.dpe_drho, es.dpe_dT);
-    out += std::format("p⁺ = {:20.10g}; ∂p⁺/∂ρ = {:20.10g}; ∂p⁺/∂T = {:20.10g};\n", es.p_pos, es.dpp_drho, es.dpp_dT);
-    out += std::format("e⁻ = {:20.10g}; ∂e⁻/∂ρ = {:20.10g}; ∂e⁻/∂T = {:20.10g};\n", es.e_e, es.dee_drho, es.dee_dT);
-    out += std::format("e⁺ = {:20.10g}; ∂e⁺/∂ρ = {:20.10g}; ∂e⁺/∂T = {:20.10g};\n", es.e_pos, es.dep_drho, es.dep_dT);
+    out += std::format("η  = {:18.10g}\n", es.eta);
+    out += std::format("n⁻ = {:18.10g};  ∂n⁻/∂ρ = {:18.10g};  ∂n⁻/∂T = {:18.10g};\n", es.n_e, es.dne_drho, es.dne_dT);
+    out += std::format("n⁺ = {:18.10g};  ∂n⁺/∂ρ = {:18.10g};  ∂n⁺/∂T = {:18.10g};\n", es.n_pos, es.dnp_drho, es.dnp_dT);
+    out += std::format("p⁻ = {:18.10g};  ∂p⁻/∂ρ = {:18.10g};  ∂p⁻/∂T = {:18.10g};\n", es.p_e, es.dpe_drho, es.dpe_dT);
+    out += std::format("p⁺ = {:18.10g};  ∂p⁺/∂ρ = {:18.10g};  ∂p⁺/∂T = {:18.10g};\n", es.p_pos, es.dpp_drho, es.dpp_dT);
+    out += std::format("e⁻ = {:18.10g};  ∂e⁻/∂ρ = {:18.10g};  ∂e⁻/∂T = {:18.10g};\n", es.e_e, es.dee_drho, es.dee_dT);
+    out += std::format("e⁺ = {:18.10g};  ∂e⁺/∂ρ = {:18.10g};  ∂e⁺/∂T = {:18.10g};\n", es.e_pos, es.dep_drho, es.dep_dT);
 
     os << out;
     return os;
