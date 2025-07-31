@@ -16,12 +16,20 @@ jobs:
           wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh
           bash miniconda.sh -b -p $HOME/miniconda
           echo "$HOME/miniconda/bin" >> $GITHUB_PATH
-          source $HOME/miniconda/bin/activate
+
 
       - name: install GCC 15
         run: |
+          source $HOME/miniconda/etc/profile.d/conda.sh
           conda create -y -n gcc15 -c conda-forge gcc=15.1.0 gxx=15.1.0
+
+      - name: Set environment variables
+        run: |
+          source $HOME/miniconda/etc/profile.d/conda.sh
           conda activate gcc15
+          echo "CC=$(which gcc)" >> $GITHUB_ENV
+          echo "CXX=$(which g++)" >> $GITHUB_ENV
+          echo "$(dirname $(which gcc))" >> $GITHUB_PATH
 
       - name: report GCC version
         run: gcc --version
