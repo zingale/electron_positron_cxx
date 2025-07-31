@@ -7,13 +7,56 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install GCC 15 via Conda (this is not available yet in Ubuntu)
+      - name: update
         run: |
           sudo apt-get update -y -qq
-          sudo apt-get -qq -y install conda
-          conda create -n gcc15_env -c conda-forge gcc_linux-64=15
-          conda activate gcc15_env
-          gcc --version
+          sudo apt-get install -y \
+                    build-essential \
+                    flex \
+                    bison \
+                    libgmp-dev \
+                    libmpfr-dev \
+                    libmpc-dev \
+                    texinfo \
+                    wget \
+                    curl \
+                    git \
+                    python3 \
+                    libisl-dev
+
+      - name: Clone GCC 15 source
+        run: |
+          git clone --depth 1 --branch releases/gcc-15 https://gcc.gnu.org/git/gcc.git gcc-15
+
+      - name: Download prerequisites
+        working-directory: gcc-15
+        run: |
+          ./contrib/download_prerequisites
+
+      - name: Create build directory
+        run: mkdir gcc-build
+
+      - name: Configure GCC
+        run: |
+          cd gcc-build
+          ../gcc-15/configure \
+            --prefix=$HOME/gcc-15-install \
+            --enable-languages=c,c++ \
+            --disable-multilib
+
+      - name: Build GCC (this may take a while)
+        run: |
+          cd gcc-build
+          make -j$(nproc)
+
+      - name: Install GCC
+        run: |
+          cd gcc-build
+          make install
+
+      - name: Add GCC 15 to PATH
+        run: echo "$HOME/gcc-15-install/bin" >> $GITHUB_PATH
+
 
       - name: Compile problems
         run: |
