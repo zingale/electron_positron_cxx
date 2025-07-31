@@ -1,0 +1,19 @@
+name: Test compilation
+
+on: [pull_request]
+jobs:
+  compilation:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update -y -qq
+          sudo apt-get -qq -y install g++
+
+      - name: Compile problems
+        run: |
+          cd tests
+          make
+
