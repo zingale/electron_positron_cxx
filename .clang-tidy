@@ -11,13 +11,11 @@ Checks: >
        -cppcoreguidelines-init-variables,
        -cppcoreguidelines-interfaces-global-init,
        -cppcoreguidelines-non-private-member-variables-in-classes,
-       -cppcoreguidelines-owning-memory,
        -cppcoreguidelines-pro-*,
      misc-*,
        -misc-const-correctness,
-       -misc-use-internal-linkage,
        -misc-non-private-member-variables-in-classes,
-       -misc-no-recursion,
+       -misc-use-internal-linkage,
      modernize-*,
        -modernize-use-trailing-return-type,
      performance-*,
@@ -33,8 +31,6 @@ Checks: >
        -readability-magic-numbers,
        -readability-math-missing-parentheses,
        -readability-named-parameter,
-       -readability-redundant-inline-specifier,
-       -readability-static-accessed-through-instance,
 
 HeaderFileExtensions: ["H"]
 
