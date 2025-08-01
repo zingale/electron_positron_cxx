@@ -11,6 +11,10 @@ the forms of the thermodynamic quantities.
 To get good results, this uses 128-bit precision, relying on GCC's
 `__float128` and the quadmath library.
 
+## Requirements
+
+This needs a C++23 compiler.  For GCC, you need GCC >= 15.1
+
 ## Driver
 
 A basic driver that takes density, temperature, and Y_e is in `eos/`.
