@@ -161,9 +161,6 @@ public:
                 std::cerr << "unable to solve for eta" << std::endl;
                 abort();
             }
-        } catch (...) {
-            std::cerr << "unknown error doing eta solve" << std::endl;
-            abort();
         }
 
         es.eta = eta;

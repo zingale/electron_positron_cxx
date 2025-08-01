@@ -1,5 +1,8 @@
 #include <print>
 
+#include <array>
+#include <cmath>
+
 #include "real_type.H"
 #include "electron_positron.H"
 #include "difference_utils.H"
