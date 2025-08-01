@@ -9,17 +9,17 @@
 int main() {
 
     std::println("Enter rho, T, Ye (space-separated): ");
-    double _rho{};
-    double _T{};
-    double _Ye{};
+    double rho_{};
+    double T_{};
+    double Ye_{};
 
-    std::cin >> _rho >> _T >> _Ye;
+    std::cin >> rho_ >> T_ >> Ye_;
 
-    assert (_rho != 0.0 && _T != 0.0 && _Ye != 0.0);
+    assert (rho_ != 0.0 && T_ != 0.0 && Ye_ != 0.0);
 
-    real_t rho = static_cast<real_t>(_rho);
-    real_t T = static_cast<real_t>(_T);
-    real_t Ye = static_cast<real_t>(_Ye);
+    auto rho = static_cast<real_t>(rho_);
+    auto T = static_cast<real_t>(T_);
+    auto Ye = static_cast<real_t>(Ye_);
 
     ElectronPositronEOS<real_t> eos;
     auto state = eos.pe_state(rho, T, Ye);
