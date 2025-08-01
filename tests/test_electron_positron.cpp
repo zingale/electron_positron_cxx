@@ -49,9 +49,9 @@ test_ne_T_derivs() {
         for (auto rho : rhos) {
             auto es = eos.pe_state(rho, T, Ye);
             auto dT{eps * T};
-            auto [deriv, _err] = fd::adaptive_diff<real_t>([&] (real_t _T) -> real_t
+            auto [deriv, _err] = fd::adaptive_diff<real_t>([&] (real_t T_) -> real_t
                 {
-                    auto es_eps = eos.pe_state(rho, _T, Ye);
+                    auto es_eps = eos.pe_state(rho, T_, Ye);
                     return es_eps.n_e;
                 }, T, dT);
 
@@ -118,9 +118,9 @@ test_np_T_derivs() {
                 continue;
             }
             auto dT{eps * T};
-            auto [deriv, _err] = fd::adaptive_diff<real_t>([&] (real_t _T) -> real_t
+            auto [deriv, _err] = fd::adaptive_diff<real_t>([&] (real_t T_) -> real_t
                 {
-                    auto es_eps = eos.pe_state(rho, _T, Ye);
+                    auto es_eps = eos.pe_state(rho, T_, Ye);
                     return es_eps.n_pos;
                 }, T, dT);
 
@@ -180,9 +180,9 @@ test_pe_T_derivs() {
         for (auto rho : rhos) {
             auto es = eos.pe_state(rho, T, Ye);
             auto dT{eps * T};
-            auto [deriv, _err] = fd::adaptive_diff<real_t>([&] (real_t _T) -> real_t
+            auto [deriv, _err] = fd::adaptive_diff<real_t>([&] (real_t T_) -> real_t
                 {
-                    auto es_eps = eos.pe_state(rho, _T, Ye);
+                    auto es_eps = eos.pe_state(rho, T_, Ye);
                     return es_eps.p_e;
                 }, T, dT);
 
@@ -249,9 +249,9 @@ test_pp_T_derivs() {
                 continue;
             }
             auto dT{eps * T};
-            auto [deriv, _err] = fd::adaptive_diff<real_t>([&] (real_t _T) -> real_t
+            auto [deriv, _err] = fd::adaptive_diff<real_t>([&] (real_t T_) -> real_t
                 {
-                    auto es_eps = eos.pe_state(rho, _T, Ye);
+                    auto es_eps = eos.pe_state(rho, T_, Ye);
                     return es_eps.p_pos;
                 }, T, dT);
 

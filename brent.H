@@ -16,7 +16,7 @@ using namespace literals;
 // in Brent 1971)
 
 template <typename T>
-T brent(std::function<T(T)> f, T a, T b, T atol=1.e-100_rt) {
+T brent(const std::function<T(T)>& f, T a, T b, T atol=1.e-100_rt) {
 
     // we will keep track of 3 points, a, b, and c, such that f(b) *
     // f(c) < 0 and |f(b)| <= |f(c)|.
@@ -43,7 +43,6 @@ T brent(std::function<T(T)> f, T a, T b, T atol=1.e-100_rt) {
     // e is the old value of d
     T e = d;
 
-    int iter{};
     while (true) {
 
         if (std::abs(fc) < std::abs(fb)) {
@@ -131,7 +130,6 @@ T brent(std::function<T(T)> f, T a, T b, T atol=1.e-100_rt) {
             e = d = b - a;
         }
 
-        iter++;
     }
 }
 

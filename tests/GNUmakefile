@@ -10,9 +10,10 @@ INCLUDES := ..
 INCLUDE_FLAGS := $(patsubst %,-I%,$(INCLUDES))
 CXXFLAGS := -O3 -std=c++23 -Wall -Wextra -Wshadow
 
-GNU_QUADMATH_FLAGS := -fext-numeric-literals 
+# for GCC, to recognize the Q literal
+GNU_QUADMATH_FLAGS := -fext-numeric-literals
 
-# for clang-tidy
+# for clang-tidy -- clang doesn't find quadmath.H
 PATH_TO_QUADMATH := /usr/lib/gcc/x86_64-redhat-linux/15/include
 
 ALL: $(EXECUTABLES)

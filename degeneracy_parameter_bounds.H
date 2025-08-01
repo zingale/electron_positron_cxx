@@ -87,14 +87,14 @@ namespace bounds {
         //   rhoYes[ir] <= rhoYe0 < rhoYe[ir+1]
         // and likewise for T
 
-        auto ip = std::upper_bound(rhoYes.cbegin(), rhoYes.cend(), rhoYe0);
+        const auto *const ip = std::upper_bound(rhoYes.cbegin(), rhoYes.cend(), rhoYe0);
         int ir{-1};
         if (ip != rhoYes.cend()) {
             ir = std::clamp(static_cast<int>(std::distance(rhoYes.cbegin(), ip)) - 1,
                               1, static_cast<int>(rhoYes.size())-3);
         }
 
-        auto ip2 = std::upper_bound(Ts.cbegin(), Ts.cend(), temp0);
+        const auto *const ip2 = std::upper_bound(Ts.cbegin(), Ts.cend(), temp0);
         int it{-1};
         if (ip2 != Ts.cend()) {
             it = std::clamp(static_cast<int>(std::distance(Ts.cbegin(), ip2)) - 1,

@@ -150,12 +150,20 @@ public:
                 }, eta_min, eta_max);
         } catch (const std::out_of_range& e) {
             // try with larger bounds
-            eta = brent<T>([=] (T _eta) -> T
-                {
-                    auto n_e = n_e_constraint(_eta, beta);
-                    T n_pos = (with_positrons) ? n_p_constraint(_eta, beta) : 0.0_rt;
-                    return n_e_net - (n_e - n_pos);
-                }, -100.0_rt, 1.e7_rt);
+            try {
+                eta = brent<T>([=] (T _eta) -> T
+                    {
+                        auto n_e = n_e_constraint(_eta, beta);
+                        T n_pos = (with_positrons) ? n_p_constraint(_eta, beta) : 0.0_rt;
+                        return n_e_net - (n_e - n_pos);
+                    }, -100.0_rt, 1.e7_rt);
+            } catch (...) {
+                std::cerr << "unable to solve for eta" << std::endl;
+                abort();
+            }
+        } catch (...) {
+            std::cerr << "unknown error doing eta solve" << std::endl;
+            abort();
         }
 
         es.eta = eta;
