@@ -35,7 +35,7 @@ jobs:
 
       - name: Install clang-tidy
         run: |
-          conda install -c conda-forge clang-20
+          conda install -c conda-forge clang-20 clang-tidy=20
 
       - name: Report clang-tidy version
         run: clang-tidy --version
