@@ -20,6 +20,8 @@ jobs:
       - name: Install GCC 15
         run: |
           source $HOME/miniconda/etc/profile.d/conda.sh
+          conda config --add channels conda-forge
+          conda config --set channel_priority strict
           conda create -y -n gcc15 -c conda-forge gcc=15.1.0 gxx=15.1.0
 
       - name: Set environment variables
