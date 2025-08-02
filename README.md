@@ -11,6 +11,8 @@ the forms of the thermodynamic quantities.
 To get good results, this uses 128-bit precision, relying on GCC's
 `__float128` and the quadmath library.
 
+The precision can be selected by editing the `Make.eos` file.
+
 ## Requirements
 
 This needs a C++23 compiler.  For GCC, you need GCC >= 15.1
@@ -34,3 +36,10 @@ make
 optionally, you can switch from `_float128` to `long double` by
 editing the `GNUmakefile`.
 
+## clang-tidy
+
+To check the codebase with `clang-tidy`, build as:
+
+```
+make USE_CLANG_TIDY=TRUE
+```

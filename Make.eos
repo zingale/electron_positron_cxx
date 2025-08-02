@@ -2,13 +2,12 @@
 
 TOP ?= .
 
-EXECUTBLES =
-
 ALL: $(EXECUTABLES)
 
 
 HEADERS := $(wildcard $(TOP)/*.H)
 
+# select the precision
 #DEFINES := -DUSE_LONG_DOUBLE
 DEFINES := -DUSE_FLOAT128
 
@@ -21,7 +20,7 @@ CXXFLAGS := -O3 -std=c++23 -Wall -Wextra -Wshadow
 GNU_QUADMATH_FLAGS := -fext-numeric-literals
 
 # for clang-tidy -- clang doesn't find quadmath.H
-PATH_TO_QUADMATH := /usr/lib/gcc/x86_64-redhat-linux/15/include
+PATH_TO_QUADMATH := $(shell dirname $(shell find /usr/ -name quadmath.h 2> /dev/null | grep $(shell gcc -dumpversion)))
 
 % : %.cpp $(HEADERS)
 ifeq ($(USE_CLANG_TIDY),TRUE)
