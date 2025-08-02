@@ -1,0 +1,56 @@
+name: Run clang-tidy
+
+on: [pull_request]
+jobs:
+  clang-tidy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Update
+        run: |
+          sudo apt-get update -y -qq
+
+      - name: Install conda
+        run: |
+          wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh
+          bash miniconda.sh -b -p $HOME/miniconda
+          echo "$HOME/miniconda/bin" >> $GITHUB_PATH
+
+      - name: Install GCC 15
+        run: |
+          source $HOME/miniconda/etc/profile.d/conda.sh
+          conda config --add channels conda-forge
+          conda config --set channel_priority strict
+          conda create -y -n gcc15 -c conda-forge gcc=15.1.0 gxx=15.1.0
+
+      - name: Set environment variables
+        run: |
+          source $HOME/miniconda/etc/profile.d/conda.sh
+          conda activate gcc15
+          echo "CC=$(which gcc)" >> $GITHUB_ENV
+          echo "CXX=$(which g++)" >> $GITHUB_ENV
+          echo "$(dirname $(which gcc))" >> $GITHUB_PATH
+
+      - name: Install clang-tidy
+        run: |
+          conda install -c conda-forge clang-20 clang-tools=20
+
+      - name: Print system info
+        run: |
+          echo '::group::CPU / OS info'
+          lscpu
+          uname -a
+          echo '::endgroup::'
+          echo '::group::Package versions'
+          gcc --version
+          which gcc
+          clang-tidy --version
+          which clang-tidy
+          echo '::endgroup::'
+
+      - name: Compile problems
+        run: |
+          cd eos
+          make USE_CLANG_TIDY=TRUE
+
