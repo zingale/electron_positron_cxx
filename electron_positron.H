@@ -139,7 +139,7 @@ public:
         auto [eta_min, eta_max] = bounds::get_eta_bounds(rho * Ye, temp, include_positrons);
 
         T eta{};
-        bool with_positrons = include_positrons; // don't capture "this"
+        const bool with_positrons = include_positrons; // don't capture "this"
 
         try {
             eta = brent<T>([=] (T _eta) -> T

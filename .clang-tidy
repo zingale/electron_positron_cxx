@@ -7,11 +7,9 @@ Checks: >
      clang-diagnostic-*,
      cppcoreguidelines-*,
        -cppcoreguidelines-avoid-magic-numbers,
-       -cppcoreguidelines-interfaces-global-init,
        -cppcoreguidelines-non-private-member-variables-in-classes,
        -cppcoreguidelines-pro-*,
      misc-*,
-       -misc-const-correctness,
        -misc-non-private-member-variables-in-classes,
        -misc-use-internal-linkage,
      modernize-*,
@@ -21,13 +19,11 @@ Checks: >
      portability-*,
      readability-*,
        -readability-avoid-const-params-in-decls,
-       -readability-enum-initial-value,
        -readability-function-cognitive-complexity,
        -readability-function-size,
        -readability-identifier-length,
        -readability-magic-numbers,
        -readability-math-missing-parentheses,
-       -readability-named-parameter,
 
 HeaderFileExtensions: ["H"]
 
