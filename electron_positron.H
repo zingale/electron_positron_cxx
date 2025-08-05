@@ -23,12 +23,12 @@ template <typename T>
 class EOSState {
 
 public:
-    T rho{};
-    T temp{};
-    T Y_e{};
+    T rho{};  // density (g/cm^3)
+    T temp{};  // temperature (Kelvin)
+    T Y_e{};  // electron fraction
 
-    T n_e{};
-    T n_pos{};
+    T n_e{};  // number density of electrons (1/cm^3)
+    T n_pos{};  // number density of positrons (1/cm^3)
 
     T dne_drho{};
     T dne_dT{};
@@ -36,8 +36,8 @@ public:
     T dnp_drho{};
     T dnp_dT{};
 
-    T p_e{};
-    T p_pos{};
+    T p_e{};  // electron pressure (erg/cm^3)
+    T p_pos{};  // positron pressure (erg/cm?^3)
 
     T dpe_drho{};
     T dpe_dT{};
@@ -45,14 +45,17 @@ public:
     T dpp_drho{};
     T dpp_dT{};
 
-    T e_e{};
-    T e_pos{};
+    T e_e{};  // specific electron energy (erg/g)
+    T e_pos{};  // specific positron energy (erg/g)
 
     T dee_drho{};
     T dee_dT{};
 
     T dep_drho{};
     T dep_dT{};
+
+    T s_e{};  // electron specific energy (erg/g/K)
+    T s_pos{};  // positron specific energy (erg/g/K)
 
     T eta{};
 
@@ -66,14 +69,17 @@ std::ostream& operator<< (std::ostream& os, EOSState<T>& es) {
 
     std::string out{"\n"};
 
-    out += std::format(" ρ = {:18.10g};       T = {:18.10g};      Yₑ = {:18.10g};\n", es.rho, es.temp, es.Y_e);
+    out += std::format(" ρ = {:18.10g}       T = {:18.10g}      Yₑ = {:18.10g}\n", es.rho, es.temp, es.Y_e);
     out += std::format(" η = {:18.10g}\n", es.eta);
-    out += std::format("n⁻ = {:18.10g};  ∂n⁻/∂ρ = {:18.10g};  ∂n⁻/∂T = {:18.10g};\n", es.n_e, es.dne_drho, es.dne_dT);
-    out += std::format("n⁺ = {:18.10g};  ∂n⁺/∂ρ = {:18.10g};  ∂n⁺/∂T = {:18.10g};\n", es.n_pos, es.dnp_drho, es.dnp_dT);
-    out += std::format("p⁻ = {:18.10g};  ∂p⁻/∂ρ = {:18.10g};  ∂p⁻/∂T = {:18.10g};\n", es.p_e, es.dpe_drho, es.dpe_dT);
-    out += std::format("p⁺ = {:18.10g};  ∂p⁺/∂ρ = {:18.10g};  ∂p⁺/∂T = {:18.10g};\n", es.p_pos, es.dpp_drho, es.dpp_dT);
-    out += std::format("e⁻ = {:18.10g};  ∂e⁻/∂ρ = {:18.10g};  ∂e⁻/∂T = {:18.10g};\n", es.e_e, es.dee_drho, es.dee_dT);
-    out += std::format("e⁺ = {:18.10g};  ∂e⁺/∂ρ = {:18.10g};  ∂e⁺/∂T = {:18.10g};\n", es.e_pos, es.dep_drho, es.dep_dT);
+    out += std::format("n⁻ = {:18.10g}  ∂n⁻/∂ρ = {:18.10g}  ∂n⁻/∂T = {:18.10g}\n", es.n_e, es.dne_drho, es.dne_dT);
+    out += std::format("n⁺ = {:18.10g}  ∂n⁺/∂ρ = {:18.10g}  ∂n⁺/∂T = {:18.10g}\n", es.n_pos, es.dnp_drho, es.dnp_dT);
+    out += std::format("p⁻ = {:18.10g}  ∂p⁻/∂ρ = {:18.10g}  ∂p⁻/∂T = {:18.10g}\n", es.p_e, es.dpe_drho, es.dpe_dT);
+    out += std::format("p⁺ = {:18.10g}  ∂p⁺/∂ρ = {:18.10g}  ∂p⁺/∂T = {:18.10g}\n", es.p_pos, es.dpp_drho, es.dpp_dT);
+    out += std::format("e⁻ = {:18.10g}  ∂e⁻/∂ρ = {:18.10g}  ∂e⁻/∂T = {:18.10g}\n", es.e_e, es.dee_drho, es.dee_dT);
+    out += std::format("e⁺ = {:18.10g}  ∂e⁺/∂ρ = {:18.10g}  ∂e⁺/∂T = {:18.10g}\n", es.e_pos, es.dep_drho, es.dep_dT);
+    out += std::format("s⁻ = {:18.10g}\n", es.s_e);
+    out += std::format("s⁺ = {:18.10g}\n", es.s_pos);
+
 
     os << out;
     return os;
@@ -283,6 +289,10 @@ public:
             es.dep_drho = (dEp_drho - E_pos / rho) / rho;
             es.dep_dT = dEp_dT / rho;
         }
+
+        // compute entropy -- this follows from Arnett's text, Eq. B.6
+        es.s_e = (es.e_e + es.p_e / rho) / temp - es.n_e * C::k * eta / rho;
+        es.s_pos = (es.e_pos + es.p_pos / rho) / temp - es.n_pos * C::k * eta_pos / rho;
 
         return es;
     }
