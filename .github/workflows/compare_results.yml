@@ -1,0 +1,54 @@
+name: Compare results
+
+on: [pull_request]
+jobs:
+  compare:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: update
+        run: |
+          sudo apt-get update -y -qq
+
+      - name: install conda
+        run: |
+          wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh
+          bash miniconda.sh -b -p $HOME/miniconda
+          echo "$HOME/miniconda/bin" >> $GITHUB_PATH
+
+      - name: install GCC 15
+        run: |
+          source $HOME/miniconda/etc/profile.d/conda.sh
+          conda create -y -n gcc15 -c conda-forge gcc=15.1.0 gxx=15.1.0
+
+      - name: Set environment variables
+        run: |
+          source $HOME/miniconda/etc/profile.d/conda.sh
+          conda activate gcc15
+          echo "CC=$(which gcc)" >> $GITHUB_ENV
+          echo "CXX=$(which g++)" >> $GITHUB_ENV
+          echo "$(dirname $(which gcc))" >> $GITHUB_PATH
+
+      - name: report GCC version
+        run: gcc --version
+
+      - name: Compile eos
+        run: |
+          cd eos
+          make
+
+      - name: check conditions 1
+        run: |
+          echo 1.e4 1.e7 0.5 | ./eos > test1.txt
+          diff test1.txt ci-benchmarks/eos_cond1.txt
+
+      - name: check conditions 2
+        run: |
+          echo 1.e9 1.e4 0.5 | ./eos > test2.txt
+          diff test2.txt ci-benchmarks/eos_cond2.txt
+
+      - name: check conditions 3
+        run: |
+          echo 1.e-2 1.e9 0.5 | ./eos > test3.txt
+          diff test3.txt ci-benchmarks/eos_cond3.txt
