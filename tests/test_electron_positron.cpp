@@ -407,9 +407,142 @@ test_ep_T_derivs() {
     }
 }
 
+// entropy
+
+void
+test_se_rho_derivs() {
+
+    ElectronPositronEOS<real_t> eos;
+    constexpr real_t Ye{0.5_rt};
+
+    constexpr real_t eps{0.01_rt};
+
+    std::println("");
+    std::println("testing ∂s⁻/∂ρ via differencing");
+
+    for (auto T : Ts) {
+        for (auto rho : rhos) {
+            auto es = eos.pe_state(rho, T, Ye);
+            auto drho{eps * rho};
+            auto [deriv, _err] = fd::adaptive_diff<real_t>([&] (real_t _rho) -> real_t
+                {
+                    auto es_eps = eos.pe_state(_rho, T, Ye);
+                    return es_eps.s_e;
+                }, rho, drho);
+
+            real_t err = std::abs(es.dse_drho - deriv) / std::abs(es.dse_drho);
+            std::println("ρ = {:10.3g} T = {:10.3g}, ∂s⁻/∂ρ = {:15.8g}, error = {:15.5g}",
+                         rho, T, es.dse_drho, err);
+        }
+    }
+}
+
+void
+test_se_T_derivs() {
+
+    ElectronPositronEOS<real_t> eos;
+    constexpr real_t Ye{0.5_rt};
+
+    constexpr real_t eps{0.01_rt};
+
+    std::println("");
+    std::println("testing ∂s⁻/∂T via differencing");
+
+    for (auto T : Ts) {
+        for (auto rho : rhos) {
+            auto es = eos.pe_state(rho, T, Ye);
+            auto dT{eps * T};
+            auto [deriv, _err] = fd::adaptive_diff<real_t>([&] (real_t T_) -> real_t
+                {
+                    auto es_eps = eos.pe_state(rho, T_, Ye);
+                    return es_eps.s_e;
+                }, T, dT);
+
+            real_t err{};
+            if (es.dse_dT == 0.0_rt) {
+                real_t scale = es.s_e / T;
+                err = std::abs(es.dse_dT - deriv / scale) ;
+            } else {
+                err = std::abs(es.dse_dT - deriv) / std::abs(es.dse_dT);
+            }
+            std::println("ρ = {:10.3g} T = {:10.3g}, ∂s⁻/∂T = {:15.8g}, error = {:15.5g}",
+                         rho, T, es.dse_dT, err);
+        }
+    }
+}
+
+void
+test_sp_rho_derivs() {
+
+    ElectronPositronEOS<real_t> eos;
+    constexpr real_t Ye{0.5_rt};
+
+    constexpr real_t eps{0.01_rt};
+
+    std::println("");
+    std::println("testing ∂s⁺/∂ρ via differencing");
+
+    for (auto T : Ts) {
+        for (auto rho : rhos) {
+            auto es = eos.pe_state(rho, T, Ye);
+            if (es.n_pos == 0.0 && es.dsp_drho == 0.0) {
+                continue;
+            }
+            auto drho{eps * rho};
+            auto [deriv, _err] = fd::adaptive_diff<real_t>([&] (real_t _rho) -> real_t
+                {
+                    auto es_eps = eos.pe_state(_rho, T, Ye);
+                    return es_eps.s_pos;
+                }, rho, drho);
+
+            real_t err = std::abs(es.dsp_drho - deriv) / std::abs(es.dsp_drho);
+            std::println("ρ = {:10.3g} T = {:10.3g}, ∂s⁺/∂ρ = {:15.8g}, error = {:15.5g}",
+                         rho, T, es.dsp_drho, err);
+        }
+    }
+}
+
+void
+test_sp_T_derivs() {
+
+    ElectronPositronEOS<real_t> eos;
+    constexpr real_t Ye{0.5_rt};
+
+    constexpr real_t eps{0.01_rt};
+
+    std::println("");
+    std::println("testing ∂s⁺/∂T via differencing");
+
+    for (auto T : Ts) {
+        for (auto rho : rhos) {
+            auto es = eos.pe_state(rho, T, Ye);
+            if (es.n_pos == 0.0 && es.dsp_dT == 0.0) {
+                continue;
+            }
+            auto dT{eps * T};
+            auto [deriv, _err] = fd::adaptive_diff<real_t>([&] (real_t T_) -> real_t
+                {
+                    auto es_eps = eos.pe_state(rho, T_, Ye);
+                    return es_eps.s_pos;
+                }, T, dT);
+
+            real_t err{};
+            if (es.dsp_dT == 0.0_rt) {
+                real_t scale = es.s_pos / T;
+                err = std::abs(es.dsp_dT - deriv / scale) ;
+            } else {
+                err = std::abs(es.dsp_dT - deriv) / std::abs(es.dsp_dT);
+            }
+            std::println("ρ = {:10.3g} T = {:10.3g}, ∂s⁺/∂T = {:15.8g}, error = {:15.5g}",
+                         rho, T, es.dsp_dT, err);
+        }
+    }
+}
+
 
 int main() {
 
+#if 0
     test_ne_rho_derivs();
     test_ne_T_derivs();
 
@@ -427,5 +560,12 @@ int main() {
 
     test_ep_rho_derivs();
     test_ep_T_derivs();
+#endif
+
+    test_se_rho_derivs();
+    test_se_T_derivs();
+
+    test_sp_rho_derivs();
+    test_sp_T_derivs();
 
 }

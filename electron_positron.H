@@ -306,7 +306,7 @@ public:
 
         T h_e = es.e_e + es.p_e / rho;
         T dhe_dT = es.dee_dT + es.dpe_dT / rho;
-        T dhe_drho = es.dee_drho + es.dpe_drho / rho - h_e / (rho * rho);
+        T dhe_drho = es.dee_drho + es.dpe_drho / rho - es.p_e / (rho * rho);
 
         es.dse_dT = dhe_dT / temp - h_e / (temp * temp) -
             C::k * (eta * es.dne_dT / rho + es.n_e * deta_dT / rho);
@@ -316,13 +316,13 @@ public:
 
         T h_pos = es.e_pos + es.p_pos / rho;
         T dhp_dT = es.dep_dT + es.dpp_dT / rho;
-        T dhp_drho = es.dep_drho + es.dpp_drho / rho - h_pos / (rho * rho);
+        T dhp_drho = es.dep_drho + es.dpp_drho / rho - es.p_pos / (rho * rho);
 
         es.dsp_dT = dhp_dT / temp - h_pos / (temp * temp) -
             C::k * (eta_pos * es.dnp_dT / rho + es.n_pos * detap_dT / rho);
 
         es.dsp_drho = dhp_drho / temp -
-            C::k * (es.n_pos * detap_drho / rho + eta * es.dne_drho / rho - es.n_e * eta / (rho * rho));
+            C::k * (es.n_pos * detap_drho / rho + eta_pos * es.dnp_drho / rho - es.n_pos * eta_pos / (rho * rho));
 
         return es;
     }
