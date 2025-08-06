@@ -45,8 +45,8 @@ public:
     T dpp_drho{};
     T dpp_dT{};
 
-    T e_e{};  // specific electron energy (erg/g)
-    T e_pos{};  // specific positron energy (erg/g)
+    T e_e{};  // electron specific energy (erg/g)
+    T e_pos{};  // positron specific energy (erg/g)
 
     T dee_drho{};
     T dee_dT{};
@@ -54,8 +54,8 @@ public:
     T dep_drho{};
     T dep_dT{};
 
-    T s_e{};  // electron specific energy (erg/g/K)
-    T s_pos{};  // positron specific energy (erg/g/K)
+    T s_e{};  // electron specific entropy(erg/g/K)
+    T s_pos{};  // positron specific entropy (erg/g/K)
 
     T dse_drho{};
     T dse_dT{};
