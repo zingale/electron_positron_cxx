@@ -64,6 +64,7 @@ public:
     T dsp_dT{};
 
     T eta{};
+    T eta_pos{};
 
     EOSState() = default;
 
@@ -76,7 +77,7 @@ std::ostream& operator<< (std::ostream& os, EOSState<T>& es) {
     std::string out{"\n"};
 
     out += std::format(" ρ = {:18.10g}       T = {:18.10g}      Yₑ = {:18.10g}\n", es.rho, es.temp, es.Y_e);
-    out += std::format(" η = {:18.10g}\n", es.eta);
+    out += std::format("η⁻ = {:18.10g}      η⁺ = {:18.10g}\n", es.eta, es.eta_pos);
     out += std::format("n⁻ = {:18.10g}  ∂n⁻/∂ρ = {:18.10g}  ∂n⁻/∂T = {:18.10g}\n", es.n_e, es.dne_drho, es.dne_dT);
     out += std::format("n⁺ = {:18.10g}  ∂n⁺/∂ρ = {:18.10g}  ∂n⁺/∂T = {:18.10g}\n", es.n_pos, es.dnp_drho, es.dnp_dT);
     out += std::format("p⁻ = {:18.10g}  ∂p⁻/∂ρ = {:18.10g}  ∂p⁻/∂T = {:18.10g}\n", es.p_e, es.dpe_drho, es.dpe_dT);
@@ -179,6 +180,7 @@ public:
 
         // for positrons
         T eta_pos = -eta - 2.0_rt / beta;
+        es.eta_pos = eta_pos;
 
         // compute the number density, pressure and energy
         constexpr T pcoeff = coeff * (2.0 / 3.0) * rest_mass;
