@@ -57,6 +57,12 @@ public:
     T s_e{};  // electron specific energy (erg/g/K)
     T s_pos{};  // positron specific energy (erg/g/K)
 
+    T dse_drho{};
+    T dse_dT{};
+
+    T dsp_drho{};
+    T dsp_dT{};
+
     T eta{};
 
     EOSState() = default;
@@ -77,8 +83,8 @@ std::ostream& operator<< (std::ostream& os, EOSState<T>& es) {
     out += std::format("p⁺ = {:18.10g}  ∂p⁺/∂ρ = {:18.10g}  ∂p⁺/∂T = {:18.10g}\n", es.p_pos, es.dpp_drho, es.dpp_dT);
     out += std::format("e⁻ = {:18.10g}  ∂e⁻/∂ρ = {:18.10g}  ∂e⁻/∂T = {:18.10g}\n", es.e_e, es.dee_drho, es.dee_dT);
     out += std::format("e⁺ = {:18.10g}  ∂e⁺/∂ρ = {:18.10g}  ∂e⁺/∂T = {:18.10g}\n", es.e_pos, es.dep_drho, es.dep_dT);
-    out += std::format("s⁻ = {:18.10g}\n", es.s_e);
-    out += std::format("s⁺ = {:18.10g}\n", es.s_pos);
+    out += std::format("s⁻ = {:18.10g}  ∂s⁻/∂ρ = {:18.10g}  ∂s⁻/∂T = {:18.10g}\n", es.s_e, es.dse_drho, es.dse_dT);
+    out += std::format("s⁺ = {:18.10g}  ∂s⁺/∂ρ = {:18.10g}  ∂s⁺/∂T = {:18.10g}\n", es.s_pos, es.dsp_drho, es.dsp_dT);
 
 
     os << out;
@@ -230,6 +236,10 @@ public:
         T deta_drho = C::N_A * Ye / (dne_deta - dnp_deta);
         T deta_dT = -dbeta_dT * (dne_dbeta - dnp_dbeta) / (dne_deta - dnp_deta);
 
+        // positron version
+        T detap_drho = -deta_drho;
+        T detap_dT = -deta_dT + 2.0 / (beta * beta) * dbeta_dT;
+
         // Compute partials of number density with density and temperature
         // For debugging
         es.dne_drho = dne_deta * deta_drho;
@@ -293,6 +303,26 @@ public:
         // compute entropy -- this follows from Arnett's text, Eq. B.6
         es.s_e = (es.e_e + es.p_e / rho) / temp - es.n_e * C::k * eta / rho;
         es.s_pos = (es.e_pos + es.p_pos / rho) / temp - es.n_pos * C::k * eta_pos / rho;
+
+        T h_e = es.e_e + es.p_e / rho;
+        T dhe_dT = es.dee_dT + es.dpe_dT / rho;
+        T dhe_drho = es.dee_drho + es.dpe_drho / rho - h_e / (rho * rho);
+
+        es.dse_dT = dhe_dT / temp - h_e / (temp * temp) -
+            C::k * (eta * es.dne_dT / rho + es.n_e * deta_dT / rho);
+
+        es.dse_drho = dhe_drho / temp -
+            C::k * (es.n_e * deta_drho / rho + eta * es.dne_drho / rho - es.n_e * eta / (rho * rho));
+
+        T h_pos = es.e_pos + es.p_pos / rho;
+        T dhp_dT = es.dep_dT + es.dpp_dT / rho;
+        T dhp_drho = es.dep_drho + es.dpp_drho / rho - h_pos / (rho * rho);
+
+        es.dsp_dT = dhp_dT / temp - h_pos / (temp * temp) -
+            C::k * (eta_pos * es.dnp_dT / rho + es.n_pos * detap_dT / rho);
+
+        es.dsp_drho = dhp_drho / temp -
+            C::k * (es.n_pos * detap_drho / rho + eta * es.dne_drho / rho - es.n_e * eta / (rho * rho));
 
         return es;
     }
