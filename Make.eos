@@ -20,11 +20,15 @@ CXXFLAGS := -O3 -std=c++23 -Wall -Wextra -Wshadow
 GNU_QUADMATH_FLAGS := -fext-numeric-literals
 
 # for clang-tidy -- clang doesn't find quadmath.H
+# we'll look both in /usr and in ~/minicoda (for GCC installs via conda)
 PATH_TO_QUADMATH := $(shell dirname $(shell find /usr/ -name quadmath.h 2> /dev/null | grep $(shell gcc -dumpversion)))
+ifeq ($(strip $(PATH_TO_QUADMATH)),)
+  PATH_TO_QUADMATH := $(shell dirname $(shell find ~/miniconda/ -name quadmath.h 2> /dev/null | grep $(shell gcc -dumpversion)))
+endif
 
 % : %.cpp $(HEADERS)
 ifeq ($(USE_CLANG_TIDY),TRUE)
-	clang-tidy --config-file=$(TOP)/.clang-tidy $< -- $(CXXFLAGS) $(INCLUDE_FLAGS) -I$(PATH_TO_QUADMATH)
+	clang-tidy --config-file=$(TOP)/.clang-tidy --warnings-as-errors=* $< -- $(CXXFLAGS) $(INCLUDE_FLAGS) -I$(PATH_TO_QUADMATH)
 endif
 	g++  $(CXXFLAGS) $(GNU_QUADMATH_FLAGS) $(DEFINES) $(INCLUDE_FLAGS) -o $@ $<
 
