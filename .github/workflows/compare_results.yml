@@ -40,15 +40,18 @@ jobs:
 
       - name: check conditions 1
         run: |
+          cd eos
           echo 1.e4 1.e7 0.5 | ./eos > test1.txt
           diff test1.txt ci-benchmarks/eos_cond1.txt
 
       - name: check conditions 2
         run: |
+          cd eos
           echo 1.e9 1.e4 0.5 | ./eos > test2.txt
           diff test2.txt ci-benchmarks/eos_cond2.txt
 
       - name: check conditions 3
         run: |
+          cd eos
           echo 1.e-2 1.e9 0.5 | ./eos > test3.txt
           diff test3.txt ci-benchmarks/eos_cond3.txt
