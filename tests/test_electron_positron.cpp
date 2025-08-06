@@ -542,7 +542,6 @@ test_sp_T_derivs() {
 
 int main() {
 
-#if 0
     test_ne_rho_derivs();
     test_ne_T_derivs();
 
@@ -560,7 +559,6 @@ int main() {
 
     test_ep_rho_derivs();
     test_ep_T_derivs();
-#endif
 
     test_se_rho_derivs();
     test_se_T_derivs();
