@@ -64,9 +64,9 @@ namespace fd {
         }
 
         T deriv = ((-fvals[0] + fvals[6]) +
-                   9.0 * (fvals[1] - fvals[5]) +
-                   45.0 * (-fvals[2] + fvals[4])) /
-            (60 * delta);
+                   9.0_rt * (fvals[1] - fvals[5]) +
+                   45.0_rt * (-fvals[2] + fvals[4])) /
+            (60_rt * delta);
 
         return deriv;
     }
@@ -90,10 +90,10 @@ namespace fd {
             fvals.push_back(_f);
         }
 
-        T deriv = ((1.0 / 280.0) * (fvals[0] - fvals[8]) +
-                   (4.0 / 105.0) * (-fvals[1] + fvals[7]) +
-                   0.2 * (fvals[2] - fvals[6]) +
-                   0.8 * (-fvals[3] + fvals[5])) / delta;
+        T deriv = ((1.0_rt / 280.0_rt) * (fvals[0] - fvals[8]) +
+                   (4.0_rt / 105.0_rt) * (-fvals[1] + fvals[7]) +
+                   0.2_rt * (fvals[2] - fvals[6]) +
+                   0.8_rt * (-fvals[3] + fvals[5])) / delta;
 
         return deriv;
     }
@@ -185,7 +185,7 @@ namespace fd {
             // at this point, A(n, n) should be the most accurate estimate
             // for the derivative, but it's possible that things have
             // become worse -- let's check
-            if (std::abs(A[n][n] - A[n-1][n-1]) > 2.0 * err) {
+            if (std::abs(A[n][n] - A[n-1][n-1]) > 2.0_rt * err) {
                 break;
             }
 
@@ -246,7 +246,7 @@ namespace fd {
             // at this point, A(n, n) should be the most accurate estimate
             // for the derivative, but it's possible that things have
             // become worse -- let's check
-            if (std::abs(A[n][n] - A[n-1][n-1]) > 2.0 * err) {
+            if (std::abs(A[n][n] - A[n-1][n-1]) > 2.0_rt * err) {
                 break;
             }
 

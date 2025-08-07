@@ -180,16 +180,14 @@ public:
             xi = std::log1p(std::exp(term)) / sigma;
         }
 
-        T xsq = xi * xi;
+        T X_a = ((a[0] + xi * (b[0] + xi * c[0])) /
+                 (1.0_rt + c[0] * xi));
 
-        T X_a = ((a[0] + b[0] * xi + c[0] * xsq) /
-                 (1.0 + c[0] * xi));
+        T X_b = ((a[1] + xi * (b[1] + xi * c[1] * d[1])) /
+                 (1.0_rt + xi * (e[1] + xi * c[1])));
 
-        T X_b = ((a[1] + b[1] * xi + c[1] * d[1] * xsq) /
-                 (1.0 + e[1] * xi + c[1] * xi*xi));
-
-        T X_c = ((a[2] + b[2] * xi + c[2] * d[2] * xsq) /
-                 (1.0 + e[2] * xi + c[2] * xsq));
+        T X_c = ((a[2] + xi * (b[2] + xi * c[2] * d[2])) /
+                 (1.0_rt + xi * (e[2] + xi * c[2])));
 
         return {X_a - X_b, X_a, X_a + X_c};
     }
@@ -260,8 +258,8 @@ private:
         // which is 1.0 / (2.0 * (1.0 + cosh(delta))
         T inv_cosh_term{};
         if (std::abs(delta) < max_exponent) {
-            //inv_cosh_term = 0.5_rt / (1.0_rt + std::cosh(delta));
-            inv_cosh_term = 1.0_rt / (2.0_rt + std::exp(-delta) + std::exp(delta));
+            inv_cosh_term = 0.5_rt / (1.0_rt + std::cosh(delta));
+            //inv_cosh_term = 1.0_rt / (2.0_rt + std::exp(-delta) + std::exp(delta));
         }
 
         // this is (exp(xsq - eta) - 1.0) / (exp(xsq - eta) + 1.0)
@@ -332,8 +330,8 @@ private:
         // which is 1.0 / (2.0 * (1.0 + cosh(delta))
         T inv_cosh_term{};
         if (std::abs(delta) < max_exponent) {
-            //inv_cosh_term = 0.5_rt / (1.0_rt + std::cosh(delta));
-            inv_cosh_term = 1.0_rt / (2.0_rt + std::exp(-delta) + std::exp(delta));
+            inv_cosh_term = 0.5_rt / (1.0_rt + std::cosh(delta));
+            //inv_cosh_term = 1.0_rt / (2.0_rt + std::exp(-delta) + std::exp(delta));
         }
 
         // this is (exp(x - eta) - 1.0) / (exp(x - eta) + 1.0)
@@ -459,7 +457,7 @@ private:
         BreakPoints<T> bp(eta_der);
         auto [S_1, S_2, S_3] = bp.get_points(eta);
 
-        auto I0 = compute_legendre(0, 0.0, std::sqrt(S_1),
+        auto I0 = compute_legendre(0, 0.0_rt, std::sqrt(S_1),
                                    eta_der, beta_der);
 
         auto I1 = compute_legendre(1, S_1, S_2,
