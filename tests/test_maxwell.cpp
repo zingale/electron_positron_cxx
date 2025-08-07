@@ -32,6 +32,25 @@ test_maxwell() {
 
             std::println("ρ = {:8.3g} T = {:8.3g}:  p⁻ + p⁺ = {:15.8g},  p = ρ² ∂e/∂ρ|ᴛ + T ∂p/∂T|ᵨ error = {:15.5g}",
                          rho, T, ptot, term);
+
+        }
+    }
+
+    std::println("");
+    std::println("testing ∂e/∂T|ᵨ = T ∂s/∂T|ᵨ");
+
+    for (auto T : Ts) {
+        for (auto rho : rhos) {
+            auto es = eos.pe_state(rho, T, Ye);
+
+            real_t de_dT = es.dee_dT + es.dep_dT;
+            real_t ds_dT = es.dse_dT + es.dsp_dT;
+
+            real_t term = std::abs((de_dT - T * ds_dT) / de_dT);
+
+            std::println("ρ = {:8.3g} T = {:8.3g}:  ∂e/∂T|ᵨ = {:15.8g},  ∂e/∂T|ᵨ = T ∂s/∂T|ᵨ error = {:15.5g}",
+                         rho, T, de_dT, term);
+
         }
     }
 }

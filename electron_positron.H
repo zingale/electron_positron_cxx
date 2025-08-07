@@ -180,7 +180,7 @@ public:
 
         // for positrons
         T eta_pos = -eta - 2.0_rt / beta;
-        es.eta_pos = eta_pos;
+        es.eta_pos = -eta;  // see C&G 24.334
 
         // compute the number density, pressure and energy
         constexpr T pcoeff = coeff * (2.0 / 3.0) * rest_mass;
@@ -240,7 +240,7 @@ public:
 
         // positron version
         T detap_drho = -deta_drho;
-        T detap_dT = -deta_dT + 2.0 / (beta * beta) * dbeta_dT;
+        T detap_dT = -deta_dT;
 
         // Compute partials of number density with density and temperature
         // For debugging
@@ -304,7 +304,7 @@ public:
 
         // compute entropy -- this follows from Arnett's text, Eq. B.6
         es.s_e = (es.e_e + es.p_e / rho) / temp - es.n_e * C::k * eta / rho;
-        es.s_pos = (es.e_pos + es.p_pos / rho) / temp - es.n_pos * C::k * eta_pos / rho;
+        es.s_pos = (es.e_pos + es.p_pos / rho) / temp - es.n_pos * C::k * es.eta_pos / rho;
 
         T h_e = es.e_e + es.p_e / rho;
         T dhe_dT = es.dee_dT + es.dpe_dT / rho;
@@ -321,10 +321,10 @@ public:
         T dhp_drho = es.dep_drho + es.dpp_drho / rho - es.p_pos / (rho * rho);
 
         es.dsp_dT = dhp_dT / temp - h_pos / (temp * temp) -
-            C::k * (eta_pos * es.dnp_dT / rho + es.n_pos * detap_dT / rho);
+            C::k * (es.eta_pos * es.dnp_dT / rho + es.n_pos * detap_dT / rho);
 
         es.dsp_drho = dhp_drho / temp -
-            C::k * (es.n_pos * detap_drho / rho + eta_pos * es.dnp_drho / rho - es.n_pos * eta_pos / (rho * rho));
+            C::k * (es.n_pos * detap_drho / rho + es.eta_pos * es.dnp_drho / rho - es.n_pos * es.eta_pos / (rho * rho));
 
         return es;
     }
