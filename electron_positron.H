@@ -109,12 +109,12 @@ T n_e_constraint(T eta, T beta) {
 
 template <typename T>
 T n_p_constraint(T eta, T beta) {
-    T eta_pos = -eta - 2.0 / beta;
+    T eta_tilde = -eta - 2.0 / beta;
 
-    FermiIntegral<T> f12_pos(0.5_rt, eta_pos, beta);
+    FermiIntegral<T> f12_pos(0.5_rt, eta_tilde, beta);
     f12_pos.evaluate(0);
 
-    FermiIntegral<T> f32_pos(1.5_rt, eta_pos, beta);
+    FermiIntegral<T> f32_pos(1.5_rt, eta_tilde, beta);
     f32_pos.evaluate(0);
 
     T n_pos = coeff * beta * std::sqrt(beta) * (f12_pos.F + beta * f32_pos.F);
@@ -179,8 +179,8 @@ public:
         es.eta = eta;
 
         // for positrons
-        T eta_pos = -eta - 2.0_rt / beta;
-        es.eta_pos = eta_pos;
+        T eta_tilde = -eta - 2.0_rt / beta;
+        es.eta_pos = -eta;  // see C&G 24.334
 
         // compute the number density, pressure and energy
         constexpr T pcoeff = coeff * (2.0 / 3.0) * rest_mass;
@@ -201,9 +201,9 @@ public:
         // this is (energy / volume, what we usually write as rho e)
         T E_e = ecoeff * beta52 * (f32.F + beta * f52.F);
 
-        FermiIntegral<T> f12_pos(0.5_rt, eta_pos, beta);
-        FermiIntegral<T> f32_pos(1.5_rt, eta_pos, beta);
-        FermiIntegral<T> f52_pos(2.5_rt, eta_pos, beta);
+        FermiIntegral<T> f12_pos(0.5_rt, eta_tilde, beta);
+        FermiIntegral<T> f32_pos(1.5_rt, eta_tilde, beta);
+        FermiIntegral<T> f52_pos(2.5_rt, eta_tilde, beta);
 
         T E_pos{};
         if (include_positrons) {
@@ -240,7 +240,7 @@ public:
 
         // positron version
         T detap_drho = -deta_drho;
-        T detap_dT = -deta_dT + 2.0 / (beta * beta) * dbeta_dT;
+        T detap_dT = -deta_dT;
 
         // Compute partials of number density with density and temperature
         // For debugging
@@ -303,28 +303,28 @@ public:
         }
 
         // compute entropy -- this follows from Arnett's text, Eq. B.6
-        es.s_e = (es.e_e + es.p_e / rho) / temp - es.n_e * C::k * eta / rho;
-        es.s_pos = (es.e_pos + es.p_pos / rho) / temp - es.n_pos * C::k * eta_pos / rho;
+        es.s_e = (es.e_e + es.p_e / rho) / temp - es.n_e * C::k * es.eta / rho;
+        es.s_pos = (es.e_pos + es.p_pos / rho) / temp - es.n_pos * C::k * es.eta_pos / rho;
 
         T h_e = es.e_e + es.p_e / rho;
         T dhe_dT = es.dee_dT + es.dpe_dT / rho;
         T dhe_drho = es.dee_drho + es.dpe_drho / rho - es.p_e / (rho * rho);
 
         es.dse_dT = dhe_dT / temp - h_e / (temp * temp) -
-            C::k * (eta * es.dne_dT / rho + es.n_e * deta_dT / rho);
+            C::k * (es.eta * es.dne_dT / rho + es.n_e * deta_dT / rho);
 
         es.dse_drho = dhe_drho / temp -
-            C::k * (es.n_e * deta_drho / rho + eta * es.dne_drho / rho - es.n_e * eta / (rho * rho));
+            C::k * (es.n_e * deta_drho / rho + es.eta * es.dne_drho / rho - es.n_e * es.eta / (rho * rho));
 
         T h_pos = es.e_pos + es.p_pos / rho;
         T dhp_dT = es.dep_dT + es.dpp_dT / rho;
         T dhp_drho = es.dep_drho + es.dpp_drho / rho - es.p_pos / (rho * rho);
 
         es.dsp_dT = dhp_dT / temp - h_pos / (temp * temp) -
-            C::k * (eta_pos * es.dnp_dT / rho + es.n_pos * detap_dT / rho);
+            C::k * (es.eta_pos * es.dnp_dT / rho + es.n_pos * detap_dT / rho);
 
         es.dsp_drho = dhp_drho / temp -
-            C::k * (es.n_pos * detap_drho / rho + eta_pos * es.dnp_drho / rho - es.n_pos * eta_pos / (rho * rho));
+            C::k * (es.n_pos * detap_drho / rho + es.eta_pos * es.dnp_drho / rho - es.n_pos * es.eta_pos / (rho * rho));
 
         return es;
     }
