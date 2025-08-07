@@ -183,13 +183,13 @@ public:
         T xsq = xi * xi;
 
         T X_a = ((a[0] + b[0] * xi + c[0] * xsq) /
-                 (1.0 + c[0] * xi));
+                 (1.0_rt + c[0] * xi));
 
         T X_b = ((a[1] + b[1] * xi + c[1] * d[1] * xsq) /
-                 (1.0 + e[1] * xi + c[1] * xi*xi));
+                 (1.0_rt + e[1] * xi + c[1] * xi*xi));
 
         T X_c = ((a[2] + b[2] * xi + c[2] * d[2] * xsq) /
-                 (1.0 + e[2] * xi + c[2] * xsq));
+                 (1.0_rt + e[2] * xi + c[2] * xsq));
 
         return {X_a - X_b, X_a, X_a + X_c};
     }
@@ -459,7 +459,7 @@ private:
         BreakPoints<T> bp(eta_der);
         auto [S_1, S_2, S_3] = bp.get_points(eta);
 
-        auto I0 = compute_legendre(0, 0.0, std::sqrt(S_1),
+        auto I0 = compute_legendre(0, 0.0_rt, std::sqrt(S_1),
                                    eta_der, beta_der);
 
         auto I1 = compute_legendre(1, S_1, S_2,
