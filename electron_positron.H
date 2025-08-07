@@ -227,19 +227,41 @@ public:
 
         T dnp_deta{};
         T dnp_dbeta{};
+
+        // ∂n⁻/∂η - ∂n⁺/∂η
+        T diff_n_eta{};
+
+        // ∂n⁻/∂β - ∂n⁺/∂β
+        T diff_n_beta{};
+
         if (include_positrons) {
             dnp_deta = coeff * beta32 * (-f12_pos.dF_deta - beta * f32_pos.dF_deta);
-            dnp_dbeta = 0.5 * coeff / beta12 * (beta * (3.0 * f12_pos.F + 5.0 * beta * f32_pos.F) +
-                                                2.0 * beta * beta * (f12_pos.dF_dbeta +
-                                                                     beta * f32_pos.dF_dbeta) +
-                                                4.0 * (f12_pos.dF_deta + beta * f32_pos.dF_deta));
+            dnp_dbeta = 0.5 * coeff * (beta12 * (3.0 * f12_pos.F + 5.0 * beta * f32_pos.F +
+                                                 2.0 * beta * (f12_pos.dF_dbeta + beta * f32_pos.dF_dbeta)) +
+                                       4.0 / beta12 * (f12_pos.dF_deta + beta * f32_pos.dF_deta));
+
+            // compute the difference of the electron and positron
+            // derivatives -- this allows us to group like beta powers
+            // together
+
+            diff_n_eta = coeff * beta32 * ((f12.dF_deta + f12_pos.dF_deta) +
+                                           beta * (f32.dF_deta + f32_pos.dF_deta));
+
+            diff_n_beta = 0.5 * coeff * (beta12 * (3.0 * (f12.F - f12_pos.F) +
+                                                   5.0 * beta * (f32.F - f32_pos.F) +
+                                                   2 * beta * ((f12.dF_dbeta - f12_pos.dF_dbeta) +
+                                                               beta * (f32.dF_dbeta - f32_pos.dF_dbeta))) -
+                                         4.0 / beta12 * (f12_pos.dF_deta + beta * f32_pos.dF_deta));
+        } else {
+            diff_n_eta = dne_deta;
+            diff_n_beta = dne_dbeta;
         }
 
         //dbeta_drho = 0.0
         T dbeta_dT = C::k / rest_mass;
 
-        T deta_drho = C::N_A * Ye / (dne_deta - dnp_deta);
-        T deta_dT = -dbeta_dT * (dne_dbeta - dnp_dbeta) / (dne_deta - dnp_deta);
+        T deta_drho = C::N_A * Ye / diff_n_eta;
+        T deta_dT = -dbeta_dT * diff_n_beta / diff_n_eta;
 
         // positron version
         T detap_drho = -deta_drho;
