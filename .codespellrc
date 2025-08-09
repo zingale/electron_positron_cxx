@@ -1,0 +1,5 @@
+[codespell]
+skip = .git,*.ipynb
+
+
+
