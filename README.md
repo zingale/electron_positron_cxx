@@ -11,11 +11,41 @@ the forms of the thermodynamic quantities.
 To get good results, this uses 128-bit precision, relying on GCC's
 `__float128` and the quadmath library.
 
-The precision can be selected by editing the `Make.eos` file.
 
 ## Requirements
 
 This needs a C++23 compiler.  For GCC, you need GCC >= 15.1
+
+## Options
+
+The precision can be changed via the `PRECISION` make variable, e.g.,
+
+* `make PRECISION=FLOAT128` builds with 128-bit precision (using the
+  `__float128` data type.
+
+* `make PRECISION=LONG_DOUBLE` builds with a `long double`, which is
+  80 bits on x86 architectures.
+
+* `make PRECISION=DOUBLE` will build with 64-bit precision, using
+   `double`.
+
+The number of quadrature points used in the integration can be set via
+`QUAD_PTS`, e.g., as:
+
+```
+make QUAD_PTS=100
+```
+
+for 100 points.  Valid options are `50`, `100`, `200` (the default), and `400`.
+
+Be sure to do
+
+```
+make clean
+```
+
+before building with any different options.
+
 
 ## Driver
 
