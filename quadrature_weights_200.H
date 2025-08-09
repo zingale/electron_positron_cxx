@@ -5,7 +5,7 @@
 #include <quadmath.h>
 
 
-// Gauss-Qegendre quadrature nodes and weights for 200 points computed
+// Gauss-Legendre quadrature nodes and weights for 200 points computed
 // with SymPy.  Here we only keep the second half, since they are symmetric
 
 constexpr std::array<__float128, 100> x_leg = {
