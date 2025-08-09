@@ -27,7 +27,16 @@
 #include <ranges>
 
 #include "real_type.H"
-#include "quadrature_weights.H"
+
+#if defined(QUAD50)
+#include "quadrature_weights_50.H"
+#elif defined(QUAD100)
+#include "quadrature_weights_100.H"
+#elif defined(QUAD200)
+#include "quadrature_weights_200.H"
+#elif defined(QUAD400)
+#include "quadrature_weights_400.H"
+#endif
 
 using namespace literals;
 
