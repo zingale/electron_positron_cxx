@@ -70,6 +70,21 @@ public:
     T d2eta_drhodT{};
     T d2eta_dT2{};
 
+    // these are included for unit tests / debugging
+    T dne_deta{};
+    T dne_dbeta{};
+
+    T dnp_deta{};
+    T dnp_dbeta{};
+
+    T d2ne_deta2{};
+    T d2ne_detadbeta{};
+    T d2ne_dbeta2{};
+
+    T d2np_deta2{};
+    T d2np_detadbeta{};
+    T d2np_dbeta2{};
+
     EOSState() = default;
 
 };
@@ -248,6 +263,12 @@ public:
                                           4.0_rt / beta12 * (f12_pos.dF_deta + beta * f32_pos.dF_deta));
         }
 
+        es.dne_deta = dne_deta;
+        es.dne_dbeta = dne_dbeta;
+
+        es.dnp_deta = dnp_deta;
+        es.dnp_dbeta = dnp_dbeta;
+
         // now compute the second derivatives of number density
 
         // ∂²n⁻/∂η²
@@ -284,6 +305,13 @@ public:
                                                       16.0_rt * (f12_pos.d2F_deta2 + beta * f32_pos.d2F_deta2));
         }
 
+        es.d2ne_deta2 = d2ne_deta2;
+        es.d2ne_detadbeta = d2ne_detadbeta;
+        es.d2ne_dbeta2 = d2ne_dbeta2;
+
+        es.d2np_deta2 = d2np_deta2;
+        es.d2np_detadbeta = d2np_detadbeta;
+        es.d2np_dbeta2 = d2np_dbeta2;
 
         // now derivatives with respect to density and temperature
         // note that ∂β/∂ρ = 0
