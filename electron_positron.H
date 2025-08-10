@@ -154,6 +154,7 @@ public:
 
         T beta12 = std::sqrt(beta);
         T beta32 = beta * beta12;
+        T beta2 = beta * beta;
         T beta52 = beta * beta32;
 
         // compute the degeneracy parameter
@@ -258,8 +259,8 @@ public:
 
         // ∂²n⁻/∂β²
         T d2ne_dbeta2 = 0.25_rt / beta12 * (3.0_rt * f12.F + 15.0_rt * beta * f32.F +
-                                            4.0 * beta * beta * (f12.d2F_dbeta2 + beta * f32.d2F_dbeta2) +
-                                            beta * (12.0_rt * f12.dF_dbeta + 20.0_rt * beta * f32.dF_dbeta));
+                                            4.0 * beta * (beta * (f12.d2F_dbeta2 + beta * f32.d2F_dbeta2) +
+                                                          (3.0_rt * f12.dF_dbeta + 5.0_rt * beta * f32.dF_dbeta)));
 
         T d2np_deta2{};
         T d2np_detadbeta{};
@@ -270,17 +271,17 @@ public:
             d2np_deta2 = coeff * beta32 * (f12_pos.d2F_deta2 + beta * f32_pos.d2F_deta2);
 
             // ∂²n⁺/∂η∂β
-            d2np_detadbeta = -0.5_rt * coeff / beta12 * (2.0_rt * beta * beta * (f12_pos.d2F_detadbeta + beta * f32_pos.d2F_detadbeta) +
+            d2np_detadbeta = -0.5_rt * coeff / beta12 * (2.0_rt * beta2 * (f12_pos.d2F_detadbeta + beta * f32_pos.d2F_detadbeta) +
                                                          beta * (3.0_rt * f12_pos.dF_deta + 5.0_rt * beta * f32_pos.dF_deta) +
                                                          4.0 * (f12_pos.d2F_deta2 + beta * f32_pos.d2F_deta2));
 
             // ∂²n⁺/∂β²
-            d2np_dbeta2 = 0.25_rt / beta52 * (beta * beta * (3.0_rt * f12_pos.F + 15.0_rt * beta * f32_pos.F) +
-                                              4.0_rt * std::pow(beta, 4.0_rt) * (f12_pos.d2F_dbeta2 + beta * f32_pos.d2F_dbeta2) +
-                                              std::pow(beta, 3.0_rt) * (12.0_rt * f12_pos.dF_dbeta + 20.0_rt * beta * f32_pos.dF_dbeta) +
-                                              16.0_rt * beta * beta * (f12_pos.d2F_detadbeta + beta * f32_pos.d2F_detadbeta) +
-                                              8.0_rt * beta * (f12_pos.dF_deta + 3.0_rt * beta * f32_pos.dF_deta) +
-                                              16.0_rt * (f12_pos.d2F_deta2 + beta * f32_pos.d2F_deta2));
+            d2np_dbeta2 = 0.25_rt * coeff / beta52 * (beta2 * ((3.0_rt * f12_pos.F + 15.0_rt * beta * f32_pos.F) +
+                                                               4.0_rt * beta2 * (f12_pos.d2F_dbeta2 + beta * f32_pos.d2F_dbeta2) +
+                                                               beta  * (12.0_rt * f12_pos.dF_dbeta + 20.0_rt * beta * f32_pos.dF_dbeta) +
+                                                               16.0_rt * (f12_pos.d2F_detadbeta + beta * f32_pos.d2F_detadbeta)) +
+                                                      8.0_rt * beta * (f12_pos.dF_deta + 3.0_rt * beta * f32_pos.dF_deta) +
+                                                      16.0_rt * (f12_pos.d2F_deta2 + beta * f32_pos.d2F_deta2));
         }
 
 
