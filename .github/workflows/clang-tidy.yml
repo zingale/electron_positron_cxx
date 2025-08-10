@@ -52,5 +52,5 @@ jobs:
       - name: Compile problems
         run: |
           cd eos
-          make USE_CLANG_TIDY=TRUE
+          make USE_CLANG_TIDY=TRUE PRECISION=LONG_DOUBLE
 
