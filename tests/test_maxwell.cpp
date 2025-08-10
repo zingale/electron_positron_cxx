@@ -1,11 +1,8 @@
 #include <print>
 
 #include <array>
-#include <cmath>
 
 #include "real_type.H"
-#include "electron_positron.H"
-#include "difference_utils.H"
 #include "maxwell_relations.H"
 
 constexpr std::array<real_t, 5> Ts{1.e4_rt, 1.e5_rt, 1.e6_rt, 1.e8_rt, 5.e9_rt};
