@@ -16,6 +16,18 @@ else ifeq ($(PRECISION), LONG_DOUBLE)
   DEFINES := -DUSE_LONG_DOUBLE
 endif
 
+QUAD_PTS ?= 200
+
+ifeq ($(QUAD_PTS), 50)
+  DEFINES += -DQUAD50
+else ifeq ($(QUAD_PTS), 100)
+  DEFINES += -DQUAD100
+else ifeq ($(QUAD_PTS), 200)
+  DEFINES += -DQUAD200
+else
+  DEFINES += -DQUAD400
+endif
+
 INCLUDES := $(TOP)
 
 INCLUDE_FLAGS := $(patsubst %,-I%,$(INCLUDES))
