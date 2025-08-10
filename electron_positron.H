@@ -64,7 +64,11 @@ public:
     T dsp_dT{};
 
     T eta{};
-    T eta_pos{};
+    T deta_drho{};
+    T deta_dT{};
+    T d2eta_drho2{};
+    T d2eta_drhodT{};
+    T d2eta_dT2{};
 
     EOSState() = default;
 
@@ -76,16 +80,17 @@ std::ostream& operator<< (std::ostream& os, EOSState<T>& es) {
 
     std::string out{"\n"};
 
-    out += std::format(" ρ = {:18.10g}       T = {:18.10g}      Yₑ = {:18.10g}\n", es.rho, es.temp, es.Y_e);
-    out += std::format("η⁻ = {:18.10g}      η⁺ = {:18.10g}\n", es.eta, es.eta_pos);
-    out += std::format("n⁻ = {:18.10g}  ∂n⁻/∂ρ = {:18.10g}  ∂n⁻/∂T = {:18.10g}\n", es.n_e, es.dne_drho, es.dne_dT);
-    out += std::format("n⁺ = {:18.10g}  ∂n⁺/∂ρ = {:18.10g}  ∂n⁺/∂T = {:18.10g}\n", es.n_pos, es.dnp_drho, es.dnp_dT);
-    out += std::format("p⁻ = {:18.10g}  ∂p⁻/∂ρ = {:18.10g}  ∂p⁻/∂T = {:18.10g}\n", es.p_e, es.dpe_drho, es.dpe_dT);
-    out += std::format("p⁺ = {:18.10g}  ∂p⁺/∂ρ = {:18.10g}  ∂p⁺/∂T = {:18.10g}\n", es.p_pos, es.dpp_drho, es.dpp_dT);
-    out += std::format("e⁻ = {:18.10g}  ∂e⁻/∂ρ = {:18.10g}  ∂e⁻/∂T = {:18.10g}\n", es.e_e, es.dee_drho, es.dee_dT);
-    out += std::format("e⁺ = {:18.10g}  ∂e⁺/∂ρ = {:18.10g}  ∂e⁺/∂T = {:18.10g}\n", es.e_pos, es.dep_drho, es.dep_dT);
-    out += std::format("s⁻ = {:18.10g}  ∂s⁻/∂ρ = {:18.10g}  ∂s⁻/∂T = {:18.10g}\n", es.s_e, es.dse_drho, es.dse_dT);
-    out += std::format("s⁺ = {:18.10g}  ∂s⁺/∂ρ = {:18.10g}  ∂s⁺/∂T = {:18.10g}\n", es.s_pos, es.dsp_drho, es.dsp_dT);
+    out += std::format(" ρ = {:15.8g}       T  = {:15.8g}      Yₑ  = {:15.8g}\n\n", es.rho, es.temp, es.Y_e);
+    out += std::format(" η = {:15.8g}   ∂η/∂ρ  = {:15.8g}   ∂η/∂T  = {:15.8g}\n", es.eta, es.deta_drho, es.deta_dT);
+    out += std::format("     {:15}  ∂²η/∂ρ² = {:15.8g}  ∂²η/∂T² = {:15.8g}  ∂²η/∂ρ∂T = {:15.8g}\n\n", " ", es.d2eta_drho2, es.d2eta_dT2, es.d2eta_drhodT);
+    out += std::format("n⁻ = {:15.8g}  ∂n⁻/∂ρ  = {:15.8g}  ∂n⁻/∂T  = {:15.8g}\n", es.n_e, es.dne_drho, es.dne_dT);
+    out += std::format("n⁺ = {:15.8g}  ∂n⁺/∂ρ  = {:15.8g}  ∂n⁺/∂T  = {:15.8g}\n\n", es.n_pos, es.dnp_drho, es.dnp_dT);
+    out += std::format("p⁻ = {:15.8g}  ∂p⁻/∂ρ  = {:15.8g}  ∂p⁻/∂T  = {:15.8g}\n", es.p_e, es.dpe_drho, es.dpe_dT);
+    out += std::format("p⁺ = {:15.8g}  ∂p⁺/∂ρ  = {:15.8g}  ∂p⁺/∂T  = {:15.8g}\n\n", es.p_pos, es.dpp_drho, es.dpp_dT);
+    out += std::format("e⁻ = {:15.8g}  ∂e⁻/∂ρ  = {:15.8g}  ∂e⁻/∂T  = {:15.8g}\n", es.e_e, es.dee_drho, es.dee_dT);
+    out += std::format("e⁺ = {:15.8g}  ∂e⁺/∂ρ  = {:15.8g}  ∂e⁺/∂T  = {:15.8g}\n\n", es.e_pos, es.dep_drho, es.dep_dT);
+    out += std::format("s⁻ = {:15.8g}  ∂s⁻/∂ρ  = {:15.8g}  ∂s⁻/∂T  = {:15.8g}\n", es.s_e, es.dse_drho, es.dse_dT);
+    out += std::format("s⁺ = {:15.8g}  ∂s⁺/∂ρ  = {:15.8g}  ∂s⁺/∂T  = {:15.8g}\n", es.s_pos, es.dsp_drho, es.dsp_dT);
 
 
     os << out;
@@ -183,7 +188,7 @@ public:
 
         // for positrons
         T eta_tilde = -eta - 2.0_rt / beta;
-        es.eta_pos = -eta;  // see C&G 24.334
+        T eta_pos = -eta;  // see C&G 24.334
 
         // compute the number density, pressure and energy
         constexpr T pcoeff = coeff * (2.0_rt / 3.0_rt) * rest_mass;
@@ -289,6 +294,9 @@ public:
         T deta_drho = C::N_A * Ye / (dne_deta - dnp_deta);
         T deta_dT = -dbeta_dT * (dne_dbeta - dnp_dbeta) / (dne_deta - dnp_deta);
 
+        es.deta_drho = deta_drho;
+        es.deta_dT = deta_dT;
+
         // ∂²η/∂T²
         T d2eta_dT2 = (std::pow(dbeta_dT, 2.0_rt) * (d2np_dbeta2 - d2ne_dbeta2) +
                        2.0_rt * dbeta_dT * deta_dT * (d2np_detadbeta - d2ne_detadbeta) +
@@ -303,6 +311,10 @@ public:
         // ∂²η/∂ρ²
         T d2eta_drho2 = deta_drho * deta_drho * (d2np_deta2 - d2ne_deta2) /
             (dne_deta - dnp_deta);
+
+        es.d2eta_drho2 = d2eta_drho2;
+        es.d2eta_drhodT = d2eta_drhodT;
+        es.d2eta_dT2 = d2eta_dT2;
 
         // Compute partials of number density with density and temperature
         // For debugging
@@ -388,13 +400,13 @@ public:
             C::k * (es.n_e * (deta_drho - es.eta * rho_inv) + es.eta * es.dne_drho ) * rho_inv;
 
         if (include_positrons) {
-            es.s_pos = h_pos * temp_inv - es.n_pos * C::k * es.eta_pos * rho_inv;
+            es.s_pos = h_pos * temp_inv - es.n_pos * C::k * eta_pos * rho_inv;
 
             es.dsp_dT = (dhp_dT - h_pos * temp_inv) * temp_inv -
-                C::k * (es.eta_pos * es.dnp_dT - es.n_pos * deta_dT) * rho_inv;
+                C::k * (eta_pos * es.dnp_dT - es.n_pos * deta_dT) * rho_inv;
 
             es.dsp_drho = dhp_drho * temp_inv -
-                C::k * (es.n_pos * (-deta_drho - es.eta_pos * rho_inv) + es.eta_pos * es.dnp_drho) * rho_inv;
+                C::k * (es.n_pos * (-deta_drho - eta_pos * rho_inv) + eta_pos * es.dnp_drho) * rho_inv;
         }
 
         return es;
