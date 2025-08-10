@@ -62,7 +62,7 @@ test_ne_T_derivs() {
 
             real_t err{};
             if (es.dne_dT == 0.0_rt) {
-                real_t scale = es.n_e / T;
+                const real_t scale = es.n_e / T;
                 err = std::abs(es.dne_dT - deriv / scale) ;
             } else {
                 err = std::abs(es.dne_dT - deriv) / std::abs(es.dne_dT);
@@ -131,7 +131,7 @@ test_np_T_derivs() {
 
             real_t err{};
             if (es.dnp_dT == 0.0_rt) {
-                real_t scale = es.n_pos / T;
+                const real_t scale = es.n_pos / T;
                 err = std::abs(es.dnp_dT - deriv / scale) ;
             } else {
                 err = std::abs(es.dnp_dT - deriv) / std::abs(es.dnp_dT);
@@ -195,7 +195,7 @@ test_pe_T_derivs() {
 
             real_t err{};
             if (es.dpe_dT == 0.0_rt) {
-                real_t scale = es.p_e / T;
+                const real_t scale = es.p_e / T;
                 err = std::abs(es.dpe_dT - deriv / scale) ;
             } else {
                 err = std::abs(es.dpe_dT - deriv) / std::abs(es.dpe_dT);
@@ -264,7 +264,7 @@ test_pp_T_derivs() {
 
             real_t err{};
             if (es.dpp_dT == 0.0_rt) {
-                real_t scale = es.p_pos / T;
+                const real_t scale = es.p_pos / T;
                 err = std::abs(es.dpp_dT - deriv / scale) ;
             } else {
                 err = std::abs(es.dpp_dT - deriv) / std::abs(es.dpp_dT);
@@ -328,7 +328,7 @@ test_ee_T_derivs() {
 
             real_t err{};
             if (es.dee_dT == 0.0_rt) {
-                real_t scale = es.e_e / T;
+                const real_t scale = es.e_e / T;
                 err = std::abs(es.dee_dT - deriv / scale) ;
             } else {
                 err = std::abs(es.dee_dT - deriv) / std::abs(es.dee_dT);
@@ -396,7 +396,7 @@ test_ep_T_derivs() {
 
             real_t err{};
             if (es.dep_dT == 0.0_rt) {
-                real_t scale = es.e_pos / T;
+                const real_t scale = es.e_pos / T;
                 err = std::abs(es.dep_dT - deriv / scale) ;
             } else {
                 err = std::abs(es.dep_dT - deriv) / std::abs(es.dep_dT);
@@ -460,7 +460,7 @@ test_se_T_derivs() {
 
             real_t err{};
             if (es.dse_dT == 0.0_rt) {
-                real_t scale = es.s_e / T;
+                const real_t scale = es.s_e / T;
                 err = std::abs(es.dse_dT - deriv / scale) ;
             } else {
                 err = std::abs(es.dse_dT - deriv) / std::abs(es.dse_dT);
@@ -528,7 +528,7 @@ test_sp_T_derivs() {
 
             real_t err{};
             if (es.dsp_dT == 0.0_rt) {
-                real_t scale = es.s_pos / T;
+                const real_t scale = es.s_pos / T;
                 err = std::abs(es.dsp_dT - deriv / scale) ;
             } else {
                 err = std::abs(es.dsp_dT - deriv) / std::abs(es.dsp_dT);
