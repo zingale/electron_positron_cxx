@@ -27,8 +27,8 @@ T d2f1dx2(T x) {
 
 int main() {
 
-    real_t x0 = 1.0_rt;
-    real_t h = 1.e-3_rt;
+    const real_t x0 = 1.0_rt;
+    const real_t h = 1.e-3_rt;
 
     auto actual_deriv = df1dx<real_t>(x0);
 

@@ -13,11 +13,11 @@ maxwell_1(T rho, T temp, T Ye) {
     ElectronPositronEOS<T> eos;
     auto es = eos.pe_state(rho, temp, Ye);
 
-    real_t ptot = es.p_e + es.p_pos;
-    real_t de_drho = es.dee_drho + es.dep_drho;
-    real_t dp_dT = es.dpe_dT + es.dpp_dT;
+    const real_t ptot = es.p_e + es.p_pos;
+    const real_t de_drho = es.dee_drho + es.dep_drho;
+    const real_t dp_dT = es.dpe_dT + es.dpp_dT;
 
-    real_t term = std::abs((ptot - (rho * rho * de_drho + temp * dp_dT)) / ptot);
+    const real_t term = std::abs((ptot - (rho * rho * de_drho + temp * dp_dT)) / ptot);
 
     return {ptot, term};
 
@@ -30,10 +30,10 @@ maxwell_2(T rho, T temp, T Ye) {
     ElectronPositronEOS<T> eos;
     auto es = eos.pe_state(rho, temp, Ye);
 
-    real_t de_dT = es.dee_dT + es.dep_dT;
-    real_t ds_dT = es.dse_dT + es.dsp_dT;
+    const real_t de_dT = es.dee_dT + es.dep_dT;
+    const real_t ds_dT = es.dse_dT + es.dsp_dT;
 
-    real_t term = std::abs((de_dT - temp * ds_dT) / de_dT);
+    const real_t term = std::abs((de_dT - temp * ds_dT) / de_dT);
 
     return {de_dT, term};
 
@@ -47,10 +47,10 @@ maxwell_3(T rho, T temp, T Ye) {
     ElectronPositronEOS<T> eos;
     auto es = eos.pe_state(rho, temp, Ye);
 
-    real_t ds_drho = es.dse_drho + es.dsp_drho;
-    real_t dp_dT = es.dpe_dT + es.dpp_dT;
+    const real_t ds_drho = es.dse_drho + es.dsp_drho;
+    const real_t dp_dT = es.dpe_dT + es.dpp_dT;
 
-    real_t term = std::abs((ds_drho + 1.0_rt / (rho * rho) * dp_dT) / ds_drho);
+    const real_t term = std::abs((ds_drho + 1.0_rt / (rho * rho) * dp_dT) / ds_drho);
 
     return {ds_drho, term};
 }

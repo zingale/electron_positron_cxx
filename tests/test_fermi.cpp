@@ -15,11 +15,11 @@ int main() {
 
         // k = 1/2
 
-        real_t k = 0.5_rt;
+        const real_t k = 0.5_rt;
 
         {
-            real_t eta = -100_rt;
-            real_t beta = 0.0_rt;
+            const real_t eta = -100_rt;
+            const real_t beta = 0.0_rt;
 
             FermiIntegral<real_t> f(k, eta, beta);
             f.evaluate(2);
@@ -33,8 +33,8 @@ int main() {
         }
 
         {
-            real_t eta = -50_rt;
-            real_t beta = 1.0_rt;
+            const real_t eta = -50_rt;
+            const real_t beta = 1.0_rt;
 
             FermiIntegral<real_t> f(k, eta, beta);
             f.evaluate(2);
@@ -48,8 +48,8 @@ int main() {
         }
 
         {
-            real_t eta = 1.0_rt;
-            real_t beta = 10.0_rt;
+            const real_t eta = 1.0_rt;
+            const real_t beta = 10.0_rt;
 
             FermiIntegral<real_t> f(k, eta, beta);
             f.evaluate(2);
@@ -63,8 +63,8 @@ int main() {
         }
 
         {
-            real_t eta = 500.0_rt;
-            real_t beta = 100.0_rt;
+            const real_t eta = 500.0_rt;
+            const real_t beta = 100.0_rt;
 
             FermiIntegral<real_t> f(k, eta, beta);
             f.evaluate(2);
@@ -83,11 +83,11 @@ int main() {
 
         // k = -1/2
 
-        real_t k = -0.5_rt;
+        const real_t k = -0.5_rt;
 
         {
-            real_t eta = -100_rt;
-            real_t beta = 100.0_rt;
+            const real_t eta = -100_rt;
+            const real_t beta = 100.0_rt;
 
             FermiIntegral<real_t> f(k, eta, beta);
             f.evaluate(2);
@@ -101,8 +101,8 @@ int main() {
         }
 
         {
-            real_t eta = -50_rt;
-            real_t beta = 0.0_rt;
+            const real_t eta = -50_rt;
+            const real_t beta = 0.0_rt;
 
             FermiIntegral<real_t> f(k, eta, beta);
             f.evaluate(2);
@@ -116,8 +116,8 @@ int main() {
         }
 
         {
-            real_t eta = 100.0_rt;
-            real_t beta = 100.0_rt;
+            const real_t eta = 100.0_rt;
+            const real_t beta = 100.0_rt;
 
             FermiIntegral<real_t> f(k, eta, beta);
             f.evaluate(2);
@@ -135,11 +135,11 @@ int main() {
     {
         // k = 3/2
 
-        real_t k = 1.5_rt;
+        const real_t k = 1.5_rt;
 
         {
-            real_t eta = -75_rt;
-            real_t beta = 10.0_rt;
+            const real_t eta = -75_rt;
+            const real_t beta = 10.0_rt;
 
             FermiIntegral<real_t> f(k, eta, beta);
             f.evaluate(2);
@@ -153,8 +153,8 @@ int main() {
         }
 
         {
-            real_t eta = -20_rt;
-            real_t beta = 100.0_rt;
+            const real_t eta = -20_rt;
+            const real_t beta = 100.0_rt;
 
             FermiIntegral<real_t> f(k, eta, beta);
             f.evaluate(2);
@@ -168,8 +168,8 @@ int main() {
         }
 
         {
-            real_t eta = 40_rt;
-            real_t beta = 10000.0_rt;
+            const real_t eta = 40_rt;
+            const real_t beta = 10000.0_rt;
 
             FermiIntegral<real_t> f(k, eta, beta);
             f.evaluate(2);
@@ -187,11 +187,11 @@ int main() {
 
         // k = 5/2
 
-        real_t k = 2.5_rt;
+        const real_t k = 2.5_rt;
 
         {
-            real_t eta = -55_rt;
-            real_t beta = 15.0_rt;
+            const real_t eta = -55_rt;
+            const real_t beta = 15.0_rt;
 
             FermiIntegral<real_t> f(k, eta, beta);
             f.evaluate(2);
@@ -205,8 +205,8 @@ int main() {
         }
 
         {
-            real_t eta = 10.0_rt;
-            real_t beta = 1.e-4_rt;
+            const real_t eta = 10.0_rt;
+            const real_t beta = 1.e-4_rt;
 
             FermiIntegral<real_t> f(k, eta, beta);
             f.evaluate(2);
@@ -220,8 +220,8 @@ int main() {
         }
 
         {
-            real_t eta = 100.0_rt;
-            real_t beta = 1.0_rt;
+            const real_t eta = 100.0_rt;
+            const real_t beta = 1.0_rt;
 
             FermiIntegral<real_t> f(k, eta, beta);
             f.evaluate(2);
@@ -239,7 +239,7 @@ int main() {
 
     {
 
-        real_t h = 0.05_rt;
+        const real_t h = 0.05_rt;
 
         std::println("dF/dη");
 
@@ -250,7 +250,7 @@ int main() {
                     FermiIntegral<real_t> f(k, eta, beta);
                     f.evaluate(2);
 
-                    real_t _h = (eta == 0) ? h : h * std::abs(eta);
+                    const real_t _h = (eta == 0) ? h : h * std::abs(eta);
 
                     // check dF/dη
                     auto [diff, err] =
@@ -272,7 +272,7 @@ int main() {
 
     {
 
-        real_t h = 0.05_rt;
+        const real_t h = 0.05_rt;
 
         std::println();
         std::println("dF/dβ");
@@ -284,7 +284,7 @@ int main() {
                     FermiIntegral<real_t> f(k, eta, beta);
                     f.evaluate(2);
 
-                    real_t _h = (beta == 0) ? 1.e-4_rt : h * std::abs(beta);
+                    const real_t _h = (beta == 0) ? 1.e-4_rt : h * std::abs(beta);
 
                     // check dF/dβ
                     auto [diff, err] =
@@ -306,7 +306,7 @@ int main() {
 
     {
 
-        real_t h = 0.05_rt;
+        const real_t h = 0.05_rt;
 
         std::println();
         std::println("d²F/dη²");
@@ -318,7 +318,7 @@ int main() {
                     FermiIntegral<real_t> f(k, eta, beta);
                     f.evaluate(2);
 
-                    real_t _h = (eta == 0) ? h : h * std::abs(eta);
+                    const real_t _h = (eta == 0) ? h : h * std::abs(eta);
 
                     // check d²F/dη²
 
@@ -354,7 +354,7 @@ int main() {
 
     {
 
-        real_t h = 0.05_rt;
+        const real_t h = 0.05_rt;
 
         std::println();
         std::println("d²F/dβ²");
@@ -366,7 +366,7 @@ int main() {
                     FermiIntegral<real_t> f(k, eta, beta);
                     f.evaluate(2);
 
-                    real_t _h = (beta == 0) ? h : h * std::abs(beta);
+                    const real_t _h = (beta == 0) ? h : h * std::abs(beta);
 
                     // check d²F/dβ²
 
