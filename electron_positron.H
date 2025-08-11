@@ -63,12 +63,42 @@ public:
     T dsp_drho{};
     T dsp_dT{};
 
-    T eta{};
-    T eta_pos{};
+    T eta{};  // degeneracy parameter
+    T beta{};  // k T / rest mass
+
+    T deta_drho{};
+    T deta_dT{};
+    T d2eta_drho2{};
+    T d2eta_drhodT{};
+    T d2eta_dT2{};
 
     EOSState() = default;
 
 };
+
+
+template <typename T>
+class NumDens {
+
+public:
+    T dne_deta{};
+    T dne_dbeta{};
+
+    T dnp_deta{};
+    T dnp_dbeta{};
+
+    T d2ne_deta2{};
+    T d2ne_detadbeta{};
+    T d2ne_dbeta2{};
+
+    T d2np_deta2{};
+    T d2np_detadbeta{};
+    T d2np_dbeta2{};
+
+    NumDens() = default;
+
+};
+
 
 template<typename T>
 inline
@@ -76,16 +106,18 @@ std::ostream& operator<< (std::ostream& os, EOSState<T>& es) {
 
     std::string out{"\n"};
 
-    out += std::format(" ρ = {:18.10g}       T = {:18.10g}      Yₑ = {:18.10g}\n", es.rho, es.temp, es.Y_e);
-    out += std::format("η⁻ = {:18.10g}      η⁺ = {:18.10g}\n", es.eta, es.eta_pos);
-    out += std::format("n⁻ = {:18.10g}  ∂n⁻/∂ρ = {:18.10g}  ∂n⁻/∂T = {:18.10g}\n", es.n_e, es.dne_drho, es.dne_dT);
-    out += std::format("n⁺ = {:18.10g}  ∂n⁺/∂ρ = {:18.10g}  ∂n⁺/∂T = {:18.10g}\n", es.n_pos, es.dnp_drho, es.dnp_dT);
-    out += std::format("p⁻ = {:18.10g}  ∂p⁻/∂ρ = {:18.10g}  ∂p⁻/∂T = {:18.10g}\n", es.p_e, es.dpe_drho, es.dpe_dT);
-    out += std::format("p⁺ = {:18.10g}  ∂p⁺/∂ρ = {:18.10g}  ∂p⁺/∂T = {:18.10g}\n", es.p_pos, es.dpp_drho, es.dpp_dT);
-    out += std::format("e⁻ = {:18.10g}  ∂e⁻/∂ρ = {:18.10g}  ∂e⁻/∂T = {:18.10g}\n", es.e_e, es.dee_drho, es.dee_dT);
-    out += std::format("e⁺ = {:18.10g}  ∂e⁺/∂ρ = {:18.10g}  ∂e⁺/∂T = {:18.10g}\n", es.e_pos, es.dep_drho, es.dep_dT);
-    out += std::format("s⁻ = {:18.10g}  ∂s⁻/∂ρ = {:18.10g}  ∂s⁻/∂T = {:18.10g}\n", es.s_e, es.dse_drho, es.dse_dT);
-    out += std::format("s⁺ = {:18.10g}  ∂s⁺/∂ρ = {:18.10g}  ∂s⁺/∂T = {:18.10g}\n", es.s_pos, es.dsp_drho, es.dsp_dT);
+    out += std::format(" ρ = {:15.8g}       T  = {:15.8g}      Yₑ  = {:15.8g}\n\n", es.rho, es.temp, es.Y_e);
+    out += std::format(" β = {:15.8g}\n", es.beta);
+    out += std::format(" η = {:15.8g}   ∂η/∂ρ  = {:15.8g}   ∂η/∂T  = {:15.8g}\n", es.eta, es.deta_drho, es.deta_dT);
+    out += std::format("     {:15}  ∂²η/∂ρ² = {:15.8g}  ∂²η/∂T² = {:15.8g}  ∂²η/∂ρ∂T = {:15.8g}\n\n", " ", es.d2eta_drho2, es.d2eta_dT2, es.d2eta_drhodT);
+    out += std::format("n⁻ = {:15.8g}  ∂n⁻/∂ρ  = {:15.8g}  ∂n⁻/∂T  = {:15.8g}\n", es.n_e, es.dne_drho, es.dne_dT);
+    out += std::format("n⁺ = {:15.8g}  ∂n⁺/∂ρ  = {:15.8g}  ∂n⁺/∂T  = {:15.8g}\n\n", es.n_pos, es.dnp_drho, es.dnp_dT);
+    out += std::format("p⁻ = {:15.8g}  ∂p⁻/∂ρ  = {:15.8g}  ∂p⁻/∂T  = {:15.8g}\n", es.p_e, es.dpe_drho, es.dpe_dT);
+    out += std::format("p⁺ = {:15.8g}  ∂p⁺/∂ρ  = {:15.8g}  ∂p⁺/∂T  = {:15.8g}\n\n", es.p_pos, es.dpp_drho, es.dpp_dT);
+    out += std::format("e⁻ = {:15.8g}  ∂e⁻/∂ρ  = {:15.8g}  ∂e⁻/∂T  = {:15.8g}\n", es.e_e, es.dee_drho, es.dee_dT);
+    out += std::format("e⁺ = {:15.8g}  ∂e⁺/∂ρ  = {:15.8g}  ∂e⁺/∂T  = {:15.8g}\n\n", es.e_pos, es.dep_drho, es.dep_dT);
+    out += std::format("s⁻ = {:15.8g}  ∂s⁻/∂ρ  = {:15.8g}  ∂s⁻/∂T  = {:15.8g}\n", es.s_e, es.dse_drho, es.dse_dT);
+    out += std::format("s⁺ = {:15.8g}  ∂s⁺/∂ρ  = {:15.8g}  ∂s⁺/∂T  = {:15.8g}\n", es.s_pos, es.dsp_drho, es.dsp_dT);
 
 
     os << out;
@@ -119,6 +151,67 @@ T n_p_constraint(T eta, T beta) {
 
     T n_pos = coeff * beta * std::sqrt(beta) * (f12_pos.F + beta * f32_pos.F);
     return n_pos;
+}
+
+template <typename T>
+NumDens<T> get_n_derivs(T beta,
+                        const FermiIntegral<T>& f12, const FermiIntegral<T>& f32,
+                        const FermiIntegral<T>& f12_pos, const FermiIntegral<T>& f32_pos) {
+
+    // number density derivatives needed for chain-rule computations
+    NumDens<T> nd;
+
+    T beta12 = std::sqrt(beta);
+    T beta32 = beta * beta12;
+    T beta2 = beta * beta;
+    T beta52 = beta * beta32;
+
+    // ∂n⁻/∂η
+    nd.dne_deta = coeff * beta32 * (f12.dF_deta + beta * f32.dF_deta);
+
+    // ∂n⁻/∂β
+    nd.dne_dbeta = 0.5_rt * coeff * beta12 * (3.0_rt * f12.F + 5.0_rt * beta * f32.F +
+                                              2.0_rt * beta * (f12.dF_dbeta + beta * f32.dF_dbeta));
+
+    // ∂n⁺/∂η
+    nd.dnp_deta = coeff * beta32 * (-f12_pos.dF_deta - beta * f32_pos.dF_deta);
+
+    // ∂n⁺/∂β
+    nd.dnp_dbeta = 0.5_rt * coeff * (beta12 * (3.0_rt * f12_pos.F + 5.0_rt * beta * f32_pos.F +
+                                               2.0_rt * beta * (f12_pos.dF_dbeta + beta * f32_pos.dF_dbeta)) +
+                                     4.0_rt / beta12 * (f12_pos.dF_deta + beta * f32_pos.dF_deta));
+
+    // now compute the second derivatives of number density
+
+    // ∂²n⁻/∂η²
+    nd.d2ne_deta2 = coeff * beta32 * (f12.d2F_deta2 + beta * f32.d2F_deta2);
+
+    // ∂²n⁻/∂η∂β
+    nd.d2ne_detadbeta = 0.5_rt * coeff * beta12 * (2.0_rt * beta * (f12.d2F_detadbeta + beta * f32.d2F_detadbeta) +
+                                                   3.0_rt * f12.dF_deta + 5.0_rt * beta * f32.dF_deta);
+
+    // ∂²n⁻/∂β²
+    nd.d2ne_dbeta2 = 0.25_rt * coeff / beta12 * (3.0_rt * f12.F + 15.0_rt * beta * f32.F +
+                                                 4.0 * beta * (beta * (f12.d2F_dbeta2 + beta * f32.d2F_dbeta2) +
+                                                               (3.0_rt * f12.dF_dbeta + 5.0_rt * beta * f32.dF_dbeta)));
+
+    // ∂²n⁺/∂η²
+    nd.d2np_deta2 = coeff * beta32 * (f12_pos.d2F_deta2 + beta * f32_pos.d2F_deta2);
+
+    // ∂²n⁺/∂η∂β
+    nd.d2np_detadbeta = -0.5_rt * coeff / beta12 * (2.0_rt * beta2 * (f12_pos.d2F_detadbeta + beta * f32_pos.d2F_detadbeta) +
+                                                    beta * (3.0_rt * f12_pos.dF_deta + 5.0_rt * beta * f32_pos.dF_deta) +
+                                                    4.0 * (f12_pos.d2F_deta2 + beta * f32_pos.d2F_deta2));
+
+    // ∂²n⁺/∂β²
+    nd.d2np_dbeta2 = 0.25_rt * coeff / beta52 * (beta2 * ((3.0_rt * f12_pos.F + 15.0_rt * beta * f32_pos.F) +
+                                                          4.0_rt * beta2 * (f12_pos.d2F_dbeta2 + beta * f32_pos.d2F_dbeta2) +
+                                                          beta  * (12.0_rt * f12_pos.dF_dbeta + 20.0_rt * beta * f32_pos.dF_dbeta) +
+                                                          16.0_rt * (f12_pos.d2F_detadbeta + beta * f32_pos.d2F_detadbeta)) +
+                                                 8.0_rt * beta * (f12_pos.dF_deta + 3.0_rt * beta * f32_pos.dF_deta) +
+                                                 16.0_rt * (f12_pos.d2F_deta2 + beta * f32_pos.d2F_deta2));
+
+    return nd;
 }
 
 
@@ -180,23 +273,24 @@ public:
         }
 
         es.eta = eta;
+        es.beta = beta;
 
         // for positrons
         T eta_tilde = -eta - 2.0_rt / beta;
-        es.eta_pos = -eta;  // see C&G 24.334
+        T eta_pos = -eta;  // see C&G 24.334
 
         // compute the number density, pressure and energy
         constexpr T pcoeff = coeff * (2.0_rt / 3.0_rt) * rest_mass;
         constexpr T ecoeff = coeff * rest_mass;
 
         FermiIntegral<T> f12(0.5_rt, eta, beta);
-        f12.evaluate(1);
+        f12.evaluate(2);
 
         FermiIntegral<T> f32(1.5_rt, eta, beta);
-        f32.evaluate(1);
+        f32.evaluate(2);
 
         FermiIntegral<T> f52(2.5_rt, eta, beta);
-        f52.evaluate(1);
+        f52.evaluate(2);
 
         es.n_e = coeff * beta32 * (f12.F + beta * f32.F);
         es.p_e = pcoeff * beta52 * (f32.F + 0.5_rt * beta * f52.F);
@@ -210,9 +304,9 @@ public:
 
         T E_pos{};
         if (include_positrons) {
-            f12_pos.evaluate(1);
-            f32_pos.evaluate(1);
-            f52_pos.evaluate(1);
+            f12_pos.evaluate(2);
+            f32_pos.evaluate(2);
+            f52_pos.evaluate(2);
 
             es.n_pos = coeff * beta32 * (f12_pos.F + beta * f32_pos.F);
             es.p_pos = pcoeff * beta52 * (f32_pos.F + 0.5_rt * beta * f52_pos.F);
@@ -221,37 +315,48 @@ public:
 
         // compute the derivatives of eta and beta with respect to
         // density and temperature
-        T dne_deta = coeff * beta32 * (f12.dF_deta + beta * f32.dF_deta);
-        T dne_dbeta = 0.5_rt * coeff * beta12 * (3.0_rt * f12.F + 5.0_rt * beta * f32.F +
-                                                 2.0_rt * beta * (f12.dF_dbeta + beta * f32.dF_dbeta));
 
-        T dnp_deta{};
-        T dnp_dbeta{};
-        if (include_positrons) {
-            dnp_deta = coeff * beta32 * (-f12_pos.dF_deta - beta * f32_pos.dF_deta);
-            dnp_dbeta = 0.5_rt * coeff * (beta12 * (3.0_rt * f12_pos.F + 5.0_rt * beta * f32_pos.F +
-                                                    2.0_rt * beta * (f12_pos.dF_dbeta + beta * f32_pos.dF_dbeta)) +
-                                          4.0_rt / beta12 * (f12_pos.dF_deta + beta * f32_pos.dF_deta));
-        }
+        auto nd = get_n_derivs<T>(beta, f12, f32, f12_pos, f32_pos);
 
-        //dbeta_drho = 0.0
+        // note that ∂β/∂ρ = 0
+
+        // ∂β/∂T
         T dbeta_dT = C::k / rest_mass;
 
-        T deta_drho = C::N_A * Ye / (dne_deta - dnp_deta);
-        T deta_dT = -dbeta_dT * (dne_dbeta - dnp_dbeta) / (dne_deta - dnp_deta);
+        // ∂η/∂ρ and ∂η/∂T
+        T deta_drho = C::N_A * Ye / (nd.dne_deta - nd.dnp_deta);
+        T deta_dT = -dbeta_dT * (nd.dne_dbeta - nd.dnp_dbeta) / (nd.dne_deta - nd.dnp_deta);
 
-        // positron version
-        T detap_drho = -deta_drho;
-        T detap_dT = -deta_dT;
+        es.deta_drho = deta_drho;
+        es.deta_dT = deta_dT;
+
+        // ∂²η/∂T²
+        T d2eta_dT2 = (std::pow(dbeta_dT, 2.0_rt) * (nd.d2np_dbeta2 - nd.d2ne_dbeta2) +
+                       2.0_rt * dbeta_dT * deta_dT * (nd.d2np_detadbeta - nd.d2ne_detadbeta) +
+                       std::pow(deta_dT, 2.0_rt) * (nd.d2np_deta2 - nd.d2ne_deta2)) /
+            (nd.dne_deta - nd.dnp_deta);
+
+        // ∂²η/∂ρ∂T
+        T d2eta_drhodT = (dbeta_dT * (nd.d2np_detadbeta - nd.d2ne_detadbeta) +
+                          deta_dT * (nd.d2np_deta2 - nd.d2ne_deta2)) /
+            (nd.dne_deta - nd.dnp_deta);
+
+        // ∂²η/∂ρ²
+        T d2eta_drho2 = deta_drho * deta_drho * (nd.d2np_deta2 - nd.d2ne_deta2) /
+            (nd.dne_deta - nd.dnp_deta);
+
+        es.d2eta_drho2 = d2eta_drho2;
+        es.d2eta_drhodT = d2eta_drhodT;
+        es.d2eta_dT2 = d2eta_dT2;
 
         // Compute partials of number density with density and temperature
         // For debugging
-        es.dne_drho = dne_deta * deta_drho;
-        es.dne_dT = dne_deta * deta_dT + dne_dbeta * dbeta_dT;
+        es.dne_drho = nd.dne_deta * deta_drho;
+        es.dne_dT = nd.dne_deta * deta_dT + nd.dne_dbeta * dbeta_dT;
 
         if (include_positrons) {
-            es.dnp_drho = dnp_deta * deta_drho;
-            es.dnp_dT = dnp_deta * deta_dT + dnp_dbeta * dbeta_dT;
+            es.dnp_drho = nd.dnp_deta * deta_drho;
+            es.dnp_dT = nd.dnp_deta * deta_dT + nd.dnp_dbeta * dbeta_dT;
         }
 
         // Compute partials of pressure with density and temperature via the chain rule
@@ -328,13 +433,13 @@ public:
             C::k * (es.n_e * (deta_drho - es.eta * rho_inv) + es.eta * es.dne_drho ) * rho_inv;
 
         if (include_positrons) {
-            es.s_pos = h_pos * temp_inv - es.n_pos * C::k * es.eta_pos * rho_inv;
+            es.s_pos = h_pos * temp_inv - es.n_pos * C::k * eta_pos * rho_inv;
 
             es.dsp_dT = (dhp_dT - h_pos * temp_inv) * temp_inv -
-                C::k * (es.eta_pos * es.dnp_dT + es.n_pos * detap_dT) * rho_inv;
+                C::k * (eta_pos * es.dnp_dT - es.n_pos * deta_dT) * rho_inv;
 
             es.dsp_drho = dhp_drho * temp_inv -
-                C::k * (es.n_pos * (detap_drho - es.eta_pos * rho_inv) + es.eta_pos * es.dnp_drho) * rho_inv;
+                C::k * (es.n_pos * (-deta_drho - eta_pos * rho_inv) + eta_pos * es.dnp_drho) * rho_inv;
         }
 
         return es;

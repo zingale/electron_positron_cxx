@@ -24,12 +24,12 @@ int main() {
             FermiIntegral<real_t> f(k, eta, beta);
             f.evaluate(2);
 
-            assert (rel_error(f.F, 3.2968314946796124e-044_rt) < 1.e-15);
-            assert (rel_error(f.dF_deta, 3.2968314946796139e-044_rt) < 1.e-15);
-            assert (rel_error(f.dF_dbeta, 1.2363118105048548e-044_rt) < 1.e-15);
-            assert (rel_error(f.d2F_deta2, 3.2968314946796129e-044_rt) < 1.e-15);
-            assert (rel_error(f.d2F_detadbeta, 1.2363118105048556e-044_rt) < 1.e-15);
-            assert (rel_error(f.d2F_dbeta2, -7.7269488156553455e-045_rt) < 1.e-15);
+            assert (util::rel_error(f.F, 3.2968314946796124e-044_rt) < 1.e-15);
+            assert (util::rel_error(f.dF_deta, 3.2968314946796139e-044_rt) < 1.e-15);
+            assert (util::rel_error(f.dF_dbeta, 1.2363118105048548e-044_rt) < 1.e-15);
+            assert (util::rel_error(f.d2F_deta2, 3.2968314946796129e-044_rt) < 1.e-15);
+            assert (util::rel_error(f.d2F_detadbeta, 1.2363118105048556e-044_rt) < 1.e-15);
+            assert (util::rel_error(f.d2F_dbeta2, -7.7269488156553455e-045_rt) < 1.e-15);
         }
 
         {
@@ -39,12 +39,12 @@ int main() {
             FermiIntegral<real_t> f(k, eta, beta);
             f.evaluate(2);
 
-            assert (rel_error(f.F, 2.2314386397062104e-022_rt) < 1.e-15);
-            assert (rel_error(f.dF_deta, 2.2314386397062108e-022_rt) < 1.e-15);
-            assert (rel_error(f.dF_dbeta, 4.4513616188460852e-023_rt) < 1.e-15);
-            assert (rel_error(f.d2F_deta2, 2.2314386397062099e-022_rt) < 1.e-15);
-            assert (rel_error(f.d2F_detadbeta, 4.4513616188460870e-023_rt) < 1.e-15);
-            assert (rel_error(f.d2F_dbeta2, -1.0696566775877673e-023_rt) < 1.e-15);
+            assert (util::rel_error(f.F, 2.2314386397062104e-022_rt) < 1.e-15);
+            assert (util::rel_error(f.dF_deta, 2.2314386397062108e-022_rt) < 1.e-15);
+            assert (util::rel_error(f.dF_dbeta, 4.4513616188460852e-023_rt) < 1.e-15);
+            assert (util::rel_error(f.d2F_deta2, 2.2314386397062099e-022_rt) < 1.e-15);
+            assert (util::rel_error(f.d2F_detadbeta, 4.4513616188460870e-023_rt) < 1.e-15);
+            assert (util::rel_error(f.d2F_dbeta2, -1.0696566775877673e-023_rt) < 1.e-15);
         }
 
         {
@@ -54,12 +54,12 @@ int main() {
             FermiIntegral<real_t> f(k, eta, beta);
             f.evaluate(2);
 
-            assert (rel_error(f.F, 4.3093121530612724_rt) < 1.e-15);
-            assert (rel_error(f.dF_deta, 3.0909917562756424_rt) < 1.e-15);
-            assert (rel_error(f.dF_dbeta, 0.19002958762134178_rt) < 1.e-15);
-            assert (rel_error(f.d2F_deta2, 1.6796585258434078_rt) < 1.e-15);
-            assert (rel_error(f.d2F_detadbeta, 0.13977966489586524_rt) < 1.e-15);
-            assert (rel_error(f.d2F_dbeta2, -8.4816696742261236e-003_rt) < 1.e-15);
+            assert (util::rel_error(f.F, 4.3093121530612724_rt) < 1.e-15);
+            assert (util::rel_error(f.dF_deta, 3.0909917562756424_rt) < 1.e-15);
+            assert (util::rel_error(f.dF_dbeta, 0.19002958762134178_rt) < 1.e-15);
+            assert (util::rel_error(f.d2F_deta2, 1.6796585258434078_rt) < 1.e-15);
+            assert (util::rel_error(f.d2F_detadbeta, 0.13977966489586524_rt) < 1.e-15);
+            assert (util::rel_error(f.d2F_dbeta2, -8.4816696742261236e-003_rt) < 1.e-15);
         }
 
         {
@@ -69,12 +69,12 @@ int main() {
             FermiIntegral<real_t> f(k, eta, beta);
             f.evaluate(2);
 
-            assert (rel_error(f.F, 883930.45936891437_rt) < 1.e-15);
-            assert (rel_error(f.dF_deta, 3535.6046159037460_rt) < 1.e-14);
-            assert (rel_error(f.dF_dbeta, 4419.2988177917523_rt) < 1.e-15);
-            assert (rel_error(f.d2F_deta2, 7.0710678132825819_rt) < 1.e-11);
-            assert (rel_error(f.d2F_detadbeta, 17.677315986879442_rt) < 1.e-14);
-            assert (rel_error(f.d2F_dbeta2, -22.094727366363866_rt) < 1.e-15);
+            assert (util::rel_error(f.F, 883930.45936891437_rt) < 1.e-15);
+            assert (util::rel_error(f.dF_deta, 3535.6046159037460_rt) < 1.e-14);
+            assert (util::rel_error(f.dF_dbeta, 4419.2988177917523_rt) < 1.e-15);
+            assert (util::rel_error(f.d2F_deta2, 7.0710678132825819_rt) < 1.e-11);
+            assert (util::rel_error(f.d2F_detadbeta, 17.677315986879442_rt) < 1.e-14);
+            assert (util::rel_error(f.d2F_dbeta2, -22.094727366363866_rt) < 1.e-15);
         }
 
     }
@@ -92,12 +92,12 @@ int main() {
             FermiIntegral<real_t> f(k, eta, beta);
             f.evaluate(2);
 
-            assert (rel_error(f.F, 2.7816742731063666e-043_rt) < 1.e-15);
-            assert (rel_error(f.dF_deta, 2.7816742731063678e-043_rt) <1.e-15);
-            assert (rel_error(f.dF_dbeta, 1.2653970717385436e-045_rt) < 1.e-15);
-            assert (rel_error(f.d2F_deta2, 2.7816742731063674e-043_rt) <1.e-15);
-            assert (rel_error(f.d2F_detadbeta, 1.2653970717385444e-045_rt) <1.e-15);
-            assert (rel_error(f.d2F_dbeta2, -5.9528644489672306e-048_rt) <1.e-15);
+            assert (util::rel_error(f.F, 2.7816742731063666e-043_rt) < 1.e-15);
+            assert (util::rel_error(f.dF_deta, 2.7816742731063678e-043_rt) <1.e-15);
+            assert (util::rel_error(f.dF_dbeta, 1.2653970717385436e-045_rt) < 1.e-15);
+            assert (util::rel_error(f.d2F_deta2, 2.7816742731063674e-043_rt) <1.e-15);
+            assert (util::rel_error(f.d2F_detadbeta, 1.2653970717385444e-045_rt) <1.e-15);
+            assert (util::rel_error(f.d2F_dbeta2, -5.9528644489672306e-048_rt) <1.e-15);
         }
 
         {
@@ -107,12 +107,12 @@ int main() {
             FermiIntegral<real_t> f(k, eta, beta);
             f.evaluate(2);
 
-            assert (rel_error(f.F, 3.4186200954570750e-022_rt) < 1.e-15);
-            assert (rel_error(f.dF_deta, 3.4186200954570741e-022_rt) < 1.e-15);
-            assert (rel_error(f.dF_dbeta, 4.2732751193213414e-023_rt) < 1.e-15);
-            assert (rel_error(f.d2F_deta2, 3.4186200954570736e-022_rt) < 1.e-15);
-            assert (rel_error(f.d2F_detadbeta, 4.2732751193213450e-023_rt) < 1.e-15);
-            assert (rel_error(f.d2F_dbeta2, -1.6024781697455028e-023_rt) < 1.e-15);
+            assert (util::rel_error(f.F, 3.4186200954570750e-022_rt) < 1.e-15);
+            assert (util::rel_error(f.dF_deta, 3.4186200954570741e-022_rt) < 1.e-15);
+            assert (util::rel_error(f.dF_dbeta, 4.2732751193213414e-023_rt) < 1.e-15);
+            assert (util::rel_error(f.d2F_deta2, 3.4186200954570736e-022_rt) < 1.e-15);
+            assert (util::rel_error(f.d2F_detadbeta, 4.2732751193213450e-023_rt) < 1.e-15);
+            assert (util::rel_error(f.d2F_dbeta2, -1.6024781697455028e-023_rt) < 1.e-15);
         }
 
         {
@@ -122,12 +122,12 @@ int main() {
             FermiIntegral<real_t> f(k, eta, beta);
             f.evaluate(2);
 
-            assert (rel_error(f.F, 707.87776608227455_rt) < 1.e-15);
-            assert (rel_error(f.dF_deta, 7.0717751162111329_rt) < 1.e-14);
-            assert (rel_error(f.dF_dbeta, 3.5323860528718423_rt) < 1.e-15);
-            assert (rel_error(f.d2F_deta2, -7.0773544184610238e-006_rt) < 1.e-9);
-            assert (rel_error(f.d2F_detadbeta, 3.5351802891431347e-002_rt) < 1.e-15);
-            assert (rel_error(f.d2F_dbeta2, -1.7633986737239839e-002_rt) < 1.e-15);
+            assert (util::rel_error(f.F, 707.87776608227455_rt) < 1.e-15);
+            assert (util::rel_error(f.dF_deta, 7.0717751162111329_rt) < 1.e-14);
+            assert (util::rel_error(f.dF_dbeta, 3.5323860528718423_rt) < 1.e-15);
+            assert (util::rel_error(f.d2F_deta2, -7.0773544184610238e-006_rt) < 1.e-9);
+            assert (util::rel_error(f.d2F_detadbeta, 3.5351802891431347e-002_rt) < 1.e-15);
+            assert (util::rel_error(f.d2F_dbeta2, -1.7633986737239839e-002_rt) < 1.e-15);
         }
 
     }
@@ -144,12 +144,12 @@ int main() {
             FermiIntegral<real_t> f(k, eta, beta);
             f.evaluate(2);
 
-            assert (rel_error(f.F, 1.2553979904636453e-032_rt) < 1.e-15);
-            assert (rel_error(f.dF_deta, 1.2553979904636447e-032_rt) < 1.e-15);
-            assert (rel_error(f.dF_dbeta, 5.7230338002235925e-034_rt) < 1.e-15);
-            assert (rel_error(f.d2F_deta2, 1.2553979904636453e-032_rt) < 1.e-15);
-            assert (rel_error(f.d2F_detadbeta, 5.7230338002235968e-034_rt) < 1.e-15);
-            assert (rel_error(f.d2F_dbeta2, -2.6212332799199379e-035_rt) < 1.e-15);
+            assert (util::rel_error(f.F, 1.2553979904636453e-032_rt) < 1.e-15);
+            assert (util::rel_error(f.dF_deta, 1.2553979904636447e-032_rt) < 1.e-15);
+            assert (util::rel_error(f.dF_dbeta, 5.7230338002235925e-034_rt) < 1.e-15);
+            assert (util::rel_error(f.d2F_deta2, 1.2553979904636453e-032_rt) < 1.e-15);
+            assert (util::rel_error(f.d2F_detadbeta, 5.7230338002235968e-034_rt) < 1.e-15);
+            assert (util::rel_error(f.d2F_dbeta2, -2.6212332799199379e-035_rt) < 1.e-15);
         }
 
         {
@@ -159,12 +159,12 @@ int main() {
             FermiIntegral<real_t> f(k, eta, beta);
             f.evaluate(2);
 
-            assert (rel_error(f.F, 2.9294159670904935e-008_rt) < 1.e-15);
-            assert (rel_error(f.dF_deta, 2.9294159663320433e-008_rt) < 1.e-15);
-            assert (rel_error(f.dF_dbeta, 1.4502712363335996e-010_rt) < 1.e-15);
-            assert (rel_error(f.d2F_deta2, 2.9294159648151430e-008_rt) < 1.e-15);
-            assert (rel_error(f.d2F_detadbeta, 1.4502712359617485e-010_rt) < 1.e-15);
-            assert (rel_error(f.d2F_dbeta2, -7.1804917485691793e-013_rt) < 1.e-15);
+            assert (util::rel_error(f.F, 2.9294159670904935e-008_rt) < 1.e-15);
+            assert (util::rel_error(f.dF_deta, 2.9294159663320433e-008_rt) < 1.e-15);
+            assert (util::rel_error(f.dF_dbeta, 1.4502712363335996e-010_rt) < 1.e-15);
+            assert (util::rel_error(f.d2F_deta2, 2.9294159648151430e-008_rt) < 1.e-15);
+            assert (util::rel_error(f.d2F_detadbeta, 1.4502712359617485e-010_rt) < 1.e-15);
+            assert (util::rel_error(f.d2F_dbeta2, -7.1804917485691793e-013_rt) < 1.e-15);
         }
 
         {
@@ -174,12 +174,12 @@ int main() {
             FermiIntegral<real_t> f(k, eta, beta);
             f.evaluate(2);
 
-            assert (rel_error(f.F, 1517805.2872690351_rt) < 1.e-15);
-            assert (rel_error(f.dF_deta, 113369.99663886119_rt) < 1.e-15);
-            assert (rel_error(f.dF_dbeta, 75.889697517711070_rt) < 1.e-15);
-            assert (rel_error(f.d2F_deta2, 5656.8613205601887_rt) < 1.e-15);
-            assert (rel_error(f.d2F_detadbeta, 5.6684715477425227_rt) < 1.e-15);
-            assert (rel_error(f.d2F_dbeta2, -3.7944565338813361e-003_rt) < 1.e-15);
+            assert (util::rel_error(f.F, 1517805.2872690351_rt) < 1.e-15);
+            assert (util::rel_error(f.dF_deta, 113369.99663886119_rt) < 1.e-15);
+            assert (util::rel_error(f.dF_dbeta, 75.889697517711070_rt) < 1.e-15);
+            assert (util::rel_error(f.d2F_deta2, 5656.8613205601887_rt) < 1.e-15);
+            assert (util::rel_error(f.d2F_detadbeta, 5.6684715477425227_rt) < 1.e-15);
+            assert (util::rel_error(f.d2F_dbeta2, -3.7944565338813361e-003_rt) < 1.e-15);
         }
     }
 
@@ -196,12 +196,12 @@ int main() {
             FermiIntegral<real_t> f(k, eta, beta);
             f.evaluate(2);
 
-            assert (rel_error(f.F, 2.1821367305243183e-023_rt) < 1.e-15);
-            assert (rel_error(f.dF_deta, 2.1821367305243180e-023_rt) < 1.e-15);
-            assert (rel_error(f.dF_dbeta, 6.9671437808138560e-025_rt) < 1.e-15);
-            assert (rel_error(f.d2F_deta2, 2.1821367305243186e-023_rt) < 1.e-15);
-            assert (rel_error(f.d2F_detadbeta, 6.9671437808138587e-025_rt) < 1.e-15);
-            assert (rel_error(f.d2F_dbeta2, -2.2261771808312711e-026_rt) < 1.e-15);
+            assert (util::rel_error(f.F, 2.1821367305243183e-023_rt) < 1.e-15);
+            assert (util::rel_error(f.dF_deta, 2.1821367305243180e-023_rt) < 1.e-15);
+            assert (util::rel_error(f.dF_dbeta, 6.9671437808138560e-025_rt) < 1.e-15);
+            assert (util::rel_error(f.d2F_deta2, 2.1821367305243186e-023_rt) < 1.e-15);
+            assert (util::rel_error(f.d2F_detadbeta, 6.9671437808138587e-025_rt) < 1.e-15);
+            assert (util::rel_error(f.d2F_dbeta2, -2.2261771808312711e-026_rt) < 1.e-15);
         }
 
         {
@@ -211,12 +211,12 @@ int main() {
             FermiIntegral<real_t> f(k, eta, beta);
             f.evaluate(2);
 
-            assert (rel_error(f.F, 1034.9073854351607_rt) < 1.e-15);
-            assert (rel_error(f.dF_deta, 335.76592223107093_rt) < 1.e-15);
-            assert (rel_error(f.dF_dbeta, 2231.0524130570820_rt) < 1.e-15);
-            assert (rel_error(f.d2F_deta2, 80.071134602962601_rt) < 1.e-15);
-            assert (rel_error(f.d2F_detadbeta, 905.09777777902468_rt) < 1.e-15);
-            assert (rel_error(f.d2F_dbeta2, -5201.1741381184684_rt) < 1.e-15);
+            assert (util::rel_error(f.F, 1034.9073854351607_rt) < 1.e-15);
+            assert (util::rel_error(f.dF_deta, 335.76592223107093_rt) < 1.e-15);
+            assert (util::rel_error(f.dF_dbeta, 2231.0524130570820_rt) < 1.e-15);
+            assert (util::rel_error(f.d2F_deta2, 80.071134602962601_rt) < 1.e-15);
+            assert (util::rel_error(f.d2F_detadbeta, 905.09777777902468_rt) < 1.e-15);
+            assert (util::rel_error(f.d2F_dbeta2, -5201.1741381184684_rt) < 1.e-15);
         }
 
         {
@@ -226,12 +226,12 @@ int main() {
             FermiIntegral<real_t> f(k, eta, beta);
             f.evaluate(2);
 
-            assert (rel_error(f.F, 17946771.869476113_rt) < 1.e-15);
-            assert (rel_error(f.dF_deta, 714843.05556091876_rt) < 1.e-15);
-            assert (rel_error(f.dF_dbeta, 8740888.8928929009_rt) < 1.e-15);
-            assert (rel_error(f.d2F_deta2, 21361.250145668106_rt) < 1.e-14);
-            assert (rel_error(f.d2F_detadbeta, 350417.80107778130_rt) < 1.e-15);
-            assert (rel_error(f.d2F_dbeta2, -4257540.4021439729_rt) < 1.e-15);
+            assert (util::rel_error(f.F, 17946771.869476113_rt) < 1.e-15);
+            assert (util::rel_error(f.dF_deta, 714843.05556091876_rt) < 1.e-15);
+            assert (util::rel_error(f.dF_dbeta, 8740888.8928929009_rt) < 1.e-15);
+            assert (util::rel_error(f.d2F_deta2, 21361.250145668106_rt) < 1.e-14);
+            assert (util::rel_error(f.d2F_detadbeta, 350417.80107778130_rt) < 1.e-15);
+            assert (util::rel_error(f.d2F_dbeta2, -4257540.4021439729_rt) < 1.e-15);
         }
     }
 
@@ -241,7 +241,7 @@ int main() {
 
         const real_t h = 0.05_rt;
 
-        std::println("dF/dη");
+        util::green_println("dF/dη");
 
         for (auto k : {-0.5_rt, 0.5_rt, 1.5_rt, 2.5_rt}) {
             for (auto eta : {-70.0_rt, 0.0_rt, 50.0_rt, 500.0_rt, 10000.0_rt}) {
@@ -275,7 +275,7 @@ int main() {
         const real_t h = 0.05_rt;
 
         std::println();
-        std::println("dF/dβ");
+        util::green_println("dF/dβ");
 
         for (auto k : {-0.5_rt, 0.5_rt, 1.5_rt, 2.5_rt}) {
             for (auto eta : {-70.0_rt, 0.0_rt, 50.0_rt, 500.0_rt, 10000.0_rt}) {
@@ -309,7 +309,7 @@ int main() {
         const real_t h = 0.05_rt;
 
         std::println();
-        std::println("d²F/dη²");
+        util::green_println("d²F/dη²");
 
         for (auto k : {-0.5_rt, 0.5_rt, 1.5_rt, 2.5_rt}) {
             for (auto eta : {-70.0_rt, 0.0_rt, 50.0_rt, 500.0_rt, 10000.0_rt}) {
@@ -357,7 +357,7 @@ int main() {
         const real_t h = 0.05_rt;
 
         std::println();
-        std::println("d²F/dβ²");
+        util::green_println("d²F/dβ²");
 
         for (auto k : {-0.5_rt, 0.5_rt, 1.5_rt, 2.5_rt}) {
             for (auto eta : {-70.0_rt, 0.0_rt, 50.0_rt, 500.0_rt, 10000.0_rt}) {
