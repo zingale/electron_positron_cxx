@@ -2,6 +2,11 @@
 #define UTIL_H
 
 #include <cmath>
+#include <format>
+#include <print>
+#include <utility>
+
+#include "real_type.H"
 
 namespace util {
 
@@ -18,6 +23,20 @@ void green_println(std::format_string<Args...> fmt, Args&&... args) {
     std::print("{}{}{}\n", green,
                std::format(fmt, std::forward<Args>(args)...),
                reset);
+}
+
+// print in red if we go above a threshold
+template <real_t threshold=1.e-10_rt, typename... Args>
+void threshold_println(real_t val, std::format_string<Args...> fmt, Args&&... args) {
+    constexpr auto red = "\033[91m";
+    constexpr auto reset = "\033[0m";
+    if (std::abs(val) > threshold) {
+        std::print("{}{}{}\n", red,
+                   std::format(fmt, std::forward<Args>(args)...),
+                   reset);
+    } else {
+        std::print("{}\n", std::format(fmt, std::forward<Args>(args)...));
+    }
 }
 
 }
