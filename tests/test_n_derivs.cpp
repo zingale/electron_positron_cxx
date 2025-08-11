@@ -23,7 +23,7 @@ int main() {
         for (auto eta : {-10.0_rt, 0.0_rt, 50.0_rt, 500.0_rt, 10000.0_rt}) {
             for (auto beta : {1.e-6_rt, 1.e-3_rt, 30.0_rt, 100.0_rt}) {
 
-                real_t eta_tilde = -eta - 2.0_rt / beta;
+                const real_t eta_tilde = -eta - 2.0_rt / beta;
 
                 // construct the needed Fermi integrals
                 FermiIntegral<real_t> f12(0.5_rt, eta, beta);
@@ -70,7 +70,7 @@ int main() {
         for (auto eta : {-10.0_rt, 0.0_rt, 50.0_rt, 500.0_rt, 10000.0_rt}) {
             for (auto beta : {1.e-6_rt, 1.e-3_rt, 30.0_rt, 100.0_rt}) {
 
-                real_t eta_tilde = -eta - 2.0_rt / beta;
+                const real_t eta_tilde = -eta - 2.0_rt / beta;
 
                 // construct the needed Fermi integrals
                 FermiIntegral<real_t> f12(0.5_rt, eta, beta);
@@ -121,7 +121,7 @@ int main() {
         for (auto eta : {-10.0_rt, 0.0_rt, 50.0_rt, 500.0_rt, 10000.0_rt}) {
             for (auto beta : {1.e-6_rt, 1.e-3_rt, 30.0_rt, 100.0_rt}) {
 
-                real_t eta_tilde = -eta - 2.0_rt / beta;
+                const real_t eta_tilde = -eta - 2.0_rt / beta;
 
                 // construct the needed Fermi integrals
                 FermiIntegral<real_t> f12(0.5_rt, eta, beta);
@@ -167,7 +167,7 @@ int main() {
         for (auto eta : {-10.0_rt, 0.0_rt, 50.0_rt, 500.0_rt, 10000.0_rt}) {
             for (auto beta : {1.e-6_rt, 1.e-3_rt, 30.0_rt, 100.0_rt}) {
 
-                real_t eta_tilde = -eta - 2.0_rt / beta;
+                const real_t eta_tilde = -eta - 2.0_rt / beta;
 
                 // construct the needed Fermi integrals
                 FermiIntegral<real_t> f12(0.5_rt, eta, beta);
@@ -218,7 +218,7 @@ int main() {
         for (auto eta : {-10.0_rt, 0.0_rt, 50.0_rt, 500.0_rt, 10000.0_rt}) {
             for (auto beta : {1.e-6_rt, 1.e-3_rt, 30.0_rt, 100.0_rt}) {
 
-                real_t eta_tilde = -eta - 2.0_rt / beta;
+                const real_t eta_tilde = -eta - 2.0_rt / beta;
 
                 // construct the needed Fermi integrals
                 FermiIntegral<real_t> f12(0.5_rt, eta, beta);
@@ -265,7 +265,7 @@ int main() {
         for (auto eta : {-10.0_rt, 0.0_rt, 50.0_rt, 500.0_rt, 10000.0_rt}) {
             for (auto beta : {1.e-6_rt, 1.e-3_rt, 30.0_rt, 100.0_rt}) {
 
-                real_t eta_tilde = -eta - 2.0_rt / beta;
+                const real_t eta_tilde = -eta - 2.0_rt / beta;
 
                 // construct the needed Fermi integrals
                 FermiIntegral<real_t> f12(0.5_rt, eta, beta);
@@ -316,7 +316,7 @@ int main() {
         for (auto eta : {-10.0_rt, 0.0_rt, 50.0_rt, 500.0_rt, 10000.0_rt}) {
             for (auto beta : {1.e-6_rt, 1.e-3_rt, 30.0_rt, 100.0_rt}) {
 
-                real_t eta_tilde = -eta - 2.0_rt / beta;
+                const real_t eta_tilde = -eta - 2.0_rt / beta;
 
                 // construct the needed Fermi integrals
                 FermiIntegral<real_t> f12(0.5_rt, eta, beta);
@@ -363,7 +363,7 @@ int main() {
         for (auto eta : {-10.0_rt, 0.0_rt, 50.0_rt, 500.0_rt, 10000.0_rt}) {
             for (auto beta : {1.e-6_rt, 1.e-3_rt, 30.0_rt, 100.0_rt}) {
 
-                real_t eta_tilde = -eta - 2.0_rt / beta;
+                const real_t eta_tilde = -eta - 2.0_rt / beta;
 
                 // construct the needed Fermi integrals
                 FermiIntegral<real_t> f12(0.5_rt, eta, beta);
@@ -414,7 +414,7 @@ int main() {
         for (auto eta : {-10.0_rt, 0.0_rt, 50.0_rt, 500.0_rt, 10000.0_rt}) {
             for (auto beta : {1.e-6_rt, 1.e-3_rt, 30.0_rt, 100.0_rt}) {
 
-                real_t eta_tilde = -eta - 2.0_rt / beta;
+                const real_t eta_tilde = -eta - 2.0_rt / beta;
 
                 // construct the needed Fermi integrals
                 FermiIntegral<real_t> f12(0.5_rt, eta, beta);
@@ -439,7 +439,7 @@ int main() {
                 auto [diff_eta, err1] =
                     fd::adaptive_diff<real_t>([=] (real_t _eta) -> real_t
                     {
-                        real_t eta_tilde_tmp = -_eta - 2.0_rt / beta;
+                        const real_t eta_tilde_tmp = -_eta - 2.0_rt / beta;
 
                         FermiIntegral<real_t> f12_tmp(0.5_rt, _eta, beta);
                         f12_tmp.evaluate(1);
@@ -467,7 +467,7 @@ int main() {
                 auto [diff_beta, err2] =
                     fd::adaptive_diff<real_t>([=] (real_t _beta) -> real_t
                     {
-                        real_t eta_tilde_tmp = -eta - 2.0_rt / _beta;
+                        const real_t eta_tilde_tmp = -eta - 2.0_rt / _beta;
 
                         FermiIntegral<real_t> f12_tmp(0.5_rt, eta, _beta);
                         f12_tmp.evaluate(1);
@@ -504,7 +504,7 @@ int main() {
         for (auto eta : {-10.0_rt, 0.0_rt, 50.0_rt, 500.0_rt, 10000.0_rt}) {
             for (auto beta : {1.e-6_rt, 1.e-3_rt, 30.0_rt, 100.0_rt}) {
 
-                real_t eta_tilde = -eta - 2.0_rt / beta;
+                const real_t eta_tilde = -eta - 2.0_rt / beta;
 
                 // construct the needed Fermi integrals
                 FermiIntegral<real_t> f12(0.5_rt, eta, beta);
@@ -533,7 +533,7 @@ int main() {
                 auto [diff_eta, err1] =
                     fd::adaptive_diff<real_t>([=] (real_t _eta) -> real_t
                     {
-                        real_t eta_tilde_tmp = -_eta - 2.0_rt / beta;
+                        const real_t eta_tilde_tmp = -_eta - 2.0_rt / beta;
 
                         FermiIntegral<real_t> f12_tmp(0.5_rt, _eta, beta);
                         f12_tmp.evaluate(1);
@@ -561,7 +561,7 @@ int main() {
                 auto [diff_beta, err2] =
                     fd::adaptive_diff<real_t>([=] (real_t _beta) -> real_t
                     {
-                        real_t eta_tilde_tmp = -eta - 2.0_rt / _beta;
+                        const real_t eta_tilde_tmp = -eta - 2.0_rt / _beta;
 
                         FermiIntegral<real_t> f12_tmp(0.5_rt, eta, _beta);
                         f12_tmp.evaluate(1);
