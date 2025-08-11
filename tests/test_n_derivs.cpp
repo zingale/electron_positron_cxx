@@ -437,7 +437,7 @@ int main() {
 
                 // check ∂²n⁻/∂η∂β by differencing ∂n⁻/∂β
                 auto [diff_eta, err1] =
-                    fd::adaptive_diff2<real_t>([=] (real_t _eta) -> real_t
+                    fd::adaptive_diff<real_t>([=] (real_t _eta) -> real_t
                     {
                         real_t eta_tilde_tmp = -_eta - 2.0_rt / beta;
 
@@ -465,7 +465,7 @@ int main() {
 
                 // check ∂²n⁻/∂η∂β by differencing ∂n⁻/∂η
                 auto [diff_beta, err2] =
-                    fd::adaptive_diff2<real_t>([=] (real_t _beta) -> real_t
+                    fd::adaptive_diff<real_t>([=] (real_t _beta) -> real_t
                     {
                         real_t eta_tilde_tmp = -eta - 2.0_rt / _beta;
 
@@ -489,7 +489,7 @@ int main() {
 
                 util::threshold_println(err_eta,
                                         "eta = {:9.3f}, beta = {:8.3g},  ∂²n⁻/∂η∂β = {:12.5g},  D_η(∂n⁻/∂β) error = {:12.5g}  D_β(∂n⁻/∂η) error = {:12.5g}",
-                                        eta, beta, nd.d2ne_dbeta2, err_eta, err_beta);
+                                        eta, beta, nd.d2ne_detadbeta, err_eta, err_beta);
             }
         }
     }
