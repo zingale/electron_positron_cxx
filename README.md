@@ -74,6 +74,14 @@ as described above.  The `tests/README.md` describes the basic
 functionality of the tests.
 
 
+## Generating quadrature points / weights
+
+The Gauss-Legendre and Gauss-Leguerre quadrature roots and weights are
+generated via the notebook `generate_quadrature_weights.ipynb` using
+SymPy.  This will directly write the C++ header file with the desired
+number of quadrature points.
+
+
 ## clang-tidy
 
 To check the codebase with `clang-tidy`, build as:
