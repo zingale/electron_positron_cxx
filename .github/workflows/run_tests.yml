@@ -43,3 +43,9 @@ jobs:
           cd tests
           ./test_n_derivs > test.out
           diff test.out ci-benchmarks/test_n_derivs.out
+
+      - name: Run test_fermi
+        run: |
+          cd tests
+          ./test_fermi > test2.out
+          diff test2.out ci-benchmarks/test_fermi.out

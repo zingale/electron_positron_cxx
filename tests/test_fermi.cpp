@@ -263,8 +263,9 @@ int main() {
 
                     real_t rel_err = std::abs(f.dF_deta - diff) / std::abs(f.dF_deta);
 
-                    std::println("k = {:5.2f}, eta = {:9.3f}, beta = {:9.3g}, dF/dη= {:15.8g}, error = {:15.8g}",
-                                 k, eta, beta, f.dF_deta, rel_err);
+                    util::threshold_println(rel_err,
+                                            "k = {:5.2f}, eta = {:9.3f}, beta = {:9.3g}, dF/dη= {:15.8g}, error = {:15.8g}",
+                                            k, eta, beta, f.dF_deta, rel_err);
                 }
             }
         }
@@ -297,8 +298,9 @@ int main() {
 
                     real_t rel_err = std::abs(f.dF_dbeta - diff) / std::abs(f.dF_dbeta);
 
-                    std::println("k = {:5.2f}, eta = {:9.3f}, beta = {:9.3g}, dF/dβ = {:15.8g}, error = {:15.8g}",
-                                 k, eta, beta, f.dF_dbeta, rel_err);
+                    util::threshold_println(rel_err,
+                                            "k = {:5.2f}, eta = {:9.3f}, beta = {:9.3g}, dF/dβ = {:15.8g}, error = {:15.8g}",
+                                            k, eta, beta, f.dF_dbeta, rel_err);
                 }
             }
         }
@@ -345,8 +347,9 @@ int main() {
                     real_t rel_err2 = std::abs(f.d2F_deta2 - diff2) / std::abs(f.d2F_deta2);
 
 
-                    std::println("k = {:5.2f}, eta = {:9.3f}, beta = {:9.3g}, d²F/dη² = {:15.8g}, error (D2F) = {:15.8g}, error (DF') = {:15.8g}",
-                                 k, eta, beta, f.dF_dbeta, rel_err, rel_err2);
+                    util::threshold_println(rel_err,
+                                            "k = {:5.2f}, eta = {:9.3f}, beta = {:9.3g}, d²F/dη² = {:15.8g}, error (D2F) = {:15.8g}, error (DF') = {:15.8g}",
+                                            k, eta, beta, f.dF_dbeta, rel_err, rel_err2);
                 }
             }
         }
@@ -392,8 +395,9 @@ int main() {
 
                     real_t rel_err2 = std::abs(f.d2F_dbeta2 - diff2) / std::abs(f.d2F_dbeta2);
 
-                    std::println("k = {:5.2f}, eta = {:9.3f}, beta = {:9.3g}, d²F/dβ² = {:15.8g}, error (D2F) = {:15.8g}, error (DF') = {:15.8g}",
-                                 k, eta, beta, f.dF_dbeta, rel_err, rel_err2);
+                    util::threshold_println(rel_err,
+                                            "k = {:5.2f}, eta = {:9.3f}, beta = {:9.3g}, d²F/dβ² = {:15.8g}, error (D2F) = {:15.8g}, error (DF') = {:15.8g}",
+                                            k, eta, beta, f.dF_dbeta, rel_err, rel_err2);
                 }
             }
         }
