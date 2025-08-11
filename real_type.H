@@ -1,7 +1,9 @@
 #ifndef REAL_TYPE_H
 #define REAL_TYPE_H
 
+#if defined(__clang__)
 #include <quadmath.h>
+#endif
 
 #if defined(USE_FLOAT128)
 using real_t = __float128;
