@@ -3,7 +3,6 @@
 #define QUADRATURE_WEIGHTS_H
 
 #include <array>
-#include <quadmath.h>
 
 
 // Gauss-Legendre and Gauss-Laguerre quadrature nodes and weights for 50 points
