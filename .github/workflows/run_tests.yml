@@ -36,7 +36,7 @@ jobs:
       - name: Compile tests
         run: |
           cd tests
-          make
+          make -j 4
 
       - name: Run test_n_derivs
         run: |
