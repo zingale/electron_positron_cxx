@@ -9,7 +9,7 @@ integrals, and follows the notation from Timmes and Arnett 1999 for
 the forms of the thermodynamic quantities.
 
 To get good results, this uses 128-bit precision, relying on GCC's
-`__float128` and the quadmath library.
+`__float128` implementation.
 
 
 ## Requirements
@@ -22,6 +22,10 @@ The precision can be changed via the `PRECISION` make variable, e.g.,
 
 * `make PRECISION=FLOAT128` builds with 128-bit precision (using the
   `__float128` data type.
+
+  Note: at the moment, this is only supported with GCC, and not
+  CLANG because of an incompatibility with 128-bit floats and
+  `std::println()` in C++ under CLANG.
 
 * `make PRECISION=LONG_DOUBLE` builds with a `long double`, which is
   80 bits on x86 architectures.
@@ -51,25 +55,32 @@ before building with any different options.
 
 A basic driver that takes density, temperature, and Y_e is in `eos/`.
 To build, type:
+
 ```
 make
 ```
 
 ## Tests
 
-In `tests/` type:
+There are a large number of tests that exercise different parts of the
+algorithm.  In `tests/` type:
 
 ```
 make
 ```
 
-optionally, you can switch from `_float128` to `long double` by
-editing the `GNUmakefile`.
+You can optionally set the precision and number of quadrature points
+as described above.  The `tests/README.md` describes the basic
+functionality of the tests.
+
 
 ## clang-tidy
 
 To check the codebase with `clang-tidy`, build as:
 
 ```
-make USE_CLANG_TIDY=TRUE
+make USE_CLANG_TIDY=TRUE PRECISION=LONG_DOUBLE
 ```
+
+At the moment, building with `PRECISION=FLOAT128` with
+`clang-tidy` does not work.

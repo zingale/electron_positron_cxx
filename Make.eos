@@ -7,6 +7,15 @@ ALL: $(EXECUTABLES)
 
 HEADERS := $(wildcard $(TOP)/*.H)
 
+# compiler -- allowed options are GCC or CLANG
+COMP ?= GCC
+
+ifeq ($(COMP), CLANG)
+  CC = clang++
+else
+  CC = g++
+endif
+
 # select the precision
 PRECISION ?= FLOAT128
 
@@ -28,14 +37,6 @@ else
   DEFINES += -DQUAD400
 endif
 
-INCLUDES := $(TOP)
-
-INCLUDE_FLAGS := $(patsubst %,-I%,$(INCLUDES))
-CXXFLAGS := -O3 -std=c++23 -Wall -Wextra -Wshadow
-
-# for GCC, to recognize the Q literal
-GNU_QUADMATH_FLAGS := -fext-numeric-literals
-
 # for clang-tidy -- clang doesn't find quadmath.H
 # we'll look both in /usr and in ~/minicoda (for GCC installs via conda)
 PATH_TO_QUADMATH := $(shell dirname $(shell find /usr/ -name quadmath.h 2> /dev/null | grep $(shell gcc -dumpversion)))
@@ -43,11 +44,26 @@ ifeq ($(strip $(PATH_TO_QUADMATH)),)
   PATH_TO_QUADMATH := $(shell dirname $(shell find ~/miniconda/ -name quadmath.h 2> /dev/null | grep $(shell gcc -dumpversion)))
 endif
 
+INCLUDES := $(TOP)
+
+ifeq ($(COMP), CLANG)
+  INCLUDES += $(PATH_TO_QUADMATH)
+endif
+
+INCLUDE_FLAGS := $(patsubst %,-I%,$(INCLUDES))
+
+CXXFLAGS := -O3 -std=c++23 -Wall -Wextra -Wshadow
+
+EXTRA_CXX_FLAGS :=
+ifeq ($(COMP), GCC)
+  EXTRA_CXXFLAGS += -fext-numeric-literals
+endif
+
 % : %.cpp $(HEADERS)
 ifeq ($(USE_CLANG_TIDY),TRUE)
 	clang-tidy --config-file=$(TOP)/.clang-tidy --warnings-as-errors=* $< -- $(CXXFLAGS) $(DEFINES) $(INCLUDE_FLAGS) -I$(PATH_TO_QUADMATH)
 endif
-	g++  $(CXXFLAGS) $(GNU_QUADMATH_FLAGS) $(DEFINES) $(INCLUDE_FLAGS) -o $@ $<
+	$(CC) $(CXXFLAGS) $(EXTRA_CXXFLAGS) $(DEFINES) $(INCLUDE_FLAGS) -o $@ $<
 
 clean:
 	rm -f $(EXECUTABLES)

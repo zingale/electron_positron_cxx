@@ -2,7 +2,6 @@
 #define QUADRATURE_WEIGHTS_H
 
 #include <array>
-#include <quadmath.h>
 
 
 // Gauss-Legendre quadrature nodes and weights for 200 points computed
