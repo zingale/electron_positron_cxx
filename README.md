@@ -74,6 +74,15 @@ as described above.  The `tests/README.md` describes the basic
 functionality of the tests.
 
 
+## Derivations
+
+The derivation of the derivatives of the different thermodynamic
+quantities is provided by the notebook `degenerate_derivatives.ipynb`,
+using SymPy.
+
+These are the expressions that are coded up in `electron_positron.H`.
+
+
 ## Generating quadrature points / weights
 
 The Gauss-Legendre and Gauss-Leguerre quadrature roots and weights are
