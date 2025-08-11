@@ -3,9 +3,9 @@
 
 #include <algorithm>
 #include <array>
-#include <print>
 
 #include "real_type.H"
+#include "util.H"
 
 using namespace literals;
 
@@ -102,7 +102,7 @@ namespace bounds {
         }
 
         if (it < 0 || ir < 0) {
-            std::println("thermodynamic state (T = {}, rhoYe = {}) out of bounds", temp0, rhoYe0);
+            util::safe_println("thermodynamic state (T = {}, rhoYe = {}) out of bounds", temp0, rhoYe0);
             abort();
         }
 
