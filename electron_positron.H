@@ -192,9 +192,9 @@ NumDens<T> get_n_derivs(T beta,
                                                    3.0_rt * f12.dF_deta + 5.0_rt * beta * f32.dF_deta);
 
     // ∂²n⁻/∂β²
-    nd.d2ne_dbeta2 = 0.25_rt / beta12 * (3.0_rt * f12.F + 15.0_rt * beta * f32.F +
-                                         4.0 * beta * (beta * (f12.d2F_dbeta2 + beta * f32.d2F_dbeta2) +
-                                                       (3.0_rt * f12.dF_dbeta + 5.0_rt * beta * f32.dF_dbeta)));
+    nd.d2ne_dbeta2 = 0.25_rt * coeff / beta12 * (3.0_rt * f12.F + 15.0_rt * beta * f32.F +
+                                                 4.0 * beta * (beta * (f12.d2F_dbeta2 + beta * f32.d2F_dbeta2) +
+                                                               (3.0_rt * f12.dF_dbeta + 5.0_rt * beta * f32.dF_dbeta)));
 
     // ∂²n⁺/∂η²
     nd.d2np_deta2 = coeff * beta32 * (f12_pos.d2F_deta2 + beta * f32_pos.d2F_deta2);
