@@ -24,8 +24,9 @@ int main() {
 
             auto [scale, error] = maxwell_1<real_t>(rho, T, Ye);
 
-            std::println("ρ = {:8.3g} T = {:8.3g}:  p⁻ + p⁺ = {:15.8g},  p = ρ² ∂e/∂ρ|ᴛ + T ∂p/∂T|ᵨ error = {:15.5g}",
-                         rho, T, scale, error);
+            util::threshold_println(error,
+                                    "ρ = {:8.3g} T = {:8.3g}:  p⁻ + p⁺ = {:15.8g},  p = ρ² ∂e/∂ρ|ᴛ + T ∂p/∂T|ᵨ error = {:15.5g}",
+                                    rho, T, scale, error);
 
         }
     }
@@ -38,8 +39,9 @@ int main() {
 
             auto [scale, error] = maxwell_2<real_t>(rho, T, Ye);
 
-            std::println("ρ = {:8.3g} T = {:8.3g}:  ∂e/∂T|ᵨ = {:15.8g},  ∂e/∂T|ᵨ = T ∂s/∂T|ᵨ error = {:15.5g}",
-                         rho, T, scale, error);
+            util::threshold_println(error,
+                                    "ρ = {:8.3g} T = {:8.3g}:  ∂e/∂T|ᵨ = {:15.8g},  ∂e/∂T|ᵨ = T ∂s/∂T|ᵨ error = {:15.5g}",
+                                    rho, T, scale, error);
 
         }
     }
@@ -52,8 +54,9 @@ int main() {
 
             auto [scale, error] = maxwell_3<real_t>(rho, T, Ye);
 
-            std::println("ρ = {:8.3g} T = {:8.3g}:  ∂s/∂ρ|ᴛ = {:15.8g},  -∂s/∂ρ|ᴛ = 1/ρ² ∂p/∂T|ᵨ error = {:15.5g}",
-                         rho, T, scale, error);
+            util::threshold_println(error,
+                                    "ρ = {:8.3g} T = {:8.3g}:  ∂s/∂ρ|ᴛ = {:15.8g},  -∂s/∂ρ|ᴛ = 1/ρ² ∂p/∂T|ᵨ error = {:15.5g}",
+                                    rho, T, scale, error);
 
         }
     }

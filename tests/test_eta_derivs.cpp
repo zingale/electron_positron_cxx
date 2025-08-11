@@ -34,8 +34,9 @@ test_eta_rho_derivs() {
                 }, rho, drho);
 
             real_t err = std::abs(es.deta_drho - deriv) / std::abs(es.deta_drho);
-            std::println("ρ = {:8.3g} T = {:8.3g} η = {:11.5}:  ∂η/∂ρ = {:11.5g},  error = {:11.5g}",
-                         rho, T, es.eta, es.deta_drho, err);
+            util::threshold_println(err,
+                                    "ρ = {:8.3g} T = {:8.3g} η = {:11.5}:  ∂η/∂ρ = {:11.5g},  error = {:11.5g}",
+                                    rho, T, es.eta, es.deta_drho, err);
         }
     }
 }
@@ -63,8 +64,9 @@ test_eta_T_derivs() {
 
             real_t err{};
             err = std::abs(es.deta_dT - deriv) / std::abs(es.deta_dT);
-            std::println("ρ = {:8.3g} T = {:8.3g} η = {:11.5}:  ∂η/∂T = {:11.5g},  error = {:11.5g}",
-                         rho, T, es.eta, es.deta_dT, err);
+            util::threshold_println(err,
+                                    "ρ = {:8.3g} T = {:8.3g} η = {:11.5}:  ∂η/∂T = {:11.5g},  error = {:11.5g}",
+                                    rho, T, es.eta, es.deta_dT, err);
         }
     }
 }
@@ -105,8 +107,9 @@ test_eta_rho2_derivs() {
 
             real_t err = std::abs(es.d2eta_drho2 - deriv) / std::abs(es.d2eta_drho2);
 
-            std::println("ρ = {:8.3g} T = {:8.3g} η = {:11.5}:  ∂²η/∂ρ² = {:11.5g},  D²(η) error = {:11.5g},  D(∂η/∂ρ) error = {:11.5g}",
-                         rho, T, es.eta, es.d2eta_drho2, err2, err);
+            util::threshold_println(err,
+                                    "ρ = {:8.3g} T = {:8.3g} η = {:11.5}:  ∂²η/∂ρ² = {:11.5g},  D²(η) error = {:11.5g},  D(∂η/∂ρ) error = {:11.5g}",
+                                    rho, T, es.eta, es.d2eta_drho2, err2, err);
         }
     }
 }
@@ -147,8 +150,9 @@ test_eta_T2_derivs() {
 
             real_t err = std::abs(es.d2eta_dT2 - deriv) / std::abs(es.d2eta_dT2);
 
-            std::println("ρ = {:8.3g} T = {:8.3g} η = {:11.5}:  ∂²η/∂T² = {:11.5g},  D²(η) error = {:11.5g}  D(∂η/∂T) error = {:11.5g}",
-                         rho, T, es.eta, es.d2eta_dT2, err2, err);
+            util::threshold_println(err,
+                                    "ρ = {:8.3g} T = {:8.3g} η = {:11.5}:  ∂²η/∂T² = {:11.5g},  D²(η) error = {:11.5g}  D(∂η/∂T) error = {:11.5g}",
+                                    rho, T, es.eta, es.d2eta_dT2, err2, err);
         }
     }
 }
@@ -156,8 +160,8 @@ test_eta_T2_derivs() {
 
 int main() {
 
-    //test_eta_rho_derivs();
-    //test_eta_T_derivs();
+    test_eta_rho_derivs();
+    test_eta_T_derivs();
 
     test_eta_rho2_derivs();
     test_eta_T2_derivs();

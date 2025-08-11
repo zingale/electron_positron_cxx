@@ -49,3 +49,9 @@ jobs:
           cd tests
           ./test_fermi > test2.out
           diff test2.out ci-benchmarks/test_fermi.out
+
+      - name: Run test_maxwell
+        run: |
+          cd tests
+          ./test_maxwell > test3.out
+          diff test3.out ci-benchmarks/test_maxwell.out
