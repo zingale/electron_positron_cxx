@@ -26,11 +26,15 @@ The following tests exercise different parts of the EOS algorithm:
   approximations.
 
 * `test_fermi.cpp` : This tests the Fermi integral first- and
-  second-derivatives computed via quadrature by comparing to
-  finite-difference approximations.
+  second-derivatives (with respect to β and η) computed via quadrature
+  by comparing to finite-difference approximations.
 
 * `test_maxwell.cpp` : This checks the Maxwell relations for
   thermodynamic consistency.
 
+* `test_n_derivs.cpp` : This checks the first- and second-derivatives
+  (with respect to density and temperature) of the number density.
+  These are the building blocks of the η derivatives that are then
+  used for all the other thermodynamic derivatives.
 
 
