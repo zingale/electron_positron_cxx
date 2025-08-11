@@ -15,7 +15,7 @@ int main() {
 
         const real_t h = 0.05_rt;
 
-        std::println("dn⁻/dη");
+        util::green_println("testing dn⁻/dη");
 
         for (auto eta : {-10.0_rt, 0.0_rt, 50.0_rt, 500.0_rt, 10000.0_rt}) {
             for (auto beta : {1.e-6_rt, 1.e-3_rt, 30.0_rt, 100.0_rt}) {
@@ -61,7 +61,7 @@ int main() {
         const real_t h = 0.05_rt;
 
         std::println("");
-        std::println("dn⁺/dη");
+        util::green_println("testing dn⁺/dη");
 
         for (auto eta : {-10.0_rt, 0.0_rt, 50.0_rt, 500.0_rt, 10000.0_rt}) {
             for (auto beta : {1.e-6_rt, 1.e-3_rt, 30.0_rt, 100.0_rt}) {
@@ -111,7 +111,7 @@ int main() {
         const real_t h = 0.05_rt;
 
         std::println("");
-        std::println("dn⁻/dβ");
+        util::green_println("testing dn⁻/dβ");
 
         for (auto eta : {-10.0_rt, 0.0_rt, 50.0_rt, 500.0_rt, 10000.0_rt}) {
             for (auto beta : {1.e-6_rt, 1.e-3_rt, 30.0_rt, 100.0_rt}) {
@@ -157,7 +157,7 @@ int main() {
         const real_t h = 0.05_rt;
 
         std::println("");
-        std::println("d²n⁻/dη²");
+        util::green_println("testing d²n⁻/dη²");
 
         for (auto eta : {-10.0_rt, 0.0_rt, 50.0_rt, 500.0_rt, 10000.0_rt}) {
             for (auto beta : {1.e-6_rt, 1.e-3_rt, 30.0_rt, 100.0_rt}) {
@@ -203,7 +203,7 @@ int main() {
         const real_t h = 0.05_rt;
 
         std::println("");
-        std::println("d²n⁻/dβ²");
+        util::green_println("testing d²n⁻/dβ²");
 
         for (auto eta : {-10.0_rt, 0.0_rt, 50.0_rt, 500.0_rt, 10000.0_rt}) {
             for (auto beta : {1.e-6_rt, 1.e-3_rt, 30.0_rt, 100.0_rt}) {

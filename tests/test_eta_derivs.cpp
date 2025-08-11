@@ -21,7 +21,7 @@ test_eta_rho_derivs() {
 
     constexpr real_t eps{0.01_rt};
 
-    green_println("testing ∂η/∂ρ via differencing");
+    util::green_println("testing ∂η/∂ρ via differencing");
 
     for (auto T : Ts) {
         for (auto rho : rhos) {
@@ -49,7 +49,7 @@ test_eta_T_derivs() {
     constexpr real_t eps{0.01_rt};
 
     std::println("");
-    green_println("testing ∂η/∂T via differencing");
+    util::green_println("testing ∂η/∂T via differencing");
 
     for (auto T : Ts) {
         for (auto rho : rhos) {
@@ -78,7 +78,7 @@ test_eta_rho2_derivs() {
     constexpr real_t eps{0.01_rt};
 
     std::println("");
-    green_println("testing ∂²η/∂ρ² via differencing");
+    util::green_println("testing ∂²η/∂ρ² via differencing");
 
     for (auto T : Ts) {
         for (auto rho : rhos) {
@@ -120,7 +120,7 @@ test_eta_T2_derivs() {
     constexpr real_t eps{0.01_rt};
 
     std::println("");
-    green_println("testing ∂²η/∂T² via differencing");
+    util::green_println("testing ∂²η/∂T² via differencing");
 
     for (auto T : Ts) {
         for (auto rho : rhos) {

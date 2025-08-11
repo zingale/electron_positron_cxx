@@ -63,8 +63,8 @@ public:
     T dsp_drho{};
     T dsp_dT{};
 
-    T eta{};
-    T beta{};
+    T eta{};  // degeneracy parameter
+    T beta{};  // k T / rest mass
 
     T deta_drho{};
     T deta_dT{};
@@ -81,7 +81,6 @@ template <typename T>
 class NumDens {
 
 public:
-    // these are included for unit tests / debugging
     T dne_deta{};
     T dne_dbeta{};
 

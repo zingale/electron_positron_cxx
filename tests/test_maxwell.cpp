@@ -4,6 +4,7 @@
 
 #include "real_type.H"
 #include "maxwell_relations.H"
+#include "util.H"
 
 constexpr std::array<real_t, 5> Ts{1.e4_rt, 1.e5_rt, 1.e6_rt, 1.e8_rt, 5.e9_rt};
 constexpr std::array<real_t, 5> rhos{1.e-2_rt, 1.e2_rt, 1.e5_rt, 1.e7_rt, 5.e9_rt};
@@ -16,7 +17,7 @@ int main() {
 
     constexpr real_t Ye{0.5_rt};
 
-    std::println("testing p = ρ² ∂e/∂ρ|ᴛ + T ∂p/∂T|ᵨ");
+    util::green_println("testing p = ρ² ∂e/∂ρ|ᴛ + T ∂p/∂T|ᵨ");
 
     for (auto T : Ts) {
         for (auto rho : rhos) {
@@ -30,7 +31,7 @@ int main() {
     }
 
     std::println("");
-    std::println("testing ∂e/∂T|ᵨ = T ∂s/∂T|ᵨ");
+    util::green_println("testing ∂e/∂T|ᵨ = T ∂s/∂T|ᵨ");
 
     for (auto T : Ts) {
         for (auto rho : rhos) {
@@ -44,7 +45,7 @@ int main() {
     }
 
     std::println("");
-    std::println("testing -∂s/∂ρ|ᴛ = 1/ρ² ∂p/∂T|ᵨ");
+    util::green_println("testing -∂s/∂ρ|ᴛ = 1/ρ² ∂p/∂T|ᵨ");
 
     for (auto T : Ts) {
         for (auto rho : rhos) {
