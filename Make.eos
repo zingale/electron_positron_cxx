@@ -46,16 +46,24 @@ endif
 
 INCLUDES := $(TOP)
 
+ifeq ($(COMP), CLANG)
+  INCLUDES += $(PATH_TO_QUADMATH)
+endif
+
 INCLUDE_FLAGS := $(patsubst %,-I%,$(INCLUDES))
 
-CXXFLAGS := -O3 -std=c++23 -fext-numeric-literals -Wall -Wextra -Wshadow
+CXXFLAGS := -O3 -std=c++23 -Wall -Wextra -Wshadow
 
+EXTRA_CXX_FLAGS :=
+ifeq ($(COMP), GCC)
+  EXTRA_CXXFLAGS += -fext-numeric-literals
+endif
 
 % : %.cpp $(HEADERS)
 ifeq ($(USE_CLANG_TIDY),TRUE)
 	clang-tidy --config-file=$(TOP)/.clang-tidy --warnings-as-errors=* $< -- $(CXXFLAGS) $(DEFINES) $(INCLUDE_FLAGS) -I$(PATH_TO_QUADMATH)
 endif
-	$(CC) $(CXXFLAGS) $(GNU_QUADMATH_FLAGS) $(DEFINES) $(INCLUDE_FLAGS) -o $@ $<
+	$(CC) $(CXXFLAGS) $(EXTRA_CXXFLAGS) $(DEFINES) $(INCLUDE_FLAGS) -o $@ $<
 
 clean:
 	rm -f $(EXECUTABLES)
