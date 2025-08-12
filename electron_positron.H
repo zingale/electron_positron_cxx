@@ -154,9 +154,10 @@ T n_p_constraint(T eta, T beta) {
 }
 
 template <typename T>
-NumDens<T> get_n_derivs(T beta,
-                        const FermiIntegral<T>& f12, const FermiIntegral<T>& f32,
-                        const FermiIntegral<T>& f12_pos, const FermiIntegral<T>& f32_pos) {
+std::pair<EtaBetaDerivs<T>, EtaBetaDerivs<T>>
+get_n_derivs(T beta,
+             const FermiIntegral<T>& f12, const FermiIntegral<T>& f32,
+             const FermiIntegral<T>& f12_pos, const FermiIntegral<T>& f32_pos) {
 
     // number density derivatives needed for chain-rule computations
     NumDens<T> nd;
