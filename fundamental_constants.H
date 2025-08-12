@@ -34,6 +34,10 @@ namespace C
     // atomic mass unit
     constexpr real_t m_u = 1.66053906892e-24_rt; // g
 
+    constexpr real_t inv_compton_wavelength = m_e * c_light / h;
+    constexpr real_t rest_mass = m_e * c_light * c_light;
+
+    constexpr real_t dbeta_dT = k / rest_mass;
 }
 
 #endif
