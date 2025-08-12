@@ -125,11 +125,9 @@ get_eta_beta_derivs(const T A, const T c, const T p, const T beta,
     dw.deta2 = A * betap2 * (c * beta * fy_pos.d2F_deta2 + fx_pos.d2F_deta2);
 
     // ∂²w/∂η∂β
-    dw.detadbeta = -A * betap2 * (c * beta * (fy_pos.d2F_detadbeta + 2.0 * betai * betai * fy_pos.d2F_deta2) +
-                                  c * fy_pos.dF_deta +
-                                  0.5_rt * p * betai * (c * beta * fy_pos.dF_deta + fx_pos.dF_deta) +
-                                  fx_pos.d2F_detadbeta +
-                                  2.0 * betai * betai * fx_pos.d2F_deta2);
+    dw.detadbeta = -A * betap2 * (2.0 * betai * betai * (fx_pos.d2F_deta2 + c * beta * fy_pos.d2F_deta2) +
+                                  0.5_rt * betai * (c * (p + 2.0_rt) * beta * fy_pos.dF_deta + p * fx_pos.dF_deta) +
+                                  (fx_pos.d2F_detadbeta + c * beta * fy_pos.d2F_detadbeta));
 
     // ∂²w/∂β²
     dw.dbeta2 = 0.25_rt * A * betap2 / beta4 * (p * (p - 2.0_rt) * beta2 * fx_pos.F + c * p * (p + 2.0_rt) * beta3 * fy_pos.F +
