@@ -49,68 +49,102 @@ T n_p_constraint(T eta, T beta) {
     return n_pos;
 }
 
+// convenience wrapper for testing
 template <typename T>
 inline
 std::pair<EtaBetaDerivs<T>, EtaBetaDerivs<T>>
-get_n_derivs(T beta,
-             const FermiIntegral<T>& f12, const FermiIntegral<T>& f32,
-             const FermiIntegral<T>& f12_pos, const FermiIntegral<T>& f32_pos) {
+get_n_derivs(const T beta,
+             const FermiIntegral<T>& fx, const FermiIntegral<T>& fy,
+             const FermiIntegral<T>& fx_pos, const FermiIntegral<T>& fy_pos) {
 
-    // number density derivatives needed for chain-rule computations
-    EtaBetaDerivs<T> dn_e;
-    EtaBetaDerivs<T> dn_pos;
+    return get_eta_beta_derivs<T>(coeff, 1.0_rt, 3.0_rt, beta, fx, fy, fx_pos, fy_pos);
 
-    T beta12 = std::sqrt(beta);
-    T beta32 = beta * beta12;
+}
+
+template <typename T>
+inline
+std::pair<EtaBetaDerivs<T>, EtaBetaDerivs<T>>
+get_eta_beta_derivs(const T A, const T c, const T p, const T beta,
+                    const FermiIntegral<T>& fx, const FermiIntegral<T>& fy,
+                    const FermiIntegral<T>& fx_pos, const FermiIntegral<T>& fy_pos) {
+
+    // we can write number density, pressure, and energy density for electrons as
+    //
+    // q = A β**(p/2) (F_x(η, β) + c beta F_y(η, β))
+    //
+    // and for positrons
+    //
+    // w = A β**(p/2) (F_x(-η - 2/β, β) + c beta F_y(-η - 2/β, β))
+
+    // Here we compute the η and β first- and second-derivatives of
+    // both quantities.  These are then used via the chain rule to
+    // find the thermodynamic derivatives.
+
+    EtaBetaDerivs<T> dq;
+    EtaBetaDerivs<T> dw;
+
+    T betap2 = std::pow(beta, p / 2.0_rt);
     T beta2 = beta * beta;
-    T beta52 = beta * beta32;
+    T beta3 = beta * beta2;
+    T beta4 = beta * beta3;
+    T beta5 = beta * beta4;
+    T betai = 1.0_rt / beta;
 
-    // ∂n⁻/∂η
-    dn_e.deta = coeff * beta32 * (f12.dF_deta + beta * f32.dF_deta);
+    // first derivatives
 
-    // ∂n⁻/∂β
-    dn_e.dbeta = 0.5_rt * coeff * beta12 * (3.0_rt * f12.F + 5.0_rt * beta * f32.F +
-                                            2.0_rt * beta * (f12.dF_dbeta + beta * f32.dF_dbeta));
+    // ∂q/∂η
+    dq.deta = A * (c * beta * fy.dF_deta + fx.dF_deta) * betap2;
 
-    // ∂n⁺/∂η
-    dn_pos.deta = coeff * beta32 * (-f12_pos.dF_deta - beta * f32_pos.dF_deta);
+    // ∂q/∂β
+    dq.dbeta = A * betap2 * (0.5_rt * p * (c * beta * fy.F + fx.F) * betai +
+                             (c * fy.F + c * beta * fy.dF_dbeta + fx.dF_dbeta));
 
-    // ∂n⁺/∂β
-    dn_pos.dbeta = 0.5_rt * coeff * (beta12 * (3.0_rt * f12_pos.F + 5.0_rt * beta * f32_pos.F +
-                                               2.0_rt * beta * (f12_pos.dF_dbeta + beta * f32_pos.dF_dbeta)) +
-                                     4.0_rt / beta12 * (f12_pos.dF_deta + beta * f32_pos.dF_deta));
+    // ∂w/∂η
+    dw.deta = -A * (c * beta * fy_pos.dF_deta + fx_pos.dF_deta) * betap2;
 
-    // now compute the second derivatives of number density
+    // ∂w/∂β
+    dw.dbeta = 0.5 * A / beta4 * (p * (c * beta * fy_pos.F + fx_pos.F) * betap2 * beta3 +
+                                  2.0_rt * betap2  * beta2 * (c * (beta2 * fy_pos.dF_dbeta + 2.0_rt * fy_pos.dF_deta) * beta +
+                                                              (c * fy_pos.F + fx_pos.dF_dbeta) * beta2 +
+                                                              2.0_rt * fx_pos.dF_deta));
+
+    // second derivatives
 
     // ∂²n⁻/∂η²
-    dn_e.deta2 = coeff * beta32 * (f12.d2F_deta2 + beta * f32.d2F_deta2);
+    dq.deta2 = A * betap2 * (c * beta * fy.d2F_deta2 + fx.d2F_deta2);
 
-    // ∂²n⁻/∂η∂β
-    dn_e.detadbeta = 0.5_rt * coeff * beta12 * (2.0_rt * beta * (f12.d2F_detadbeta + beta * f32.d2F_detadbeta) +
-                                                3.0_rt * f12.dF_deta + 5.0_rt * beta * f32.dF_deta);
+    // ∂²q/∂η∂β
+    dq.detadbeta = A * betap2 * (c * beta * fy.d2F_detadbeta + c * fy.dF_deta +
+                                 0.5_rt / beta * p * (c * beta * fy.dF_deta + fx.dF_deta) +
+                                 fx.d2F_detadbeta);
 
-    // ∂²n⁻/∂β²
-    dn_e.dbeta2 = 0.25_rt * coeff / beta12 * (3.0_rt * f12.F + 15.0_rt * beta * f32.F +
-                                              4.0 * beta * (beta * (f12.d2F_dbeta2 + beta * f32.d2F_dbeta2) +
-                                                            (3.0_rt * f12.dF_dbeta + 5.0_rt * beta * f32.dF_dbeta)));
+    // ∂²q/∂β²
+    dq.dbeta2 = A * betap2 * (c * beta * fy.d2F_dbeta2 + 2.0_rt * c * fy.dF_dbeta +
+                              0.25_rt * p * (p - 2.0_rt) / beta2 * (c * beta * fy.F + fx.F) +
+                              p / beta * (c * fy.F + c * beta * fy.dF_dbeta + fx.dF_dbeta) +
+                              fx.d2F_dbeta2);
 
-    // ∂²n⁺/∂η²
-    dn_pos.deta2 = coeff * beta32 * (f12_pos.d2F_deta2 + beta * f32_pos.d2F_deta2);
+    // ∂²w/∂η²
+    dw.deta2 = A * betap2 * (c * beta * fy_pos.d2F_deta2 + fx_pos.d2F_deta2);
 
-    // ∂²n⁺/∂η∂β
-    dn_pos.detadbeta = -0.5_rt * coeff / beta12 * (2.0_rt * beta2 * (f12_pos.d2F_detadbeta + beta * f32_pos.d2F_detadbeta) +
-                                                   beta * (3.0_rt * f12_pos.dF_deta + 5.0_rt * beta * f32_pos.dF_deta) +
-                                                   4.0 * (f12_pos.d2F_deta2 + beta * f32_pos.d2F_deta2));
+    // ∂²w/∂η∂β
+    dw.detadbeta = -A * betap2 * (c * beta * (fy_pos.d2F_detadbeta + 2.0 * betai * betai * fy_pos.d2F_deta2) +
+                                  c * fy_pos.dF_deta +
+                                  0.5_rt * p * betai * (c * beta * fy_pos.dF_deta + fx_pos.dF_deta) +
+                                  fx_pos.d2F_detadbeta +
+                                  2.0 * betai * betai * fx_pos.d2F_deta2);
 
-    // ∂²n⁺/∂β²
-    dn_pos.dbeta2 = 0.25_rt * coeff / beta52 * (beta2 * ((3.0_rt * f12_pos.F + 15.0_rt * beta * f32_pos.F) +
-                                                         4.0_rt * beta2 * (f12_pos.d2F_dbeta2 + beta * f32_pos.d2F_dbeta2) +
-                                                         beta  * (12.0_rt * f12_pos.dF_dbeta + 20.0_rt * beta * f32_pos.dF_dbeta) +
-                                                         16.0_rt * (f12_pos.d2F_detadbeta + beta * f32_pos.d2F_detadbeta)) +
-                                                8.0_rt * beta * (f12_pos.dF_deta + 3.0_rt * beta * f32_pos.dF_deta) +
-                                                16.0_rt * (f12_pos.d2F_deta2 + beta * f32_pos.d2F_deta2));
+    // ∂²w/∂β²
+    dw.dbeta2 = 0.25_rt * A * betap2 / beta4 * (c * p * (p + 2.0_rt) * beta3 * fy_pos.F +
+                                                4.0_rt * c * p * beta4 * fy_pos.dF_dbeta + 8.0_rt * c * p * beta2 * fy_pos.dF_deta +
+                                                4.0_rt * c * beta5 * fy_pos.d2F_dbeta2 + 8.0 * c * beta4 * fy_pos.dF_dbeta +
+                                                16.0_rt * c * beta3 * fy_pos.d2F_detadbeta + 16 * c * beta * fy_pos.d2F_deta2 +
+                                                p * (p - 2.0_rt) * beta2 * fx_pos.F +
+                                                4.0 * p * beta3 * fx_pos.dF_dbeta + 8.0_rt * p * beta * fx_pos.dF_deta +
+                                                4.0 * beta4 * fx_pos.d2F_dbeta2 + 16.0_rt * beta2 * fx_pos.d2F_detadbeta +
+                                                -16.0_rt * beta * fx_pos.dF_deta + 16.0_rt * fx_pos.d2F_deta2);
 
-    return {dn_e, dn_pos};
+    return {dq, dw};
 }
 
 
@@ -274,7 +308,8 @@ public:
         // compute the derivatives of eta and beta with respect to
         // density and temperature
 
-        const auto [dn_e, dn_pos] = get_n_derivs<T>(beta, f12, f32, f12_pos, f32_pos);
+        const auto [dn_e, dn_pos] = get_eta_beta_derivs<T>(coeff, 1.0_rt, 3.0_rt,
+                                                           beta, f12, f32, f12_pos, f32_pos);
 
         // note that ∂β/∂ρ = 0
 
