@@ -39,23 +39,23 @@ int main() {
                 f32_pos.evaluate(2);
 
                 // get the derivs
-                auto nd = get_n_derivs<real_t>(beta, f12, f32, f12_pos, f32_pos);
+                const auto [dn_e, dn_pos] = get_n_derivs<real_t>(beta, f12, f32, f12_pos, f32_pos);
 
                 const real_t _h = (eta == 0) ? h : h * std::abs(eta);
 
                 // check ∂n⁻/∂η
                 auto [diff, err] =
                     fd::adaptive_diff<real_t>([=] (real_t _eta) -> real_t
-                    {
-                        auto ne = n_e_constraint<real_t>(_eta, beta);
-                        return ne;
-                    }, eta, _h);
+                        {
+                            auto ne = n_e_constraint<real_t>(_eta, beta);
+                            return ne;
+                        }, eta, _h);
 
-                real_t rel_err = std::abs(nd.dne_deta - diff) / std::abs(nd.dne_deta);
+                real_t rel_err = std::abs(dn_e.deta - diff) / std::abs(dn_e.deta);
 
                 util::threshold_println(rel_err,
                                         "eta = {:9.3f}, beta = {:8.3g},  ∂n⁻/∂η = {:12.5g},  error = {:12.5g}",
-                                        eta, beta, nd.dne_deta, rel_err);
+                                        eta, beta, dn_e.deta, rel_err);
             }
         }
     }
@@ -86,9 +86,9 @@ int main() {
                 f32_pos.evaluate(2);
 
                 // get the derivs
-                auto nd = get_n_derivs<real_t>(beta, f12, f32, f12_pos, f32_pos);
+                const auto [dn_e, dn_pos] = get_n_derivs<real_t>(beta, f12, f32, f12_pos, f32_pos);
 
-                if (std::abs(nd.dnp_deta) < pos_thresh) {
+                if (std::abs(dn_pos.deta) < pos_thresh) {
                     continue;
                 }
 
@@ -102,11 +102,11 @@ int main() {
                         return np;
                     }, eta, _h);
 
-                real_t rel_err = std::abs(nd.dnp_deta - diff) / std::abs(nd.dnp_deta);
+                real_t rel_err = std::abs(dn_pos.deta - diff) / std::abs(dn_pos.deta);
 
                 util::threshold_println(rel_err,
                                         "eta = {:9.3f}, beta = {:8.3g},  ∂n⁺/∂η = {:12.5g},  error = {:12.5g}",
-                                        eta, beta, nd.dnp_deta, rel_err);
+                                        eta, beta, dn_pos.deta, rel_err);
             }
         }
     }
@@ -137,7 +137,7 @@ int main() {
                 f32_pos.evaluate(2);
 
                 // get the derivs
-                auto nd = get_n_derivs<real_t>(beta, f12, f32, f12_pos, f32_pos);
+                const auto [dn_e, dn_pos] = get_n_derivs<real_t>(beta, f12, f32, f12_pos, f32_pos);
 
                 const real_t _h = h * std::abs(beta);
 
@@ -149,11 +149,11 @@ int main() {
                         return ne;
                     }, beta, _h);
 
-                real_t rel_err = std::abs(nd.dne_dbeta - diff) / std::abs(nd.dne_dbeta);
+                real_t rel_err = std::abs(dn_e.dbeta - diff) / std::abs(dn_e.dbeta);
 
                 util::threshold_println(rel_err,
                                         "eta = {:9.3f}, beta = {:8.3g},  ∂n⁻/∂β = {:12.5g},  error = {:12.5g}",
-                                        eta, beta, nd.dne_dbeta, rel_err);
+                                        eta, beta, dn_e.dbeta, rel_err);
             }
         }
     }
@@ -183,9 +183,9 @@ int main() {
                 f32_pos.evaluate(2);
 
                 // get the derivs
-                auto nd = get_n_derivs<real_t>(beta, f12, f32, f12_pos, f32_pos);
+                const auto [dn_e, dn_pos] = get_n_derivs<real_t>(beta, f12, f32, f12_pos, f32_pos);
 
-                if (std::abs(nd.dnp_dbeta) < pos_thresh) {
+                if (std::abs(dn_pos.dbeta) < pos_thresh) {
                     continue;
                 }
 
@@ -199,11 +199,11 @@ int main() {
                         return np;
                     }, beta, _h);
 
-                real_t rel_err = std::abs(nd.dnp_dbeta - diff) / std::abs(nd.dnp_dbeta);
+                real_t rel_err = std::abs(dn_pos.dbeta - diff) / std::abs(dn_pos.dbeta);
 
                 util::threshold_println(rel_err,
                                         "eta = {:9.3f}, beta = {:8.3g},  ∂n⁺/∂β = {:12.5g},  error = {:12.5g}",
-                                        eta, beta, nd.dnp_dbeta, rel_err);
+                                        eta, beta, dn_pos.dbeta, rel_err);
             }
         }
     }
@@ -234,7 +234,7 @@ int main() {
                 f32_pos.evaluate(2);
 
                 // get the derivs
-                auto nd = get_n_derivs<real_t>(beta, f12, f32, f12_pos, f32_pos);
+                const auto [dn_e, dn_pos] = get_n_derivs<real_t>(beta, f12, f32, f12_pos, f32_pos);
 
                 const real_t _h = (eta == 0) ? h : h * std::abs(eta);
 
@@ -246,11 +246,11 @@ int main() {
                         return ne;
                     }, eta, _h);
 
-                real_t rel_err = std::abs(nd.d2ne_deta2 - diff) / std::abs(nd.d2ne_deta2);
+                real_t rel_err = std::abs(dn_e.deta2 - diff) / std::abs(dn_e.deta2);
 
                 util::threshold_println(rel_err,
                                         "eta = {:9.3f}, beta = {:8.3g},  ∂²n⁻/∂η² = {:12.5g},  error = {:12.5g}",
-                                        eta, beta, nd.d2ne_deta2, rel_err);
+                                        eta, beta, dn_e.deta2, rel_err);
             }
         }
     }
@@ -281,9 +281,9 @@ int main() {
                 f32_pos.evaluate(2);
 
                 // get the derivs
-                auto nd = get_n_derivs<real_t>(beta, f12, f32, f12_pos, f32_pos);
+                const auto [dn_e, dn_pos] = get_n_derivs<real_t>(beta, f12, f32, f12_pos, f32_pos);
 
-                if (std::abs(nd.d2np_deta2) < pos_thresh) {
+                if (std::abs(dn_pos.deta2) < pos_thresh) {
                     continue;
                 }
 
@@ -297,11 +297,11 @@ int main() {
                         return np;
                     }, eta, _h);
 
-                real_t rel_err = std::abs(nd.d2np_deta2 - diff) / std::abs(nd.d2np_deta2);
+                real_t rel_err = std::abs(dn_pos.deta2 - diff) / std::abs(dn_pos.deta2);
 
                 util::threshold_println(rel_err,
                                         "eta = {:9.3f}, beta = {:8.3g},  ∂²n⁺/∂η² = {:12.5g},  error = {:12.5g}",
-                                        eta, beta, nd.d2np_deta2, rel_err);
+                                        eta, beta, dn_pos.deta2, rel_err);
             }
         }
     }
@@ -332,7 +332,7 @@ int main() {
                 f32_pos.evaluate(2);
 
                 // get the derivs
-                auto nd = get_n_derivs<real_t>(beta, f12, f32, f12_pos, f32_pos);
+                const auto [dn_e, dn_pos] = get_n_derivs<real_t>(beta, f12, f32, f12_pos, f32_pos);
 
                 const real_t _h = h * std::abs(beta);
 
@@ -344,11 +344,11 @@ int main() {
                         return ne;
                     }, beta, _h);
 
-                real_t rel_err = std::abs(nd.d2ne_dbeta2 - diff) / std::abs(nd.d2ne_dbeta2);
+                real_t rel_err = std::abs(dn_e.dbeta2 - diff) / std::abs(dn_e.dbeta2);
 
                 util::threshold_println(rel_err,
                                         "eta = {:9.3f}, beta = {:8.3g},  ∂²n⁻/∂β² = {:12.5g},  error = {:12.5g}",
-                                        eta, beta, nd.d2ne_dbeta2, rel_err);
+                                        eta, beta, dn_e.dbeta2, rel_err);
             }
         }
     }
@@ -379,9 +379,9 @@ int main() {
                 f32_pos.evaluate(2);
 
                 // get the derivs
-                auto nd = get_n_derivs<real_t>(beta, f12, f32, f12_pos, f32_pos);
+                const auto [dn_e, dn_pos] = get_n_derivs<real_t>(beta, f12, f32, f12_pos, f32_pos);
 
-                if (std::abs(nd.d2np_dbeta2) < pos_thresh) {
+                if (std::abs(dn_pos.dbeta2) < pos_thresh) {
                     continue;
                 }
 
@@ -395,11 +395,11 @@ int main() {
                         return np;
                     }, beta, _h);
 
-                real_t rel_err = std::abs(nd.d2np_dbeta2 - diff) / std::abs(nd.d2np_dbeta2);
+                real_t rel_err = std::abs(dn_pos.dbeta2 - diff) / std::abs(dn_pos.dbeta2);
 
                 util::threshold_println(rel_err,
                                         "eta = {:9.3f}, beta = {:8.3g},  ∂²n⁺/∂β² = {:12.5g},  error = {:12.5g}",
-                                        eta, beta, nd.d2np_dbeta2, rel_err);
+                                        eta, beta, dn_pos.dbeta2, rel_err);
             }
         }
     }
@@ -431,7 +431,7 @@ int main() {
 
                 // get the derivs
 
-                auto nd = get_n_derivs<real_t>(beta, f12, f32, f12_pos, f32_pos);
+                const auto [dn_e, dn_pos] = get_n_derivs<real_t>(beta, f12, f32, f12_pos, f32_pos);
 
                 const real_t _h1 = (eta == 0) ? h : h * std::abs(eta);
 
@@ -453,11 +453,11 @@ int main() {
                         FermiIntegral<real_t> f32_pos_tmp(1.5_rt, eta_tilde_tmp, beta);
                         f32_pos_tmp.evaluate(1);
 
-                        auto nd_tmp = get_n_derivs<real_t>(beta, f12_tmp, f32_tmp, f12_pos_tmp, f32_pos_tmp);
-                        return nd_tmp.dne_dbeta;
+                        const auto [dn_e_tmp, dn_pos_tmp] = get_n_derivs<real_t>(beta, f12_tmp, f32_tmp, f12_pos_tmp, f32_pos_tmp);
+                        return dn_e_tmp.dbeta;
                     }, eta, _h1);
 
-                real_t err_eta = std::abs(nd.d2ne_detadbeta - diff_eta) / std::abs(nd.d2ne_detadbeta);
+                real_t err_eta = std::abs(dn_e.detadbeta - diff_eta) / std::abs(dn_e.detadbeta);
 
                 // check ∂²n⁻/∂η∂β by differencing ∂²n⁻/∂η∂β
 
@@ -481,15 +481,15 @@ int main() {
                         FermiIntegral<real_t> f32_pos_tmp(1.5_rt, eta_tilde_tmp, _beta);
                         f32_pos_tmp.evaluate(1);
 
-                        auto nd_tmp = get_n_derivs<real_t>(_beta, f12_tmp, f32_tmp, f12_pos_tmp, f32_pos_tmp);
-                        return nd_tmp.dne_deta;
+                        const auto [dn_e_tmp, dn_pos_tmp] = get_n_derivs<real_t>(_beta, f12_tmp, f32_tmp, f12_pos_tmp, f32_pos_tmp);
+                        return dn_e_tmp.deta;
                     }, beta, _h2);
 
-                real_t err_beta = std::abs(nd.d2ne_detadbeta - diff_beta) / std::abs(nd.d2ne_detadbeta);
+                real_t err_beta = std::abs(dn_e.detadbeta - diff_beta) / std::abs(dn_e.detadbeta);
 
                 util::threshold_println(err_eta,
                                         "eta = {:9.3f}, beta = {:8.3g},  ∂²n⁻/∂η∂β = {:12.5g},  D_η(∂n⁻/∂β) error = {:12.5g}  D_β(∂n⁻/∂η) error = {:12.5g}",
-                                        eta, beta, nd.d2ne_detadbeta, err_eta, err_beta);
+                                        eta, beta, dn_e.detadbeta, err_eta, err_beta);
             }
         }
     }
@@ -521,9 +521,9 @@ int main() {
 
                 // get the derivs
 
-                auto nd = get_n_derivs<real_t>(beta, f12, f32, f12_pos, f32_pos);
+                const auto [dn_e, dn_pos] = get_n_derivs<real_t>(beta, f12, f32, f12_pos, f32_pos);
 
-                if (std::abs(nd.d2np_detadbeta) < pos_thresh) {
+                if (std::abs(dn_pos.detadbeta) < pos_thresh) {
                     continue;
                 }
 
@@ -547,11 +547,11 @@ int main() {
                         FermiIntegral<real_t> f32_pos_tmp(1.5_rt, eta_tilde_tmp, beta);
                         f32_pos_tmp.evaluate(1);
 
-                        auto nd_tmp = get_n_derivs<real_t>(beta, f12_tmp, f32_tmp, f12_pos_tmp, f32_pos_tmp);
-                        return nd_tmp.dnp_dbeta;
+                        const auto [dn_e_tmp, dn_pos_tmp] = get_n_derivs<real_t>(beta, f12_tmp, f32_tmp, f12_pos_tmp, f32_pos_tmp);
+                        return dn_pos_tmp.dbeta;
                     }, eta, _h1);
 
-                real_t err_eta = std::abs(nd.d2np_detadbeta - diff_eta) / std::abs(nd.d2np_detadbeta);
+                real_t err_eta = std::abs(dn_pos.detadbeta - diff_eta) / std::abs(dn_pos.detadbeta);
 
                 // check ∂²n⁺/∂η∂β by differencing ∂²n⁺/∂η∂β
 
@@ -575,15 +575,15 @@ int main() {
                         FermiIntegral<real_t> f32_pos_tmp(1.5_rt, eta_tilde_tmp, _beta);
                         f32_pos_tmp.evaluate(1);
 
-                        auto nd_tmp = get_n_derivs<real_t>(_beta, f12_tmp, f32_tmp, f12_pos_tmp, f32_pos_tmp);
-                        return nd_tmp.dnp_deta;
+                        const auto [dn_e_tmp, dn_pos_tmp] = get_n_derivs<real_t>(_beta, f12_tmp, f32_tmp, f12_pos_tmp, f32_pos_tmp);
+                        return dn_pos_tmp.deta;
                     }, beta, _h2);
 
-                real_t err_beta = std::abs(nd.d2np_detadbeta - diff_beta) / std::abs(nd.d2np_detadbeta);
+                real_t err_beta = std::abs(dn_pos.detadbeta - diff_beta) / std::abs(dn_pos.detadbeta);
 
                 util::threshold_println(err_eta,
                                         "eta = {:9.3f}, beta = {:8.3g},  ∂²n⁺/∂η∂β = {:12.5g},  D_η(∂n⁺/∂β) error = {:12.5g}  D_β(∂n⁺/∂η) error = {:12.5g}",
-                                        eta, beta, nd.d2np_detadbeta, err_eta, err_beta);
+                                        eta, beta, dn_pos.detadbeta, err_eta, err_beta);
             }
         }
     }
