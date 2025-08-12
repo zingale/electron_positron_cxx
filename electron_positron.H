@@ -86,26 +86,24 @@ get_eta_beta_derivs(const T A, const T c, const T p, const T beta,
     T beta2 = beta * beta;
     T beta3 = beta * beta2;
     T beta4 = beta * beta3;
-    T beta5 = beta * beta4;
     T betai = 1.0_rt / beta;
 
     // first derivatives
 
     // ∂q/∂η
-    dq.deta = A * (c * beta * fy.dF_deta + fx.dF_deta) * betap2;
+    dq.deta = A * betap2 * (c * beta * fy.dF_deta + fx.dF_deta);
 
     // ∂q/∂β
-    dq.dbeta = A * betap2 * (0.5_rt * p * (c * beta * fy.F + fx.F) * betai +
-                             (c * fy.F + c * beta * fy.dF_dbeta + fx.dF_dbeta));
+    dq.dbeta = A * betap2 * (0.5_rt * betai * (p * fx.F + c * (p + 2.0_rt) * beta * fy.F) +
+                             (fx.dF_dbeta + c * beta * fy.dF_dbeta));
 
     // ∂w/∂η
-    dw.deta = -A * (c * beta * fy_pos.dF_deta + fx_pos.dF_deta) * betap2;
+    dw.deta = -A * betap2 * (c * beta * fy_pos.dF_deta + fx_pos.dF_deta);
 
     // ∂w/∂β
-    dw.dbeta = 0.5 * A / beta4 * (p * (c * beta * fy_pos.F + fx_pos.F) * betap2 * beta3 +
-                                  2.0_rt * betap2  * beta2 * (c * (beta2 * fy_pos.dF_dbeta + 2.0_rt * fy_pos.dF_deta) * beta +
-                                                              (c * fy_pos.F + fx_pos.dF_dbeta) * beta2 +
-                                                              2.0_rt * fx_pos.dF_deta));
+    dw.dbeta = 0.5 * A / beta2 * (betap2 * beta * (c * (p + 2.0_rt) * beta * fy_pos.F + p * fx_pos.F) +
+                                  2.0_rt * betap2 * (beta2 * (fx_pos.dF_dbeta + c * beta * fy_pos.dF_dbeta) +
+                                                     2.0_rt * (fx_pos.dF_deta + c * beta * fy_pos.dF_deta)));
 
     // second derivatives
 
@@ -134,14 +132,12 @@ get_eta_beta_derivs(const T A, const T c, const T p, const T beta,
                                   2.0 * betai * betai * fx_pos.d2F_deta2);
 
     // ∂²w/∂β²
-    dw.dbeta2 = 0.25_rt * A * betap2 / beta4 * (c * p * (p + 2.0_rt) * beta3 * fy_pos.F +
-                                                4.0_rt * c * p * beta4 * fy_pos.dF_dbeta + 8.0_rt * c * p * beta2 * fy_pos.dF_deta +
-                                                4.0_rt * c * beta5 * fy_pos.d2F_dbeta2 + 8.0 * c * beta4 * fy_pos.dF_dbeta +
-                                                16.0_rt * c * beta3 * fy_pos.d2F_detadbeta + 16 * c * beta * fy_pos.d2F_deta2 +
-                                                p * (p - 2.0_rt) * beta2 * fx_pos.F +
-                                                4.0 * p * beta3 * fx_pos.dF_dbeta + 8.0_rt * p * beta * fx_pos.dF_deta +
-                                                4.0 * beta4 * fx_pos.d2F_dbeta2 + 16.0_rt * beta2 * fx_pos.d2F_detadbeta +
-                                                -16.0_rt * beta * fx_pos.dF_deta + 16.0_rt * fx_pos.d2F_deta2);
+    dw.dbeta2 = 0.25_rt * A * betap2 / beta4 * (p * (p - 2.0_rt) * beta2 * fx_pos.F + c * p * (p + 2.0_rt) * beta3 * fy_pos.F +
+                                                8.0_rt * beta * ((p - 2.0_rt) * fx_pos.dF_deta + c * p * beta * fy_pos.dF_deta) +
+                                                4.0_rt * beta4 * (fx_pos.d2F_dbeta2 + c * beta * fy_pos.d2F_dbeta2) +
+                                                4.0_rt * beta3 * (p * fx_pos.dF_dbeta + c * (p + 2.0_rt) * beta * fy_pos.dF_dbeta) +
+                                                16.0_rt * beta2 * (fx_pos.d2F_detadbeta + c * beta * fy_pos.d2F_detadbeta) +
+                                                16.0_rt * (fx_pos.d2F_deta2 + c * beta * fy_pos.d2F_deta2));
 
     return {dq, dw};
 }
