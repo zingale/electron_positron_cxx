@@ -58,7 +58,6 @@ get_n_derivs(const T beta,
              const FermiIntegral<T>& fx_pos, const FermiIntegral<T>& fy_pos) {
 
     return get_eta_beta_derivs<T>(coeff, 1.0_rt, 3.0_rt, beta, fx, fy, fx_pos, fy_pos);
-
 }
 
 template <typename T>
@@ -147,6 +146,71 @@ get_eta_beta_derivs(const T A, const T c, const T p, const T beta,
     return {dq, dw};
 }
 
+
+template <typename T>
+inline
+RhoTDerivs<T>
+get_eta_thermo_derivs(const T Ye,
+                      const EtaBetaDerivs<T>& dn_e, const EtaBetaDerivs<T>& dn_pos) {
+
+    RhoTDerivs<T> deta;
+
+    // ∂η/∂ρ and ∂η/∂T
+    deta.drho = C::N_A * Ye / (dn_e.deta - dn_pos.deta);
+    deta.dT = -C::dbeta_dT * (dn_e.dbeta - dn_pos.dbeta) / (dn_e.deta - dn_pos.deta);
+
+    // ∂²η/∂T²
+    deta.dT2 = (std::pow(C::dbeta_dT, 2.0_rt) * (dn_pos.dbeta2 - dn_e.dbeta2) +
+                2.0_rt * C::dbeta_dT * deta.dT * (dn_pos.detadbeta - dn_e.detadbeta) +
+                std::pow(deta.dT, 2.0_rt) * (dn_pos.deta2 - dn_e.deta2)) /
+        (dn_e.deta - dn_pos.deta);
+
+    // ∂²η/∂ρ∂T
+    deta.drhodT = (C::dbeta_dT * (dn_pos.detadbeta - dn_e.detadbeta) +
+                   deta.dT * (dn_pos.deta2 - dn_e.deta2)) /
+        (dn_e.deta - dn_pos.deta);
+
+    // ∂²η/∂ρ²
+    deta.drho2 = deta.drho * deta.drho * (dn_pos.deta2 - dn_e.deta2) /
+        (dn_e.deta - dn_pos.deta);
+
+    return deta;
+}
+
+
+template <typename T>
+inline
+RhoTDerivs<T>
+chain_rule(const EtaBetaDerivs<T>& df, const RhoTDerivs<T>& deta) {
+    // compute the thermodynamic derivatives of f via the chain rule
+    // with η and β
+
+    RhoTDerivs<T> df_th;  // thermodynamic derivs
+
+    // ∂f/∂ρ
+    df_th.drho = deta.drho * df.deta;
+
+    // ∂f/∂T
+    df_th.dT = C::dbeta_dT * df.dbeta + deta.dT * df.deta;
+
+    // ∂²f/∂ρ²
+    df_th.drho2 = deta.drho * deta.drho * df.deta2 +
+                  deta.drho2 * df.deta;
+
+    // ∂²f/∂T²
+    df_th.dT2 = C::dbeta_dT * C::dbeta_dT * df.dbeta2 +
+                2.0_rt * C::dbeta_dT * deta.dT + df.detadbeta +
+                deta.dT * deta.dT + df.deta2 +
+                deta.dT2 * df.deta;
+
+    // ∂²f/∂ρ∂T
+    df_th.drhodT = C::dbeta_dT * deta.drho * df.detadbeta +
+                   deta.dT * deta.drho * df.deta2 +
+                   deta.drhodT * df.deta;
+
+    return df_th;
+
+}
 
 template <typename T>
 inline
