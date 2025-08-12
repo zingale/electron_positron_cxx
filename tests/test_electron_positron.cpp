@@ -6,6 +6,7 @@
 #include "real_type.H"
 #include "electron_positron.H"
 #include "difference_utils.H"
+#include "util.H"
 
 constexpr std::array<real_t, 4> Ts{1.e4_rt, 1.e6_rt, 1.e8_rt, 5.e9_rt};
 constexpr std::array<real_t, 5> rhos{1.e-2_rt, 1.e2_rt, 1.e5_rt, 1.e7_rt, 5.e9_rt};
@@ -20,7 +21,7 @@ test_ne_rho_derivs() {
 
     constexpr real_t eps{0.01_rt};
 
-    std::println("testing ∂n⁻/∂ρ via differencing");
+    util::green_println("testing ∂n⁻/∂ρ via differencing");
 
     for (auto T : Ts) {
         for (auto rho : rhos) {
@@ -33,8 +34,9 @@ test_ne_rho_derivs() {
                 }, rho, drho);
 
             real_t err = std::abs(es.dne_drho - deriv) / std::abs(es.dne_drho);
-            std::println("ρ = {:10.3g} T = {:10.3g}, ∂n⁻/∂ρ = {:15.8g}, error = {:15.5g}",
-                         rho, T, es.dne_drho, err);
+            util::threshold_println(err,
+                                    "ρ = {:8.3g} T = {:8.3g},  ∂n⁻/∂ρ = {:15.8g},  error = {:11.5g}",
+                                    rho, T, es.dne_drho, err);
         }
     }
 }
@@ -48,7 +50,7 @@ test_ne_T_derivs() {
     constexpr real_t eps{0.01_rt};
 
     std::println("");
-    std::println("testing ∂n⁻/∂T via differencing");
+    util::green_println("testing ∂n⁻/∂T via differencing");
 
     for (auto T : Ts) {
         for (auto rho : rhos) {
@@ -67,8 +69,9 @@ test_ne_T_derivs() {
             } else {
                 err = std::abs(es.dne_dT - deriv) / std::abs(es.dne_dT);
             }
-            std::println("ρ = {:10.3g} T = {:10.3g}, ∂n⁻/∂T = {:15.8g}, error = {:15.5g}",
-                         rho, T, es.dne_dT, err);
+            util::threshold_println(err,
+                                    "ρ = {:8.3g} T = {:8.3g},  ∂n⁻/∂T = {:15.8g},  error = {:11.5g}",
+                                    rho, T, es.dne_dT, err);
         }
     }
 }
@@ -82,7 +85,7 @@ test_np_rho_derivs() {
     constexpr real_t eps{0.01_rt};
 
     std::println("");
-    std::println("testing ∂n⁺/∂ρ via differencing");
+    util::green_println("testing ∂n⁺/∂ρ via differencing");
 
     for (auto T : Ts) {
         for (auto rho : rhos) {
@@ -98,8 +101,9 @@ test_np_rho_derivs() {
                 }, rho, drho);
 
             real_t err = std::abs(es.dnp_drho - deriv) / std::abs(es.dnp_drho);
-            std::println("ρ = {:10.3g} T = {:10.3g}, ∂n⁺/∂ρ = {:15.8g}, error = {:15.5g}",
-                         rho, T, es.dnp_drho, err);
+            util::threshold_println(err,
+                                    "ρ = {:8.3g} T = {:8.3g},  ∂n⁺/∂ρ = {:15.8g},  error = {:11.5g}",
+                                    rho, T, es.dnp_drho, err);
         }
     }
 
@@ -114,7 +118,7 @@ test_np_T_derivs() {
     constexpr real_t eps{0.01_rt};
 
     std::println("");
-    std::println("testing ∂n⁺/∂T via differencing");
+    util::green_println("testing ∂n⁺/∂T via differencing");
 
     for (auto T : Ts) {
         for (auto rho : rhos) {
@@ -136,8 +140,9 @@ test_np_T_derivs() {
             } else {
                 err = std::abs(es.dnp_dT - deriv) / std::abs(es.dnp_dT);
             }
-            std::println("ρ = {:10.3g} T = {:10.3g}, ∂n⁺/∂T = {:15.8g}, error = {:15.5g}",
-                         rho, T, es.dnp_dT, err);
+            util::threshold_println(err,
+                                    "ρ = {:8.3g} T = {:8.3g},  ∂n⁺/∂T = {:15.8g},  error = {:11.5g}",
+                                    rho, T, es.dnp_dT, err);
         }
     }
 }
@@ -153,7 +158,7 @@ test_pe_rho_derivs() {
     constexpr real_t eps{0.01_rt};
 
     std::println("");
-    std::println("testing ∂p⁻/∂ρ via differencing");
+    util::green_println("testing ∂p⁻/∂ρ via differencing");
 
     for (auto T : Ts) {
         for (auto rho : rhos) {
@@ -166,8 +171,9 @@ test_pe_rho_derivs() {
                 }, rho, drho);
 
             real_t err = std::abs(es.dpe_drho - deriv) / std::abs(es.dpe_drho);
-            std::println("ρ = {:10.3g} T = {:10.3g}, ∂p⁻/∂ρ = {:15.8g}, error = {:15.5g}",
-                         rho, T, es.dpe_drho, err);
+            util::threshold_println(err,
+                                    "ρ = {:8.3g} T = {:8.3g},  ∂p⁻/∂ρ = {:15.8g},  error = {:11.5g}",
+                                    rho, T, es.dpe_drho, err);
         }
     }
 }
@@ -181,7 +187,7 @@ test_pe_T_derivs() {
     constexpr real_t eps{0.01_rt};
 
     std::println("");
-    std::println("testing ∂p⁻/∂T via differencing");
+    util::green_println("testing ∂p⁻/∂T via differencing");
 
     for (auto T : Ts) {
         for (auto rho : rhos) {
@@ -200,8 +206,9 @@ test_pe_T_derivs() {
             } else {
                 err = std::abs(es.dpe_dT - deriv) / std::abs(es.dpe_dT);
             }
-            std::println("ρ = {:10.3g} T = {:10.3g}, ∂p⁻/∂T = {:15.8g}, error = {:15.5g}",
-                         rho, T, es.dpe_dT, err);
+            util::threshold_println(err,
+                                    "ρ = {:8.3g} T = {:8.3g},  ∂p⁻/∂T = {:15.8g},  error = {:11.5g}",
+                                    rho, T, es.dpe_dT, err);
         }
     }
 }
@@ -215,7 +222,7 @@ test_pp_rho_derivs() {
     constexpr real_t eps{0.01_rt};
 
     std::println("");
-    std::println("testing ∂p⁺/∂ρ via differencing");
+    util::green_println("testing ∂p⁺/∂ρ via differencing");
 
     for (auto T : Ts) {
         for (auto rho : rhos) {
@@ -231,8 +238,9 @@ test_pp_rho_derivs() {
                 }, rho, drho);
 
             real_t err = std::abs(es.dpp_drho - deriv) / std::abs(es.dpp_drho);
-            std::println("ρ = {:10.3g} T = {:10.3g}, ∂p⁺/∂ρ = {:15.8g}, error = {:15.5g}",
-                         rho, T, es.dpp_drho, err);
+            util::threshold_println(err,
+                                    "ρ = {:8.3g} T = {:8.3g},  ∂p⁺/∂ρ = {:15.8g},  error = {:11.5g}",
+                                    rho, T, es.dpp_drho, err);
         }
     }
 
@@ -247,7 +255,7 @@ test_pp_T_derivs() {
     constexpr real_t eps{0.01_rt};
 
     std::println("");
-    std::println("testing ∂p⁺/∂T via differencing");
+    util::green_println("testing ∂p⁺/∂T via differencing");
 
     for (auto T : Ts) {
         for (auto rho : rhos) {
@@ -269,8 +277,9 @@ test_pp_T_derivs() {
             } else {
                 err = std::abs(es.dpp_dT - deriv) / std::abs(es.dpp_dT);
             }
-            std::println("ρ = {:10.3g} T = {:10.3g}, ∂p⁺/∂T = {:15.8g}, error = {:15.5g}",
-                         rho, T, es.dpp_dT, err);
+            util::threshold_println(err,
+                                    "ρ = {:8.3g} T = {:8.3g},  ∂p⁺/∂T = {:15.8g},  error = {:11.5g}",
+                                    rho, T, es.dpp_dT, err);
         }
     }
 }
@@ -286,7 +295,7 @@ test_ee_rho_derivs() {
     constexpr real_t eps{0.01_rt};
 
     std::println("");
-    std::println("testing ∂e⁻/∂ρ via differencing");
+    util::green_println("testing ∂e⁻/∂ρ via differencing");
 
     for (auto T : Ts) {
         for (auto rho : rhos) {
@@ -299,8 +308,9 @@ test_ee_rho_derivs() {
                 }, rho, drho);
 
             real_t err = std::abs(es.dee_drho - deriv) / std::abs(es.dee_drho);
-            std::println("ρ = {:10.3g} T = {:10.3g}, ∂e⁻/∂ρ = {:15.8g}, error = {:15.5g}",
-                         rho, T, es.dee_drho, err);
+            util::threshold_println(err,
+                                    "ρ = {:8.3g} T = {:8.3g},  ∂e⁻/∂ρ = {:15.8g},  error = {:11.5g}",
+                                    rho, T, es.dee_drho, err);
         }
     }
 }
@@ -314,7 +324,7 @@ test_ee_T_derivs() {
     constexpr real_t eps{0.01_rt};
 
     std::println("");
-    std::println("testing ∂e⁻/∂T via differencing");
+    util::green_println("testing ∂e⁻/∂T via differencing");
 
     for (auto T : Ts) {
         for (auto rho : rhos) {
@@ -333,8 +343,9 @@ test_ee_T_derivs() {
             } else {
                 err = std::abs(es.dee_dT - deriv) / std::abs(es.dee_dT);
             }
-            std::println("ρ = {:10.3g} T = {:10.3g}, ∂e⁻/∂T = {:15.8g}, error = {:15.5g}",
-                         rho, T, es.dee_dT, err);
+            util::threshold_println(err,
+                                    "ρ = {:8.3g} T = {:8.3g},  ∂e⁻/∂T = {:15.8g},  error = {:11.5g}",
+                                    rho, T, es.dee_dT, err);
         }
     }
 }
@@ -348,7 +359,7 @@ test_ep_rho_derivs() {
     constexpr real_t eps{0.01_rt};
 
     std::println("");
-    std::println("testing ∂e⁺/∂ρ via differencing");
+    util::green_println("testing ∂e⁺/∂ρ via differencing");
 
     for (auto T : Ts) {
         for (auto rho : rhos) {
@@ -364,8 +375,9 @@ test_ep_rho_derivs() {
                 }, rho, drho);
 
             real_t err = std::abs(es.dep_drho - deriv) / std::abs(es.dep_drho);
-            std::println("ρ = {:10.3g} T = {:10.3g}, ∂e⁺/∂ρ = {:15.8g}, error = {:15.5g}",
-                         rho, T, es.dep_drho, err);
+            util::threshold_println(err,
+                                    "ρ = {:8.3g} T = {:8.3g},  ∂e⁺/∂ρ = {:15.8g},  error = {:11.5g}",
+                                    rho, T, es.dep_drho, err);
         }
     }
 }
@@ -379,7 +391,7 @@ test_ep_T_derivs() {
     constexpr real_t eps{0.01_rt};
 
     std::println("");
-    std::println("testing ∂e⁺/∂T via differencing");
+    util::green_println("testing ∂e⁺/∂T via differencing");
 
     for (auto T : Ts) {
         for (auto rho : rhos) {
@@ -401,8 +413,9 @@ test_ep_T_derivs() {
             } else {
                 err = std::abs(es.dep_dT - deriv) / std::abs(es.dep_dT);
             }
-            std::println("ρ = {:10.3g} T = {:10.3g}, ∂e⁺/∂T = {:15.8g}, error = {:15.5g}",
-                         rho, T, es.dep_dT, err);
+            util::threshold_println(err,
+                                    "ρ = {:8.3g} T = {:8.3g},  ∂e⁺/∂T = {:15.8g},  error = {:11.5g}",
+                                    rho, T, es.dep_dT, err);
         }
     }
 }
@@ -418,7 +431,7 @@ test_se_rho_derivs() {
     constexpr real_t eps{0.01_rt};
 
     std::println("");
-    std::println("testing ∂s⁻/∂ρ via differencing");
+    util::green_println("testing ∂s⁻/∂ρ via differencing");
 
     for (auto T : Ts) {
         for (auto rho : rhos) {
@@ -431,8 +444,9 @@ test_se_rho_derivs() {
                 }, rho, drho);
 
             real_t err = std::abs(es.dse_drho - deriv) / std::abs(es.dse_drho);
-            std::println("ρ = {:10.3g} T = {:10.3g}, ∂s⁻/∂ρ = {:15.8g}, error = {:15.5g}",
-                         rho, T, es.dse_drho, err);
+            util::threshold_println(err,
+                                    "ρ = {:8.3g} T = {:8.3g},  ∂s⁻/∂ρ = {:15.8g},  error = {:11.5g}",
+                                    rho, T, es.dse_drho, err);
         }
     }
 }
@@ -446,7 +460,7 @@ test_se_T_derivs() {
     constexpr real_t eps{0.01_rt};
 
     std::println("");
-    std::println("testing ∂s⁻/∂T via differencing");
+    util::green_println("testing ∂s⁻/∂T via differencing");
 
     for (auto T : Ts) {
         for (auto rho : rhos) {
@@ -465,8 +479,9 @@ test_se_T_derivs() {
             } else {
                 err = std::abs(es.dse_dT - deriv) / std::abs(es.dse_dT);
             }
-            std::println("ρ = {:10.3g} T = {:10.3g}, ∂s⁻/∂T = {:15.8g}, error = {:15.5g}",
-                         rho, T, es.dse_dT, err);
+            util::threshold_println(err,
+                                    "ρ = {:8.3g} T = {:8.3g},  ∂s⁻/∂T = {:15.8g},  error = {:11.5g}",
+                                    rho, T, es.dse_dT, err);
         }
     }
 }
@@ -480,7 +495,7 @@ test_sp_rho_derivs() {
     constexpr real_t eps{0.01_rt};
 
     std::println("");
-    std::println("testing ∂s⁺/∂ρ via differencing");
+    util::green_println("testing ∂s⁺/∂ρ via differencing");
 
     for (auto T : Ts) {
         for (auto rho : rhos) {
@@ -496,8 +511,9 @@ test_sp_rho_derivs() {
                 }, rho, drho);
 
             real_t err = std::abs(es.dsp_drho - deriv) / std::abs(es.dsp_drho);
-            std::println("ρ = {:10.3g} T = {:10.3g}, ∂s⁺/∂ρ = {:15.8g}, error = {:15.5g}",
-                         rho, T, es.dsp_drho, err);
+            util::threshold_println(err,
+                                    "ρ = {:8.3g} T = {:8.3g},  ∂s⁺/∂ρ = {:15.8g},  error = {:11.5g}",
+                                    rho, T, es.dsp_drho, err);
         }
     }
 }
@@ -511,7 +527,7 @@ test_sp_T_derivs() {
     constexpr real_t eps{0.01_rt};
 
     std::println("");
-    std::println("testing ∂s⁺/∂T via differencing");
+    util::green_println("testing ∂s⁺/∂T via differencing");
 
     for (auto T : Ts) {
         for (auto rho : rhos) {
@@ -533,8 +549,9 @@ test_sp_T_derivs() {
             } else {
                 err = std::abs(es.dsp_dT - deriv) / std::abs(es.dsp_dT);
             }
-            std::println("ρ = {:10.3g} T = {:10.3g}, ∂s⁺/∂T = {:15.8g}, error = {:15.5g}",
-                         rho, T, es.dsp_dT, err);
+            util::threshold_println(err,
+                                    "ρ = {:8.3g} T = {:8.3g},  ∂s⁺/∂T = {:15.8g},  error = {:11.5g}",
+                                    rho, T, es.dsp_dT, err);
         }
     }
 }
