@@ -127,6 +127,7 @@ std::ostream& operator<< (std::ostream& os, EOSState<T>& es) {
 // for the root finding eta
 
 template <typename T>
+inline
 T n_e_constraint(T eta, T beta) {
     FermiIntegral<T> f12(0.5_rt, eta, beta);
     f12.evaluate(0);
@@ -140,6 +141,7 @@ T n_e_constraint(T eta, T beta) {
 
 
 template <typename T>
+inline
 T n_p_constraint(T eta, T beta) {
     T eta_tilde = -eta - 2.0_rt / beta;
 
@@ -154,6 +156,7 @@ T n_p_constraint(T eta, T beta) {
 }
 
 template <typename T>
+inline
 NumDens<T> get_n_derivs(T beta,
                         const FermiIntegral<T>& f12, const FermiIntegral<T>& f32,
                         const FermiIntegral<T>& f12_pos, const FermiIntegral<T>& f32_pos) {
