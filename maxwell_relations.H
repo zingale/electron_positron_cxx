@@ -8,6 +8,7 @@
 
 template <typename T>
 std::pair<T, T>
+inline
 maxwell_1(T rho, T temp, T Ye) {
 
     ElectronPositronEOS<T> eos;
@@ -25,6 +26,7 @@ maxwell_1(T rho, T temp, T Ye) {
 
 template <typename T>
 std::pair<T, T>
+inline
 maxwell_2(T rho, T temp, T Ye) {
 
     ElectronPositronEOS<T> eos;
@@ -42,6 +44,7 @@ maxwell_2(T rho, T temp, T Ye) {
 
 template <typename T>
 std::pair<T, T>
+inline
 maxwell_3(T rho, T temp, T Ye) {
 
     ElectronPositronEOS<T> eos;
