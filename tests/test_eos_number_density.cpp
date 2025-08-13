@@ -164,6 +164,7 @@ test_ne_rho2_derivs() {
 
     constexpr real_t eps{0.01_rt};
 
+    std::println("");
     util::green_println("testing ∂²n⁻/∂ρ² via differencing");
 
     for (auto T : Ts) {

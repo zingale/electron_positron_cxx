@@ -296,6 +296,83 @@ test_pp_T2_derivs() {
 }
 
 
+// ∂²p/∂ρ∂T
+
+void
+test_pe_rhoT_derivs() {
+
+    ElectronPositronEOS<real_t> eos;
+    constexpr real_t Ye{0.5_rt};
+
+    constexpr real_t eps{0.01_rt};
+
+    std::println("");
+    util::green_println("testing ∂²p⁻/∂ρ∂T via differencing");
+
+    for (auto T : Ts) {
+        for (auto rho : rhos) {
+            auto es = eos.pe_state(rho, T, Ye);
+            auto drho{eps * rho};
+            auto [deriv, _err] = fd::adaptive_diff<real_t>([&] (real_t rho_) -> real_t
+                {
+                    auto es_eps = eos.pe_state(rho_, T, Ye);
+                    return es_eps.dpe_dT;
+                }, rho, drho);
+
+            real_t err{};
+            if (es.d2pe_drhodT == 0.0_rt) {
+                const real_t scale = es.p_e / rho / T;
+                err = std::abs(es.d2pe_drhodT - deriv / scale) ;
+            } else {
+                err = std::abs(es.d2pe_drhodT - deriv) / std::abs(es.d2pe_drhodT);
+            }
+            util::threshold_println(err,
+                                    "ρ = {:8.3g} T = {:8.3g},  ∂²p⁻/∂ρ∂T = {:15.8g},  error = {:11.5g}",
+                                    rho, T, es.d2pe_drhodT, err);
+        }
+    }
+}
+
+
+void
+test_pp_rhoT_derivs() {
+
+    ElectronPositronEOS<real_t> eos;
+    constexpr real_t Ye{0.5_rt};
+
+    constexpr real_t eps{0.01_rt};
+
+    std::println("");
+    util::green_println("testing ∂²p⁺/∂ρ∂T via differencing");
+
+    for (auto T : Ts) {
+        for (auto rho : rhos) {
+            auto es = eos.pe_state(rho, T, Ye);
+            if (es.n_pos == 0.0 && es.d2pp_drhodT == 0.0) {
+                continue;
+            }
+            auto drho{eps * rho};
+            auto [deriv, _err] = fd::adaptive_diff<real_t>([&] (real_t rho_) -> real_t
+                {
+                    auto es_eps = eos.pe_state(rho_, T, Ye);
+                    return es_eps.dpp_dT;
+                }, rho, drho);
+
+            real_t err{};
+            if (es.d2pp_drhodT == 0.0_rt) {
+                const real_t scale = es.p_pos / rho / T;
+                err = std::abs(es.d2pp_drhodT - deriv / scale) ;
+            } else {
+                err = std::abs(es.d2pp_drhodT - deriv) / std::abs(es.d2pp_drhodT);
+            }
+            util::threshold_println(err,
+                                    "ρ = {:8.3g} T = {:8.3g},  ∂²p⁺/∂ρ∂T = {:15.8g},  error = {:11.5g}",
+                                    rho, T, es.d2pp_drhodT, err);
+        }
+    }
+}
+
+
 int main() {
 
     test_pe_rho_derivs();
@@ -309,5 +386,8 @@ int main() {
 
     test_pe_T2_derivs();
     test_pp_T2_derivs();
+
+    test_pe_rhoT_derivs();
+    test_pp_rhoT_derivs();
 
 }
