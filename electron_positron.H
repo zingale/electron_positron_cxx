@@ -351,20 +351,24 @@ public:
 
 
         // Compute partials of pressure with density and temperature via the chain rule
-        T dpe_deta = pcoeff * beta52 * (f32.dF_deta + 0.5_rt * beta * f52.dF_deta);
-        T dpe_dbeta = 0.25_rt * pcoeff * beta32 * (10.0_rt * f32.F + 7.0_rt * beta * f52.F +
-                                                   4.0_rt * beta * (f32.dF_dbeta + 0.5_rt * beta * f52.dF_dbeta));
+        // first we get the derivatives of p with respect to η and β
+        const auto [dp_e, dp_pos] = get_eta_beta_derivs<T>(pcoeff, 0.5_rt, 5.0_rt,
+                                                           beta, f32, f52, f32_pos, f52_pos);
 
-        es.dpe_drho = dpe_deta * deta.drho;
-        es.dpe_dT = dpe_deta * deta.dT + dpe_dbeta * C::dbeta_dT;
+        auto dpe_thermo = chain_rule(dp_e, deta);
+        es.dpe_drho = dpe_thermo.drho;
+        es.dpe_dT = dpe_thermo.dT;
+        es.d2pe_drho2 = dpe_thermo.drho2;
+        es.d2pe_dT2 = dpe_thermo.dT2;
+        es.d2pe_drhodT = dpe_thermo.drhodT;
 
-        T dpp_deta = -pcoeff * beta52 * (f32_pos.dF_deta + 0.5_rt * beta * f52_pos.dF_deta);
-        T dpp_dbeta = pcoeff * beta12 * (beta * ((2.5_rt * f32_pos.F + 1.75_rt * beta * f52_pos.F) +
-                                                 beta * (f32_pos.dF_dbeta + 0.5_rt * beta * f52_pos.dF_dbeta)) +
-                                         2.0_rt * (f32_pos.dF_deta + 0.5_rt * beta * f52_pos.dF_deta));
+        auto dpp_thermo = chain_rule(dp_pos, deta);
+        es.dpp_drho = dpp_thermo.drho;
+        es.dpp_dT = dpp_thermo.dT;
+        es.d2pp_drho2 = dpp_thermo.drho2;
+        es.d2pp_dT2 = dpp_thermo.dT2;
+        es.d2pp_drhodT = dpp_thermo.drhodT;
 
-        es.dpp_drho = dpp_deta * deta.drho;
-        es.dpp_dT = dpp_deta * deta.dT + dpp_dbeta * C::dbeta_dT;
 
         // Compute partials of energy with density and temperature
         T dEe_deta = ecoeff * beta52 * (f32.dF_deta + beta * f52.dF_deta);
