@@ -322,12 +322,12 @@ test_ne_rhoT_derivs() {
     for (auto T : Ts) {
         for (auto rho : rhos) {
             auto es = eos.pe_state(rho, T, Ye);
-            auto dT{eps * T};
-            auto [deriv, _err] = fd::adaptive_diff<real_t>([&] (real_t T_) -> real_t
+            auto drho{eps * rho};
+            auto [deriv, _err] = fd::adaptive_diff<real_t>([&] (real_t rho_) -> real_t
                 {
-                    auto es_eps = eos.pe_state(rho, T_, Ye);
-                    return es_eps.dne_drho;
-                }, T, dT);
+                    auto es_eps = eos.pe_state(rho_, T, Ye);
+                    return es_eps.dne_dT;
+                }, rho, drho);
 
             real_t err{};
             if (es.d2ne_drhodT == 0.0_rt) {
@@ -361,12 +361,12 @@ test_np_rhoT_derivs() {
             if (es.n_pos == 0.0 && es.d2np_drhodT == 0.0) {
                 continue;
             }
-            auto dT{eps * T};
-            auto [deriv, _err] = fd::adaptive_diff<real_t>([&] (real_t T_) -> real_t
+            auto drho{eps * rho};
+            auto [deriv, _err] = fd::adaptive_diff<real_t>([&] (real_t rho_) -> real_t
                 {
-                    auto es_eps = eos.pe_state(rho, T_, Ye);
-                    return es_eps.dnp_drho;
-                }, T, dT);
+                    auto es_eps = eos.pe_state(rho_, T, Ye);
+                    return es_eps.dnp_dT;
+                }, rho, drho);
 
             real_t err{};
             if (es.d2np_drhodT == 0.0_rt) {
@@ -385,7 +385,6 @@ test_np_rhoT_derivs() {
 
 int main() {
 
-#if 0
     test_ne_rho_derivs();
     test_np_rho_derivs();
 
@@ -397,7 +396,6 @@ int main() {
 
     test_ne_T2_derivs();
     test_np_T2_derivs();
-#endif
 
     test_ne_rhoT_derivs();
     test_np_rhoT_derivs();
