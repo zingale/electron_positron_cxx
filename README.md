@@ -1,8 +1,9 @@
 # Electron-Positron Equation of State
 
 This is an electron-positron equation of state that computes the
-number density, pressure, and energy of a Fermi gas, along with the
-first derivatives.
+number density, pressure, energy, and entropy of a Fermi gas (both the
+electron and positron contributions), along with the first- and
+second-derivatives with respect to ρ and T.
 
 This uses the method of Gong et al. 2001 to compute the Fermi-Dirac
 integrals, and follows the notation from Timmes and Arnett 1999 for
@@ -40,7 +41,8 @@ The number of quadrature points used in the integration can be set via
 make QUAD_PTS=100
 ```
 
-for 100 points.  Valid options are `50`, `100`, `200` (the default), and `400`.
+for 100 points.  Valid options are `50`, `100`, `200` (the default),
+and `400`.
 
 Be sure to do
 

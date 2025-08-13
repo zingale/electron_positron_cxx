@@ -203,7 +203,7 @@ get_eta_thermo_derivs(const T Ye,
 
     // ∂²η/∂ρ∂T
     deta.drhodT = (C::dbeta_dT * (dn_pos.detadbeta - dn_e.detadbeta) +
-                   deta.dT * (dn_pos.deta2 - dn_e.deta2)) /
+                   deta.dT * (dn_pos.deta2 - dn_e.deta2)) * deta.drho /
         (dn_e.deta - dn_pos.deta);
 
     // ∂²η/∂ρ²
@@ -235,8 +235,8 @@ chain_rule(const EtaBetaDerivs<T>& df, const RhoTDerivs<T>& deta) {
 
     // ∂²f/∂T²
     df_th.dT2 = C::dbeta_dT * C::dbeta_dT * df.dbeta2 +
-                2.0_rt * C::dbeta_dT * deta.dT + df.detadbeta +
-                deta.dT * deta.dT + df.deta2 +
+                2.0_rt * C::dbeta_dT * deta.dT * df.detadbeta +
+                deta.dT * deta.dT * df.deta2 +
                 deta.dT2 * df.deta;
 
     // ∂²f/∂ρ∂T
