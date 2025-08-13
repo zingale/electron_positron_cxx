@@ -108,11 +108,11 @@ get_eta_beta_derivs(const T A, const T c, const T p, const T beta,
                     const FermiIntegral<T>& fx_pos, const FermiIntegral<T>& fy_pos) {
     // we can write number density, pressure, and energy density for electrons as
     //
-    // q = A β**(p/2) (F_x(η, β) + c beta F_y(η, β))
+    // q = A β**(p/2) (F_x(η, β) + c β F_y(η, β))
     //
     // and for positrons
     //
-    // w = A β**(p/2) (F_x(-η - 2/β, β) + c beta F_y(-η - 2/β, β))
+    // w = A β**(p/2) (F_x(-η - 2/β, β) + c β F_y(-η - 2/β, β))
 
     // Here we compute the η and β first- and second-derivatives of
     // both quantities.  These are then used via the chain rule to
