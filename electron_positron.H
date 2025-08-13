@@ -87,16 +87,18 @@ T get_eta(T rhoYe, T temp) {
 }
 
 
-// convenience wrapper for testing
 template <typename T>
 inline
 std::pair<EtaBetaDerivs<T>, EtaBetaDerivs<T>>
 get_n_derivs(const T beta,
              const FermiIntegral<T>& fx, const FermiIntegral<T>& fy,
              const FermiIntegral<T>& fx_pos, const FermiIntegral<T>& fy_pos) {
+    // convenience wrapper for testing number density derivatives with respect
+    // to η and β
 
     return get_eta_beta_derivs<T>(coeff, 1.0_rt, 3.0_rt, beta, fx, fy, fx_pos, fy_pos);
 }
+
 
 template <typename T>
 inline
@@ -104,7 +106,6 @@ std::pair<EtaBetaDerivs<T>, EtaBetaDerivs<T>>
 get_eta_beta_derivs(const T A, const T c, const T p, const T beta,
                     const FermiIntegral<T>& fx, const FermiIntegral<T>& fy,
                     const FermiIntegral<T>& fx_pos, const FermiIntegral<T>& fy_pos) {
-
     // we can write number density, pressure, and energy density for electrons as
     //
     // q = A β**(p/2) (F_x(η, β) + c beta F_y(η, β))
@@ -145,7 +146,7 @@ get_eta_beta_derivs(const T A, const T c, const T p, const T beta,
 
     // second derivatives
 
-    // ∂²n⁻/∂η²
+    // ∂²q/∂η²
     dq.deta2 = A * betap2 * (c * beta * fy.d2F_deta2 + fx.d2F_deta2);
 
     // ∂²q/∂η∂β
@@ -184,6 +185,9 @@ inline
 RhoTDerivs<T>
 get_eta_thermo_derivs(const T Ye,
                       const EtaBetaDerivs<T>& dn_e, const EtaBetaDerivs<T>& dn_pos) {
+    // Compute the first- and second-derivatives of η with respect to
+    // ρ and T.  This requires the derivatives of n⁻ and n⁺ with
+    // respect to η and β.
 
     RhoTDerivs<T> deta;
 
@@ -214,8 +218,8 @@ template <typename T>
 inline
 RhoTDerivs<T>
 chain_rule(const EtaBetaDerivs<T>& df, const RhoTDerivs<T>& deta) {
-    // compute the thermodynamic derivatives of f via the chain rule
-    // with η and β
+    // Compute the thermodynamic derivatives of f via the chain rule
+    // and the derivatives with respect to η and β
 
     RhoTDerivs<T> df_th;  // thermodynamic derivs
 
