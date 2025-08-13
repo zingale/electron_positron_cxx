@@ -31,9 +31,15 @@ public:
 
     T dpe_drho{};
     T dpe_dT{};
+    T d2pe_drho2{};
+    T d2pe_dT2{};
+    T d2pe_drhodT{};
 
     T dpp_drho{};
     T dpp_dT{};
+    T d2pp_drho2{};
+    T d2pp_dT2{};
+    T d2pp_drhodT{};
 
     T e_e{};  // electron specific energy (erg/g)
     T e_pos{};  // positron specific energy (erg/g)
@@ -114,7 +120,9 @@ std::ostream& operator<< (std::ostream& os, EOSState<T>& es) {
     out += std::format("n⁺ = {:15.8g}   ∂n⁺/∂ρ  = {:15.8g}   ∂n⁺/∂T  = {:15.8g}\n", es.n_pos, es.dnp_drho, es.dnp_dT);
     out += std::format("     {:15}  ∂²n⁺/∂ρ² = {:15.8g}  ∂²n⁺/∂T² = {:15.8g}  ∂²n⁺/∂ρ∂T = {:15.8g}\n\n", " ", es.d2np_drho2, es.d2np_dT2, es.d2np_drhodT);
     out += std::format("p⁻ = {:15.8g}   ∂p⁻/∂ρ  = {:15.8g}   ∂p⁻/∂T  = {:15.8g}\n", es.p_e, es.dpe_drho, es.dpe_dT);
-    out += std::format("p⁺ = {:15.8g}   ∂p⁺/∂ρ  = {:15.8g}   ∂p⁺/∂T  = {:15.8g}\n\n", es.p_pos, es.dpp_drho, es.dpp_dT);
+    out += std::format("     {:15}  ∂²p⁻/∂ρ² = {:15.8g}  ∂²p⁻/∂T² = {:15.8g}  ∂²p⁻/∂ρ∂T = {:15.8g}\n", " ", es.d2pe_drho2, es.d2pe_dT2, es.d2pe_drhodT);
+    out += std::format("p⁺ = {:15.8g}   ∂p⁺/∂ρ  = {:15.8g}   ∂p⁺/∂T  = {:15.8g}\n", es.p_pos, es.dpp_drho, es.dpp_dT);
+    out += std::format("     {:15}  ∂²p⁺/∂ρ² = {:15.8g}  ∂²p⁺/∂T² = {:15.8g}  ∂²p⁺/∂ρ∂T = {:15.8g}\n\n", " ", es.d2pp_drho2, es.d2pp_dT2, es.d2pp_drhodT);
     out += std::format("e⁻ = {:15.8g}   ∂e⁻/∂ρ  = {:15.8g}   ∂e⁻/∂T  = {:15.8g}\n", es.e_e, es.dee_drho, es.dee_dT);
     out += std::format("e⁺ = {:15.8g}   ∂e⁺/∂ρ  = {:15.8g}   ∂e⁺/∂T  = {:15.8g}\n\n", es.e_pos, es.dep_drho, es.dep_dT);
     out += std::format("s⁻ = {:15.8g}   ∂s⁻/∂ρ  = {:15.8g}   ∂s⁻/∂T  = {:15.8g}\n", es.s_e, es.dse_drho, es.dse_dT);

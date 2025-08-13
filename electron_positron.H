@@ -87,16 +87,18 @@ T get_eta(T rhoYe, T temp) {
 }
 
 
-// convenience wrapper for testing
 template <typename T>
 inline
 std::pair<EtaBetaDerivs<T>, EtaBetaDerivs<T>>
 get_n_derivs(const T beta,
              const FermiIntegral<T>& fx, const FermiIntegral<T>& fy,
              const FermiIntegral<T>& fx_pos, const FermiIntegral<T>& fy_pos) {
+    // convenience wrapper for testing number density derivatives with respect
+    // to η and β
 
     return get_eta_beta_derivs<T>(coeff, 1.0_rt, 3.0_rt, beta, fx, fy, fx_pos, fy_pos);
 }
+
 
 template <typename T>
 inline
@@ -104,7 +106,6 @@ std::pair<EtaBetaDerivs<T>, EtaBetaDerivs<T>>
 get_eta_beta_derivs(const T A, const T c, const T p, const T beta,
                     const FermiIntegral<T>& fx, const FermiIntegral<T>& fy,
                     const FermiIntegral<T>& fx_pos, const FermiIntegral<T>& fy_pos) {
-
     // we can write number density, pressure, and energy density for electrons as
     //
     // q = A β**(p/2) (F_x(η, β) + c beta F_y(η, β))
@@ -145,7 +146,7 @@ get_eta_beta_derivs(const T A, const T c, const T p, const T beta,
 
     // second derivatives
 
-    // ∂²n⁻/∂η²
+    // ∂²q/∂η²
     dq.deta2 = A * betap2 * (c * beta * fy.d2F_deta2 + fx.d2F_deta2);
 
     // ∂²q/∂η∂β
@@ -184,6 +185,9 @@ inline
 RhoTDerivs<T>
 get_eta_thermo_derivs(const T Ye,
                       const EtaBetaDerivs<T>& dn_e, const EtaBetaDerivs<T>& dn_pos) {
+    // Compute the first- and second-derivatives of η with respect to
+    // ρ and T.  This requires the derivatives of n⁻ and n⁺ with
+    // respect to η and β.
 
     RhoTDerivs<T> deta;
 
@@ -214,8 +218,8 @@ template <typename T>
 inline
 RhoTDerivs<T>
 chain_rule(const EtaBetaDerivs<T>& df, const RhoTDerivs<T>& deta) {
-    // compute the thermodynamic derivatives of f via the chain rule
-    // with η and β
+    // Compute the thermodynamic derivatives of f via the chain rule
+    // and the derivatives with respect to η and β
 
     RhoTDerivs<T> df_th;  // thermodynamic derivs
 
@@ -351,20 +355,24 @@ public:
 
 
         // Compute partials of pressure with density and temperature via the chain rule
-        T dpe_deta = pcoeff * beta52 * (f32.dF_deta + 0.5_rt * beta * f52.dF_deta);
-        T dpe_dbeta = 0.25_rt * pcoeff * beta32 * (10.0_rt * f32.F + 7.0_rt * beta * f52.F +
-                                                   4.0_rt * beta * (f32.dF_dbeta + 0.5_rt * beta * f52.dF_dbeta));
+        // first we get the derivatives of p with respect to η and β
+        const auto [dp_e, dp_pos] = get_eta_beta_derivs<T>(pcoeff, 0.5_rt, 5.0_rt,
+                                                           beta, f32, f52, f32_pos, f52_pos);
 
-        es.dpe_drho = dpe_deta * deta.drho;
-        es.dpe_dT = dpe_deta * deta.dT + dpe_dbeta * C::dbeta_dT;
+        auto dpe_thermo = chain_rule(dp_e, deta);
+        es.dpe_drho = dpe_thermo.drho;
+        es.dpe_dT = dpe_thermo.dT;
+        es.d2pe_drho2 = dpe_thermo.drho2;
+        es.d2pe_dT2 = dpe_thermo.dT2;
+        es.d2pe_drhodT = dpe_thermo.drhodT;
 
-        T dpp_deta = -pcoeff * beta52 * (f32_pos.dF_deta + 0.5_rt * beta * f52_pos.dF_deta);
-        T dpp_dbeta = pcoeff * beta12 * (beta * ((2.5_rt * f32_pos.F + 1.75_rt * beta * f52_pos.F) +
-                                                 beta * (f32_pos.dF_dbeta + 0.5_rt * beta * f52_pos.dF_dbeta)) +
-                                         2.0_rt * (f32_pos.dF_deta + 0.5_rt * beta * f52_pos.dF_deta));
+        auto dpp_thermo = chain_rule(dp_pos, deta);
+        es.dpp_drho = dpp_thermo.drho;
+        es.dpp_dT = dpp_thermo.dT;
+        es.d2pp_drho2 = dpp_thermo.drho2;
+        es.d2pp_dT2 = dpp_thermo.dT2;
+        es.d2pp_drhodT = dpp_thermo.drhodT;
 
-        es.dpp_drho = dpp_deta * deta.drho;
-        es.dpp_dT = dpp_deta * deta.dT + dpp_dbeta * C::dbeta_dT;
 
         // Compute partials of energy with density and temperature
         T dEe_deta = ecoeff * beta52 * (f32.dF_deta + beta * f52.dF_deta);
