@@ -49,6 +49,44 @@ T n_p_constraint(T eta, T beta) {
     return n_pos;
 }
 
+template <typename T>
+inline
+T get_eta(T rhoYe, T temp) {
+    // compute the degeneracy parameter
+
+    T n_e_net = rhoYe * C::N_A;
+    T beta = C::dbeta_dT * temp;
+
+    auto [eta_min, eta_max] = bounds::get_eta_bounds(rhoYe, temp);
+
+    T eta{};
+
+    try {
+        eta = brent<T>([=] (T _eta) -> T
+            {
+                auto n_e = n_e_constraint(_eta, beta);
+                auto n_pos = n_p_constraint(_eta, beta);
+                return n_e_net - (n_e - n_pos);
+            }, eta_min, eta_max);
+    } catch (const std::out_of_range& e) {
+        // try with larger bounds
+        try {
+            eta = brent<T>([=] (T _eta) -> T
+                {
+                    auto n_e = n_e_constraint(_eta, beta);
+                    auto n_pos = n_p_constraint(_eta, beta);
+                    return n_e_net - (n_e - n_pos);
+                }, -100.0_rt, 1.e7_rt);
+        } catch (...) {
+            std::cerr << "unable to solve for eta" << std::endl;
+            abort();
+        }
+    }
+
+    return eta;
+}
+
+
 // convenience wrapper for testing
 template <typename T>
 inline
@@ -101,9 +139,9 @@ get_eta_beta_derivs(const T A, const T c, const T p, const T beta,
     dw.deta = -A * betap2 * (c * beta * fy_pos.dF_deta + fx_pos.dF_deta);
 
     // ∂w/∂β
-    dw.dbeta = 0.5 * A / beta2 * (betap2 * beta * (c * (p + 2.0_rt) * beta * fy_pos.F + p * fx_pos.F) +
-                                  2.0_rt * betap2 * (beta2 * (fx_pos.dF_dbeta + c * beta * fy_pos.dF_dbeta) +
-                                                     2.0_rt * (fx_pos.dF_deta + c * beta * fy_pos.dF_deta)));
+    dw.dbeta = 0.5_rt * A / beta2 * (betap2 * beta * (c * (p + 2.0_rt) * beta * fy_pos.F + p * fx_pos.F) +
+                                     2.0_rt * betap2 * (beta2 * (fx_pos.dF_dbeta + c * beta * fy_pos.dF_dbeta) +
+                                                        2.0_rt * (fx_pos.dF_deta + c * beta * fy_pos.dF_deta)));
 
     // second derivatives
 
@@ -125,7 +163,7 @@ get_eta_beta_derivs(const T A, const T c, const T p, const T beta,
     dw.deta2 = A * betap2 * (c * beta * fy_pos.d2F_deta2 + fx_pos.d2F_deta2);
 
     // ∂²w/∂η∂β
-    dw.detadbeta = -A * betap2 * (2.0 * betai * betai * (fx_pos.d2F_deta2 + c * beta * fy_pos.d2F_deta2) +
+    dw.detadbeta = -A * betap2 * (2.0_rt * betai * betai * (fx_pos.d2F_deta2 + c * beta * fy_pos.d2F_deta2) +
                                   0.5_rt * betai * (c * (p + 2.0_rt) * beta * fy_pos.dF_deta + p * fx_pos.dF_deta) +
                                   (fx_pos.d2F_detadbeta + c * beta * fy_pos.d2F_detadbeta));
 
@@ -224,40 +262,15 @@ public:
         T rho_inv{1.0_rt / rho};
         T temp_inv{1.0_rt / temp};
 
-        T n_e_net = Ye * C::N_A * rho;
-
         T beta = temp * C::dbeta_dT;
 
         T beta12 = std::sqrt(beta);
         T beta32 = beta * beta12;
         T beta52 = beta * beta32;
 
-        // compute the degeneracy parameter
-        auto [eta_min, eta_max] = bounds::get_eta_bounds(rho * Ye, temp);
-
-        T eta{};
-
-        try {
-            eta = brent<T>([=] (T _eta) -> T
-                {
-                    auto n_e = n_e_constraint(_eta, beta);
-                    auto n_pos = n_p_constraint(_eta, beta);
-                    return n_e_net - (n_e - n_pos);
-                }, eta_min, eta_max);
-        } catch (const std::out_of_range& e) {
-            // try with larger bounds
-            try {
-                eta = brent<T>([=] (T _eta) -> T
-                    {
-                        auto n_e = n_e_constraint(_eta, beta);
-                        auto n_pos = n_p_constraint(_eta, beta);
-                        return n_e_net - (n_e - n_pos);
-                    }, -100.0_rt, 1.e7_rt);
-            } catch (...) {
-                std::cerr << "unable to solve for eta" << std::endl;
-                abort();
-            }
-        }
+        // get the degeneracy parameter for these thermodynamic
+        // conditions
+        auto eta = get_eta(rho * Ye, temp);
 
         es.eta = eta;
         es.beta = beta;
@@ -298,16 +311,20 @@ public:
         es.p_pos = pcoeff * beta52 * (f32_pos.F + 0.5_rt * beta * f52_pos.F);
         T E_pos = ecoeff * beta52 * (f32_pos.F + beta * f52_pos.F) + 2.0_rt * C::rest_mass * es.n_pos;
 
-        // compute the derivatives of eta and beta with respect to
+        // compute the derivatives of η and β with respect to
         // density and temperature
 
+        // first we get the derivatives of number density with respect
+        // to η and β
         const auto [dn_e, dn_pos] = get_eta_beta_derivs<T>(coeff, 1.0_rt, 3.0_rt,
                                                            beta, f12, f32, f12_pos, f32_pos);
 
         // note that ∂β/∂ρ = 0
 
+        // now get the derivatives of η with respect to ρ and T
         auto deta = get_eta_thermo_derivs(Ye, dn_e, dn_pos);
 
+        // store the derivatives
         es.deta_drho = deta.drho;
         es.deta_dT = deta.dT;
 
@@ -315,12 +332,23 @@ public:
         es.d2eta_drhodT = deta.drhodT;
         es.d2eta_dT2 = deta.dT2;
 
-        // Compute partials of number density with density and temperature
-        es.dne_drho = dn_e.deta * deta.drho;
-        es.dne_dT = dn_e.deta * deta.dT + dn_e.dbeta * C::dbeta_dT;
+        // now we can compute the first and second derivatives of all
+        // the thermodynamic quantities
 
-        es.dnp_drho = dn_pos.deta * deta.drho;
-        es.dnp_dT = dn_pos.deta * deta.dT + dn_pos.dbeta * C::dbeta_dT;
+        auto dne_thermo = chain_rule(dn_e, deta);
+        es.dne_drho = dne_thermo.drho;
+        es.dne_dT = dne_thermo.dT;
+        es.d2ne_drho2 = dne_thermo.drho2;
+        es.d2ne_dT2 = dne_thermo.dT2;
+        es.d2ne_drhodT = dne_thermo.drhodT;
+
+        auto dnp_thermo = chain_rule(dn_pos, deta);
+        es.dnp_drho = dnp_thermo.drho;
+        es.dnp_dT = dnp_thermo.dT;
+        es.d2np_drho2 = dnp_thermo.drho2;
+        es.d2np_dT2 = dnp_thermo.dT2;
+        es.d2np_drhodT = dnp_thermo.drhodT;
+
 
         // Compute partials of pressure with density and temperature via the chain rule
         T dpe_deta = pcoeff * beta52 * (f32.dF_deta + 0.5_rt * beta * f52.dF_deta);
@@ -340,8 +368,8 @@ public:
 
         // Compute partials of energy with density and temperature
         T dEe_deta = ecoeff * beta52 * (f32.dF_deta + beta * f52.dF_deta);
-        T dEe_dbeta = 0.5 * ecoeff * beta32 * (5.0_rt * f32.F + 7.0_rt * beta * f52.F +
-                                               2.0_rt * beta * (f32.dF_dbeta + beta * f52.dF_dbeta));
+        T dEe_dbeta = 0.5_rt * ecoeff * beta32 * (5.0_rt * f32.F + 7.0_rt * beta * f52.F +
+                                                  2.0_rt * beta * (f32.dF_dbeta + beta * f52.dF_dbeta));
 
         T dEe_drho = dEe_deta * deta.drho;   // dbeta_drho = 0
         T dEe_dT = dEe_deta * deta.dT + dEe_dbeta * C::dbeta_dT;
