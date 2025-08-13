@@ -354,8 +354,10 @@ public:
         es.d2np_drhodT = dnp_thermo.drhodT;
 
 
-        // Compute partials of pressure with density and temperature via the chain rule
-        // first we get the derivatives of p with respect to η and β
+        // Compute partials of pressure with density and temperature
+        // via the chain rule.
+
+        // First we get the derivatives of p with respect to η and β
         const auto [dp_e, dp_pos] = get_eta_beta_derivs<T>(pcoeff, 0.5_rt, 5.0_rt,
                                                            beta, f32, f52, f32_pos, f52_pos);
 
@@ -373,32 +375,40 @@ public:
         es.d2pp_dT2 = dpp_thermo.dT2;
         es.d2pp_drhodT = dpp_thermo.drhodT;
 
+        // Compute partials of energy density with density and
+        // temperature via the chain rule.
 
-        // Compute partials of energy with density and temperature
-        T dEe_deta = ecoeff * beta52 * (f32.dF_deta + beta * f52.dF_deta);
-        T dEe_dbeta = 0.5_rt * ecoeff * beta32 * (5.0_rt * f32.F + 7.0_rt * beta * f52.F +
-                                                  2.0_rt * beta * (f32.dF_dbeta + beta * f52.dF_dbeta));
+        // First we get the derivatives of p with respect to η and β
+        const auto [dE_e, dE_pos] = get_eta_beta_derivs<T>(ecoeff, 1.0_rt, 5.0_rt,
+                                                           beta, f32, f52, f32_pos, f52_pos);
 
-        T dEe_drho = dEe_deta * deta.drho;   // dbeta_drho = 0
-        T dEe_dT = dEe_deta * deta.dT + dEe_dbeta * C::dbeta_dT;
+        auto dEe_thermo = chain_rule(dE_e, deta);
+        auto dEp_thermo = chain_rule(dE_pos, deta);
 
-        // these don't include the 2 m_e c**2 n_p part
-        T dEp_deta = -ecoeff * beta52 * (f32_pos.dF_deta + beta * f52_pos.dF_deta);
-        T dEp_dbeta = ecoeff * beta12 * (beta * ((2.5_rt * f32_pos.F + 3.5_rt * beta * f52_pos.F) +
-                                                 beta * (f32_pos.dF_dbeta + beta * f52_pos.dF_dbeta)) +
-                                         2.0_rt * (f32_pos.dF_deta + beta * f52_pos.dF_deta));
+        // add in rest mass term for positrons
 
-        T dEp_drho = dEp_deta * deta.drho + 2.0_rt * C::rest_mass * es.dnp_drho;
-        T dEp_dT = dEp_deta * deta.dT + dEp_dbeta * C::dbeta_dT + 2.0_rt * C::rest_mass * es.dnp_dT;
+        dEp_thermo.drho += 2.0_rt * C::rest_mass * es.dnp_drho;
+        dEp_thermo.dT += 2.0_rt * C::rest_mass * es.dnp_dT;
+        dEp_thermo.drho2 += 2.0_rt * C::rest_mass * es.d2np_drho2;
+        dEp_thermo.dT2 += 2.0_rt * C::rest_mass * es.d2np_dT2;
+        dEp_thermo.drhodT += 2.0_rt * C::rest_mass * es.d2np_drhodT;
 
         // correct energy to be specific energy
         es.e_e = E_e * rho_inv;
-        es.dee_drho = (dEe_drho - E_e * rho_inv) * rho_inv;
-        es.dee_dT = dEe_dT * rho_inv;
+        es.dee_drho = (dEe_thermo.drho - E_e * rho_inv) * rho_inv;
+        es.dee_dT = dEe_thermo.dT * rho_inv;
+        es.d2ee_drho2 = (dEe_thermo.drho2 - 2.0_rt * dEe_thermo.drho * rho_inv -
+                         2.0_rt * E_e * rho_inv * rho_inv) * rho_inv;
+        es.d2ee_dT2 = dEe_thermo.dT2 * rho_inv;
+        es.d2ee_drhodT = (dEe_thermo.drhodT - dEe_thermo.dT * rho_inv) * rho_inv;
 
         es.e_pos = E_pos * rho_inv;
-        es.dep_drho = (dEp_drho - E_pos * rho_inv) * rho_inv;
-        es.dep_dT = dEp_dT * rho_inv;
+        es.dep_drho = (dEp_thermo.drho - E_pos * rho_inv) * rho_inv;
+        es.dep_dT = dEp_thermo.dT * rho_inv;
+        es.d2ep_drho2 = (dEp_thermo.drho2 - 2.0_rt * dEp_thermo.drho * rho_inv -
+                         2.0_rt * E_pos * rho_inv * rho_inv) * rho_inv;
+        es.d2ep_dT2 = dEp_thermo.dT2 * rho_inv;
+        es.d2ep_drhodT = (dEp_thermo.drhodT - dEp_thermo.dT * rho_inv) * rho_inv;
 
         // compute entropy -- this follows from Arnett's text, Eq. B.6
         // also C&G 24.368d
