@@ -203,7 +203,7 @@ get_eta_thermo_derivs(const T Ye,
 
     // ∂²η/∂ρ∂T
     deta.drhodT = (C::dbeta_dT * (dn_pos.detadbeta - dn_e.detadbeta) +
-                   deta.dT * (dn_pos.deta2 - dn_e.deta2)) /
+                   deta.dT * (dn_pos.deta2 - dn_e.deta2)) * deta.drho /
         (dn_e.deta - dn_pos.deta);
 
     // ∂²η/∂ρ²
