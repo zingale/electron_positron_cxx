@@ -235,8 +235,8 @@ chain_rule(const EtaBetaDerivs<T>& df, const RhoTDerivs<T>& deta) {
 
     // ∂²f/∂T²
     df_th.dT2 = C::dbeta_dT * C::dbeta_dT * df.dbeta2 +
-                2.0_rt * C::dbeta_dT * deta.dT + df.detadbeta +
-                deta.dT * deta.dT + df.deta2 +
+                2.0_rt * C::dbeta_dT * deta.dT * df.detadbeta +
+                deta.dT * deta.dT * df.deta2 +
                 deta.dT2 * df.deta;
 
     // ∂²f/∂ρ∂T
