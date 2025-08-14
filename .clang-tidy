@@ -8,7 +8,7 @@ Checks: >
      cppcoreguidelines-*,
        -cppcoreguidelines-avoid-magic-numbers,
        -cppcoreguidelines-non-private-member-variables-in-classes,
-       -cppcoreguidelines-pro-*,
+       -cppcoreguidelines-pro-bounds-constant-array-index,
      misc-*,
        -misc-non-private-member-variables-in-classes,
        -misc-use-internal-linkage,
