@@ -397,7 +397,7 @@ public:
         es.e_e = E_e * rho_inv;
         es.dee_drho = (dEe_thermo.drho - E_e * rho_inv) * rho_inv;
         es.dee_dT = dEe_thermo.dT * rho_inv;
-        es.d2ee_drho2 = (dEe_thermo.drho2 - 2.0_rt * dEe_thermo.drho * rho_inv -
+        es.d2ee_drho2 = (dEe_thermo.drho2 - 2.0_rt * dEe_thermo.drho * rho_inv +
                          2.0_rt * E_e * rho_inv * rho_inv) * rho_inv;
         es.d2ee_dT2 = dEe_thermo.dT2 * rho_inv;
         es.d2ee_drhodT = (dEe_thermo.drhodT - dEe_thermo.dT * rho_inv) * rho_inv;
@@ -405,7 +405,7 @@ public:
         es.e_pos = E_pos * rho_inv;
         es.dep_drho = (dEp_thermo.drho - E_pos * rho_inv) * rho_inv;
         es.dep_dT = dEp_thermo.dT * rho_inv;
-        es.d2ep_drho2 = (dEp_thermo.drho2 - 2.0_rt * dEp_thermo.drho * rho_inv -
+        es.d2ep_drho2 = (dEp_thermo.drho2 - 2.0_rt * dEp_thermo.drho * rho_inv +
                          2.0_rt * E_pos * rho_inv * rho_inv) * rho_inv;
         es.d2ep_dT2 = dEp_thermo.dT2 * rho_inv;
         es.d2ep_drhodT = (dEp_thermo.drhodT - dEp_thermo.dT * rho_inv) * rho_inv;
