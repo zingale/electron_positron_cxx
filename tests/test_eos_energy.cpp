@@ -11,7 +11,7 @@
 constexpr std::array<real_t, 4> Ts{1.e4_rt, 1.e6_rt, 1.e8_rt, 5.e9_rt};
 constexpr std::array<real_t, 5> rhos{1.e-2_rt, 1.e2_rt, 1.e5_rt, 1.e7_rt, 5.e9_rt};
 
-// energy
+// ∂e/∂ρ
 
 void
 test_ee_rho_derivs() {
@@ -75,6 +75,8 @@ test_ep_rho_derivs() {
     }
 }
 
+
+// ∂e/∂T
 
 void
 test_ee_T_derivs() {

@@ -413,28 +413,47 @@ public:
         // compute entropy -- this follows from Arnett's text, Eq. B.6
         // also C&G 24.368d
         T h_e = es.e_e + es.p_e * rho_inv;
-        T dhe_dT = es.dee_dT + es.dpe_dT * rho_inv;
         T dhe_drho = es.dee_drho + es.dpe_drho * rho_inv - es.p_e * rho_inv * rho_inv;
+        T dhe_dT = es.dee_dT + es.dpe_dT * rho_inv;
+        T d2he_drho2 = es.d2ee_drho2 + (es.d2pe_drho2 + 2.0_rt * rho_inv * (-es.dpe_drho + rho_inv * es.p_e)) * rho_inv;
+        T d2he_dT2 = es.d2ee_dT2 + rho_inv * es.d2pe_dT2;
+        T d2he_drhodT = es.d2ee_drhodT + rho_inv * (es.d2pe_drhodT - rho_inv * es.dpe_dT);
 
         T h_pos = es.e_pos + es.p_pos * rho_inv;
-        T dhp_dT = es.dep_dT + es.dpp_dT * rho_inv;
         T dhp_drho = es.dep_drho + es.dpp_drho * rho_inv - es.p_pos * rho_inv * rho_inv;
+        T dhp_dT = es.dep_dT + es.dpp_dT * rho_inv;
+        T d2hp_drho2 = es.d2ep_drho2 + (es.d2pp_drho2 + 2.0_rt * rho_inv * (-es.dpp_drho + rho_inv * es.p_pos)) * rho_inv;
+        T d2hp_dT2 = es.d2ep_dT2 + rho_inv * es.d2pp_dT2;
+        T d2hp_drhodT = es.d2ep_drhodT + rho_inv * (es.d2pp_drhodT - rho_inv * es.dpp_dT);
 
         es.s_e = h_e * temp_inv - es.n_e * C::k * es.eta * rho_inv;
-
-        es.dse_dT = (dhe_dT - h_e * temp_inv) * temp_inv -
-            C::k * (es.eta * es.dne_dT + es.n_e * deta.dT) * rho_inv;
 
         es.dse_drho = dhe_drho * temp_inv -
             C::k * (es.n_e * (deta.drho - es.eta * rho_inv) + es.eta * es.dne_drho ) * rho_inv;
 
+        es.dse_dT = (dhe_dT - h_e * temp_inv) * temp_inv -
+            C::k * (es.eta * es.dne_dT + es.n_e * deta.dT) * rho_inv;
+
+        es.d2se_drho2 = -C::k * rho_inv * (es.eta * es.d2ne_drho2 + es.n_e * es.d2eta_drho2 + 2.0_rt * es.deta_drho * es.dne_drho) +
+            2.0_rt * C::k * rho_inv * rho_inv * (es.eta * es.dne_drho + es.n_e * es.deta_drho) +
+            -2.0_rt * C::k * std::pow(rho_inv, 3) * es.eta * es.n_e +
+            d2he_drho2 * temp_inv;
+
+        es.d2se_dT2 = -C::k * rho_inv * (es.eta * es.d2ne_dT2 + es.n_e * es.d2eta_dT2 + 2.0_rt * es.deta_dT * es.dne_dT) +
+            temp_inv * (d2he_dT2 - 2.0_rt * dhe_dT * temp_inv + 2.0_rt * h_e * temp_inv * temp_inv);
+
+        es.d2se_drhodT = -C::k * rho_inv * (es.eta * es.d2ne_drhodT + es.n_e * es.d2eta_drhodT + es.deta_dT * es.dne_drho + es.deta_drho * es.dne_dT) +
+            C::k * rho_inv * rho_inv * (es.eta * es.dne_dT + es.n_e * es.deta_dT)
+            + d2he_drhodT * temp_inv - dhe_drho * temp_inv * temp_inv;
+
         es.s_pos = h_pos * temp_inv - es.n_pos * C::k * eta_pos * rho_inv;
+
+        es.dsp_drho = dhp_drho * temp_inv -
+            C::k * (es.n_pos * (-deta.drho - eta_pos * rho_inv) + eta_pos * es.dnp_drho) * rho_inv;
 
         es.dsp_dT = (dhp_dT - h_pos * temp_inv) * temp_inv -
             C::k * (eta_pos * es.dnp_dT - es.n_pos * deta.dT) * rho_inv;
 
-        es.dsp_drho = dhp_drho * temp_inv -
-            C::k * (es.n_pos * (-deta.drho - eta_pos * rho_inv) + eta_pos * es.dnp_drho) * rho_inv;
 
         return es;
     }
