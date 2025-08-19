@@ -61,9 +61,16 @@ public:
 
     T dse_drho{};
     T dse_dT{};
+    T d2se_drho2{};
+    T d2se_dT2{};
+    T d2se_drhodT{};
+
 
     T dsp_drho{};
     T dsp_dT{};
+    T d2sp_drho2{};
+    T d2sp_dT2{};
+    T d2sp_drhodT{};
 
     T eta{};  // degeneracy parameter
     T beta{};  // k T / rest mass
@@ -134,7 +141,9 @@ std::ostream& operator<< (std::ostream& os, EOSState<T>& es) {
     out += std::format("e⁺ = {:15.8g}   ∂e⁺/∂ρ  = {:15.8g}   ∂e⁺/∂T  = {:15.8g}\n", es.e_pos, es.dep_drho, es.dep_dT);
     out += std::format("     {:15}  ∂²e⁺/∂ρ² = {:15.8g}  ∂²e⁺/∂T² = {:15.8g}  ∂²e⁺/∂ρ∂T = {:15.8g}\n\n", " ", es.d2ep_drho2, es.d2ep_dT2, es.d2ep_drhodT);
     out += std::format("s⁻ = {:15.8g}   ∂s⁻/∂ρ  = {:15.8g}   ∂s⁻/∂T  = {:15.8g}\n", es.s_e, es.dse_drho, es.dse_dT);
+    out += std::format("     {:15}  ∂²s⁻/∂ρ² = {:15.8g}  ∂²s⁻/∂T² = {:15.8g}  ∂²s⁻/∂ρ∂T = {:15.8g}\n", " ", es.d2se_drho2, es.d2se_dT2, es.d2se_drhodT);
     out += std::format("s⁺ = {:15.8g}   ∂s⁺/∂ρ  = {:15.8g}   ∂s⁺/∂T  = {:15.8g}\n", es.s_pos, es.dsp_drho, es.dsp_dT);
+    out += std::format("     {:15}  ∂²s⁺/∂ρ² = {:15.8g}  ∂²s⁺/∂T² = {:15.8g}  ∂²s⁺/∂ρ∂T = {:15.8g}\n\n", " ", es.d2sp_drho2, es.d2sp_dT2, es.d2sp_drhodT);
 
 
     os << out;
