@@ -440,11 +440,11 @@ public:
             d2he_drho2 * temp_inv;
 
         es.d2se_dT2 = -C::k * rho_inv * (es.eta * es.d2ne_dT2 + es.n_e * es.d2eta_dT2 + 2.0_rt * es.deta_dT * es.dne_dT) +
-            temp_inv * (d2he_dT2 - 2.0_rt * dhe_dT * temp_inv + 2.0_rt * h_e * temp_inv * temp_inv);
+            temp_inv * (d2he_dT2 - 2.0_rt * temp_inv * (dhe_dT - h_e * temp_inv));
 
         es.d2se_drhodT = -C::k * rho_inv * (es.eta * es.d2ne_drhodT + es.n_e * es.d2eta_drhodT + es.deta_dT * es.dne_drho + es.deta_drho * es.dne_dT) +
             C::k * rho_inv * rho_inv * (es.eta * es.dne_dT + es.n_e * es.deta_dT)
-            + d2he_drhodT * temp_inv - dhe_drho * temp_inv * temp_inv;
+            + temp_inv * (d2he_drhodT - dhe_drho * temp_inv);
 
         es.s_pos = h_pos * temp_inv - es.n_pos * C::k * eta_pos * rho_inv;
 
@@ -460,11 +460,11 @@ public:
             d2hp_drho2 * temp_inv;
 
         es.d2sp_dT2 = C::k * rho_inv * (es.eta * es.d2np_dT2 + es.n_pos * es.d2eta_dT2 + 2.0_rt * es.deta_dT * es.dnp_dT) +
-            temp_inv * (d2hp_dT2 - 2.0_rt * dhp_dT * temp_inv + 2.0_rt * h_pos * temp_inv * temp_inv);
+            temp_inv * (d2hp_dT2 - 2.0_rt * temp_inv * (dhp_dT - h_pos * temp_inv));
 
         es.d2sp_drhodT = C::k * rho_inv * (es.eta * es.d2np_drhodT + es.n_pos * es.d2eta_drhodT + es.deta_dT * es.dnp_drho + es.deta_drho * es.dnp_dT) +
             -C::k * rho_inv * rho_inv * (es.eta * es.dnp_dT + es.n_pos * es.deta_dT)
-            + d2hp_drhodT * temp_inv - dhp_drho * temp_inv * temp_inv;
+            + temp_inv * (d2hp_drhodT - dhp_drho * temp_inv);
 
         return es;
     }
