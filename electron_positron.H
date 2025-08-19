@@ -454,6 +454,17 @@ public:
         es.dsp_dT = (dhp_dT - h_pos * temp_inv) * temp_inv -
             C::k * (eta_pos * es.dnp_dT - es.n_pos * deta.dT) * rho_inv;
 
+        es.d2sp_drho2 = C::k * rho_inv * (es.eta * es.d2np_drho2 + es.n_pos * es.d2eta_drho2 + 2.0_rt * es.deta_drho * es.dnp_drho) +
+            -2.0_rt * C::k * rho_inv * rho_inv * (es.eta * es.dnp_drho + es.n_pos * es.deta_drho) +
+            2.0_rt * C::k * std::pow(rho_inv, 3) * es.eta * es.n_pos +
+            d2hp_drho2 * temp_inv;
+
+        es.d2sp_dT2 = C::k * rho_inv * (es.eta * es.d2np_dT2 + es.n_pos * es.d2eta_dT2 + 2.0_rt * es.deta_dT * es.dnp_dT) +
+            temp_inv * (d2hp_dT2 - 2.0_rt * dhp_dT * temp_inv + 2.0_rt * h_pos * temp_inv * temp_inv);
+
+        es.d2sp_drhodT = C::k * rho_inv * (es.eta * es.d2np_drhodT + es.n_pos * es.d2eta_drhodT + es.deta_dT * es.dnp_drho + es.deta_drho * es.dnp_dT) +
+            -C::k * rho_inv * rho_inv * (es.eta * es.dnp_dT + es.n_pos * es.deta_dT)
+            + d2hp_drhodT * temp_inv - dhp_drho * temp_inv * temp_inv;
 
         return es;
     }
