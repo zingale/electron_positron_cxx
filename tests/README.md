@@ -49,4 +49,6 @@ The following tests exercise different parts of the EOS algorithm:
   blocks of the η derivatives that are then used for all the other
   thermodynamic derivatives.
 
+* `test_precision.cpp` : print out the details of the floating point
+  representation and test the printing tools in `util.H`.
 
