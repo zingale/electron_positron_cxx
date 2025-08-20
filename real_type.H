@@ -1,11 +1,10 @@
 #ifndef REAL_TYPE_H
 #define REAL_TYPE_H
 
-#if defined(__clang__)
-#include <quadmath.h>
-#endif
+#include <string>
 
 #if defined(USE_FLOAT128)
+#include <quadmath.h>
 using real_t = __float128;
 #elif defined(USE_LONG_DOUBLE)
 using real_t = long double;
@@ -29,8 +28,22 @@ inline namespace literals {
 
 // std::numbers does not work with __float128
 
-constexpr real_t pi = 3.141592653589793238462643383279502884197169399375105820974944592307816406286208998628034825342117068Q;
-constexpr real_t sqrt2 = 1.414213562373095048801688724209698078569671875376948073176679737990732478462107038850387534327641573Q;
+inline
+real_t str_to_real_t(const char* s) {
+#if defined(USE_FLOAT128)
+    return strtoflt128(s, nullptr); 
+#elif defined (USE_LONG_DOUBLE)
+    return std::stold(s);
+#else
+    return std::stod(s);
+#endif
 
+}
+
+namespace constants {
+static inline const real_t pi = str_to_real_t("3.141592653589793238462643383279502884197169399375105820974944592307816406286208998628034825342117068");
+
+static inline const real_t sqrt2 = str_to_real_t("1.414213562373095048801688724209698078569671875376948073176679737990732478462107038850387534327641573");
+}
 
 #endif

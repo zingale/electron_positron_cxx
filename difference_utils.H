@@ -147,7 +147,7 @@ namespace fd {
 
         T _h{h};
 
-        T jump{sqrt2};
+        T jump{constants::sqrt2};
 
         auto _fp = func(x0 + _h);
         auto _fm = func(x0 - _h);
@@ -206,7 +206,7 @@ namespace fd {
 
         T _h{h};
 
-        T jump{sqrt2};
+        T jump{constants::sqrt2};
 
         auto _fp = func(x0 + _h);
         auto _f0 = func(x0);

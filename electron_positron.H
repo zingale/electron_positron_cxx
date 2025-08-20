@@ -14,7 +14,7 @@
 
 // our Fermi integrals will use a dimensionless temperature
 
-constexpr real_t coeff = 8.0_rt * pi * sqrt2 *
+const real_t coeff = 8.0_rt * constants::pi * constants::sqrt2 *
     C::inv_compton_wavelength * C::inv_compton_wavelength * C::inv_compton_wavelength;
 
 
@@ -284,8 +284,8 @@ public:
         T eta_pos = -eta;  // see C&G 24.334
 
         // compute the number density, pressure and energy
-        constexpr T pcoeff = coeff * (2.0_rt / 3.0_rt) * C::rest_mass;
-        constexpr T ecoeff = coeff * C::rest_mass;
+        T pcoeff = coeff * (2.0_rt / 3.0_rt) * C::rest_mass;
+        T ecoeff = coeff * C::rest_mass;
 
         FermiIntegral<T> f12(0.5_rt, eta, beta);
         f12.evaluate(2);
