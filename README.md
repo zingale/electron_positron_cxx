@@ -21,6 +21,9 @@ This needs a C++23 compiler.  For GCC, you need GCC >= 15.1
 
 The precision can be changed via the `PRECISION` make variable, e.g.,
 
+* `make PRECISION=BOOST256` builds with 256-bit precision (using
+  the boost multiprecision library).
+
 * `make PRECISION=FLOAT128` builds with 128-bit precision (using the
   `__float128` data type.
 
