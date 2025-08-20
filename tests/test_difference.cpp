@@ -12,7 +12,7 @@ T f1(T x) {
 
 template <typename T>
 T df1dx(T x) {
-    return std::exp(x) * (-x * x + 2.0_rt * x - sqrt2 * std::cos(x + 0.25_rt * pi)) /
+    return std::exp(x) * (-x * x + 2.0_rt * x - constants::sqrt2 * std::cos(x + 0.25_rt * constants::pi)) /
         std::pow(x * x - std::sin(x), 2);
 }
 
