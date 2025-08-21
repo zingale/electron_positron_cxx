@@ -1,10 +1,10 @@
 #include <print>
 #include <vector>
+#include <fstream>
 
 #include "real_type.H"
 #include "electron_positron.H"
 #include "maxwell_relations.H"
-
 
 int main() {
 
@@ -23,6 +23,26 @@ int main() {
         rhos.push_back(std::pow(10.0_rt, std::log10(rho_min) + i * dlogrho));
     }
 
+#if defined(QUAD50)
+    std::string qnpts("50");
+#elif defined(QUAD100)
+    std::string qnpts("100");
+#elif defined(QUAD200)
+    std::string qnpts("200");
+#elif defined(QUAD400)
+    std::string qnpts("400");
+#endif
+
+#if defined(USE_FLOAT128)
+    std::string precision("128");
+#elif defined(USE_LONG_DOUBLE)
+    std::string precision("80");
+#else
+    std::string precision("64");
+#endif
+
+    std::ofstream of(std::format("maxwell_p{}_npts{}.txt", precision, qnpts));
+
     for (auto T : Ts) {
         for (auto rho : rhos) {
 
@@ -30,8 +50,8 @@ int main() {
             auto [scale2, error2] = maxwell_2<real_t>(rho, T, Ye);
             auto [scale3, error3] = maxwell_3<real_t>(rho, T, Ye);
 
-            std::println("{:8.3g} {:8.3g} {:15.10g} {:15.10g} {:15.10g}",
-                         T, rho, error1, error2, error3);
+            of << std::format("{:8.3g} {:8.3g} {:15.10g} {:15.10g} {:15.10g}\n",
+                              T, rho, error1, error2, error3);
         }
     }
 
