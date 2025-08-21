@@ -7,6 +7,7 @@
 
 #include "eos_types.H"
 #include "real_type.H"
+#include "mp_math.H"
 #include "brent.H"
 #include "degeneracy_parameter_bounds.H"
 #include "fermi_integrals.H"
@@ -29,7 +30,7 @@ T n_e_constraint(T eta, T beta) {
     FermiIntegral<T> f32(1.5_rt, eta, beta);
     f32.evaluate(0);
 
-    T n_e = coeff * beta * std::sqrt(beta) * (f12.F + beta * f32.F);
+    T n_e = coeff * beta * mp::sqrt(beta) * (f12.F + beta * f32.F);
     return n_e;
 }
 
@@ -45,7 +46,7 @@ T n_p_constraint(T eta, T beta) {
     FermiIntegral<T> f32_pos(1.5_rt, eta_tilde, beta);
     f32_pos.evaluate(0);
 
-    T n_pos = coeff * beta * std::sqrt(beta) * (f12_pos.F + beta * f32_pos.F);
+    T n_pos = coeff * beta * mp::sqrt(beta) * (f12_pos.F + beta * f32_pos.F);
     return n_pos;
 }
 
@@ -121,7 +122,7 @@ get_eta_beta_derivs(const T A, const T c, const T p, const T beta,
     EtaBetaDerivs<T> dq;
     EtaBetaDerivs<T> dw;
 
-    T betap2 = std::pow(beta, p / 2.0_rt);
+    T betap2 = mp::pow(beta, p / 2.0_rt);
     T beta2 = beta * beta;
     T beta3 = beta * beta2;
     T beta4 = beta * beta3;
@@ -196,9 +197,9 @@ get_eta_thermo_derivs(const T Ye,
     deta.dT = -C::dbeta_dT * (dn_e.dbeta - dn_pos.dbeta) / (dn_e.deta - dn_pos.deta);
 
     // ∂²η/∂T²
-    deta.dT2 = (std::pow(C::dbeta_dT, 2.0_rt) * (dn_pos.dbeta2 - dn_e.dbeta2) +
+    deta.dT2 = (mp::pow(C::dbeta_dT, 2.0_rt) * (dn_pos.dbeta2 - dn_e.dbeta2) +
                 2.0_rt * C::dbeta_dT * deta.dT * (dn_pos.detadbeta - dn_e.detadbeta) +
-                std::pow(deta.dT, 2.0_rt) * (dn_pos.deta2 - dn_e.deta2)) /
+                mp::pow(deta.dT, 2.0_rt) * (dn_pos.deta2 - dn_e.deta2)) /
         (dn_e.deta - dn_pos.deta);
 
     // ∂²η/∂ρ∂T
@@ -268,7 +269,7 @@ public:
 
         T beta = temp * C::dbeta_dT;
 
-        T beta12 = std::sqrt(beta);
+        T beta12 = mp::sqrt(beta);
         T beta32 = beta * beta12;
         T beta52 = beta * beta32;
 
@@ -436,7 +437,7 @@ public:
 
         es.d2se_drho2 = -C::k * rho_inv * (es.eta * es.d2ne_drho2 + es.n_e * es.d2eta_drho2 + 2.0_rt * es.deta_drho * es.dne_drho) +
             2.0_rt * C::k * rho_inv * rho_inv * (es.eta * es.dne_drho + es.n_e * es.deta_drho) +
-            -2.0_rt * C::k * std::pow(rho_inv, 3) * es.eta * es.n_e +
+            -2.0_rt * C::k * mp::pow(rho_inv, 3) * es.eta * es.n_e +
             d2he_drho2 * temp_inv;
 
         es.d2se_dT2 = -C::k * rho_inv * (es.eta * es.d2ne_dT2 + es.n_e * es.d2eta_dT2 + 2.0_rt * es.deta_dT * es.dne_dT) +
@@ -456,7 +457,7 @@ public:
 
         es.d2sp_drho2 = C::k * rho_inv * (es.eta * es.d2np_drho2 + es.n_pos * es.d2eta_drho2 + 2.0_rt * es.deta_drho * es.dnp_drho) +
             -2.0_rt * C::k * rho_inv * rho_inv * (es.eta * es.dnp_drho + es.n_pos * es.deta_drho) +
-            2.0_rt * C::k * std::pow(rho_inv, 3) * es.eta * es.n_pos +
+            2.0_rt * C::k * mp::pow(rho_inv, 3) * es.eta * es.n_pos +
             d2hp_drho2 * temp_inv;
 
         es.d2sp_dT2 = C::k * rho_inv * (es.eta * es.d2np_dT2 + es.n_pos * es.d2eta_dT2 + 2.0_rt * es.deta_dT * es.dnp_dT) +

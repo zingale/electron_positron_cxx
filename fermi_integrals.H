@@ -27,6 +27,7 @@
 #include <ranges>
 
 #include "real_type.H"
+#include "mp_math.H"
 
 #if defined(QUAD50)
 #include "quadrature_weights_50.H"
@@ -66,7 +67,7 @@ class BreakPoints {
 public:
 
     explicit BreakPoints(int eta_order) :
-        max_exponent{std::trunc(std::log(std::numeric_limits<T>::max()))}
+        max_exponent{mp::trunc(mp::log(std::numeric_limits<T>::max()))}
     {
 
         if (eta_order == 0) {
@@ -186,7 +187,7 @@ public:
         if (term > max_exponent) {
             xi = eta - D;
         } else {
-            xi = std::log1p(std::exp(term)) / sigma;
+            xi = mp::log1p(mp::exp(term)) / sigma;
         }
 
         T X_a = ((a[0] + xi * (b[0] + xi * c[0])) /
@@ -242,7 +243,7 @@ public:
     T d2F_dbeta2{};
 
     FermiIntegral(T _k, T _eta, T _beta) :
-        max_exponent{std::trunc(std::log(std::numeric_limits<T>::max()))},
+        max_exponent{mp::trunc(mp::log(std::numeric_limits<T>::max()))},
         k(_k), eta(_eta), beta(_beta)
     {}
 
@@ -257,8 +258,8 @@ private:
         // in the conversion from x to z).
 
         T xsq = x * x;
-        T sqrt_term = std::sqrt(1.0_rt + 0.5_rt * xsq * beta);
-        T num = 2.0_rt * std::pow(x, 2.0_rt * k + 1.0_rt) * sqrt_term;
+        T sqrt_term = mp::sqrt(1.0_rt + 0.5_rt * xsq * beta);
+        T num = 2.0_rt * mp::pow(x, 2.0_rt * k + 1.0_rt) * sqrt_term;
 
         // this is what we are usually exponentiating
         T delta = xsq - eta;
@@ -267,12 +268,12 @@ private:
         // which is 1.0 / (2.0 * (1.0 + cosh(delta))
         T inv_cosh_term{};
         if (std::abs(delta) < max_exponent) {
-            inv_cosh_term = 0.5_rt / (1.0_rt + std::cosh(delta));
+            inv_cosh_term = 0.5_rt / (1.0_rt + mp::cosh(delta));
             //inv_cosh_term = 1.0_rt / (2.0_rt + std::exp(-delta) + std::exp(delta));
         }
 
         // this is (exp(xsq - eta) - 1.0) / (exp(xsq - eta) + 1.0)
-        T tanh_half_delta = std::tanh(0.5_rt * delta);
+        T tanh_half_delta = mp::tanh(0.5_rt * delta);
 
         T denomi{};
         if (delta < -max_exponent) {
@@ -285,7 +286,7 @@ private:
                 //T inv_exp_delta = std::exp(-delta);
                 // 1 / (exp(x**2 - eta) + 1) rewritten
                 //denomi = inv_exp_delta / (1.0_rt + inv_exp_delta);
-                denomi = 1.0_rt / (1.0_rt + std::exp(delta));
+                denomi = 1.0_rt / (1.0_rt + mp::exp(delta));
             }
         }
 
@@ -301,7 +302,7 @@ private:
         } else if (eta_der == 0 && beta_der == 1) {
             // this is IB = 2 from Gong et al.
             // this corresponds to eq A.2 in terms of x**2
-            result = 0.5_rt * std::pow(x, 2.0_rt * k + 3.0_rt) / sqrt_term * denomi;
+            result = 0.5_rt * mp::pow(x, 2.0_rt * k + 3.0_rt) / sqrt_term * denomi;
 
         } else if (eta_der == 2 && beta_der == 0) {
             // this is IB = 3 from Gong et al.
@@ -311,12 +312,12 @@ private:
         } else if (eta_der == 1 && beta_der == 1) {
             // this is IB = 4 from Gong et al.
             // this corresponds to eq A.4 in terms of x**2
-            result = 0.5_rt * std::pow(x, 2.0_rt * k + 3.0_rt) * inv_cosh_term / sqrt_term;
+            result = 0.5_rt * mp::pow(x, 2.0_rt * k + 3.0_rt) * inv_cosh_term / sqrt_term;
 
         } else if (eta_der == 0 && beta_der == 2) {
             // this is IB = 5 from Gong et al.
             // this corresponds to eq A.5 in terms of x**2
-            result = -0.125_rt * std::pow(x, 2.0_rt * k + 5.0_rt) / std::pow(sqrt_term, 3) * denomi;
+            result = -0.125_rt * mp::pow(x, 2.0_rt * k + 5.0_rt) / mp::pow(sqrt_term, 3) * denomi;
         }
 
         return result;
@@ -329,8 +330,8 @@ private:
 
         // we will work in terms of x
 
-        T sqrt_term = std::sqrt(1.0_rt + 0.5_rt * x * beta);
-        T num = std::pow(x, k) * sqrt_term;
+        T sqrt_term = mp::sqrt(1.0_rt + 0.5_rt * x * beta);
+        T num = mp::pow(x, k) * sqrt_term;
 
         // this is what we are usually exponentiating
         T delta = x - eta;
@@ -339,12 +340,12 @@ private:
         // which is 1.0 / (2.0 * (1.0 + cosh(delta))
         T inv_cosh_term{};
         if (std::abs(delta) < max_exponent) {
-            inv_cosh_term = 0.5_rt / (1.0_rt + std::cosh(delta));
+            inv_cosh_term = 0.5_rt / (1.0_rt + mp::cosh(delta));
             //inv_cosh_term = 1.0_rt / (2.0_rt + std::exp(-delta) + std::exp(delta));
         }
 
         // this is (exp(x - eta) - 1.0) / (exp(x - eta) + 1.0)
-        T tanh_half_delta = std::tanh(0.5_rt * delta);
+        T tanh_half_delta = mp::tanh(0.5_rt * delta);
 
         T denomi{};
         if (delta < -max_exponent) {
@@ -356,7 +357,7 @@ private:
                 //T inv_exp_delta = std::exp(-delta);
                 // 1 / (exp(x - eta) + 1) rewritten
                 // denomi = inv_exp_delta / (1.0_rt + inv_exp_delta);
-                denomi = 1.0_rt / (1.0_rt + std::exp(delta));
+                denomi = 1.0_rt / (1.0_rt + mp::exp(delta));
             }
         }
 
@@ -372,7 +373,7 @@ private:
         } else if (eta_der == 0 && beta_der == 1) {
             // this is IB = 2 from Gong et al.
             // this corresponds to eq A.2
-            result = 0.25_rt * std::pow(x, k + 1.0_rt) / sqrt_term * denomi;
+            result = 0.25_rt * mp::pow(x, k + 1.0_rt) / sqrt_term * denomi;
 
         } else if (eta_der == 2 && beta_der == 0) {
             // this is IB = 3 from Gong et al.
@@ -382,12 +383,12 @@ private:
         } else if (eta_der == 1 && beta_der == 1) {
             // this is IB = 4 from Gong et al.
             // this corresponds to eq A.4
-            result = 0.25_rt * std::pow(x, k + 1.0_rt) * inv_cosh_term / sqrt_term;
+            result = 0.25_rt * mp::pow(x, k + 1.0_rt) * inv_cosh_term / sqrt_term;
 
         } else if (eta_der == 0 && beta_der == 2) {
             // this is IB = 5 from Gong et al.
             // this corresponds to eq A.5
-            result = -0.0625_rt * std::pow(x, k + 2.0_rt) / std::pow(sqrt_term, 3) * denomi;
+            result = -0.0625_rt * mp::pow(x, k + 2.0_rt) / mp::pow(sqrt_term, 3) * denomi;
         }
 
         return result;
@@ -466,7 +467,7 @@ private:
         BreakPoints<T> bp(eta_der);
         auto [S_1, S_2, S_3] = bp.get_points(eta);
 
-        auto I0 = compute_legendre(0, 0.0_rt, std::sqrt(S_1),
+        auto I0 = compute_legendre(0, 0.0_rt, mp::sqrt(S_1),
                                    eta_der, beta_der);
 
         auto I1 = compute_legendre(1, S_1, S_2,

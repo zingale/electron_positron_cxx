@@ -2,6 +2,7 @@
 #include <vector>
 
 #include "real_type.H"
+#include "mp_math.H"
 #include "electron_positron.H"
 #include "maxwell_relations.H"
 
@@ -17,10 +18,10 @@ int main() {
     real_t rho_max = 1.e10_rt;
     int npts = 71;
 
-    real_t dlogrho = (std::log10(rho_max) - std::log10(rho_min)) / static_cast<real_t>(npts-1);
+    real_t dlogrho = (std::log10(rho_max) - mp::log10(rho_min)) / static_cast<real_t>(npts-1);
 
     for (int i = 0; i < npts; ++i) {
-        rhos.push_back(std::pow(10.0_rt, std::log10(rho_min) + i * dlogrho));
+        rhos.push_back(mp::pow(10.0_rt, mp::log10(rho_min) + i * dlogrho));
     }
 
     for (auto T : Ts) {
