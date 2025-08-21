@@ -1,9 +1,6 @@
 name: check ifdefs
 
-on:
-  pull_request:
-    branches:
-      - development
+on: [pull_request]
 
 jobs:
   check-ifdefs:
