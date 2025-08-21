@@ -34,8 +34,20 @@ jobs:
       - name: report GCC version
         run: gcc --version
 
-      - name: Compile problems
+      - name: Compile problems with __float128
         run: |
           cd tests
-          make
+          make PRECISION=FLOAT128
+
+      - name: Compile problems with long double
+        run: |
+          cd tests
+          make clean
+          make PRECISION=LONG_DOUBLE
+
+      - name: Compile problems with double
+        run: |
+          cd tests
+          make clean
+          make PRECISION=DOUBLE
 
