@@ -7,12 +7,13 @@
 #include <utility>
 
 #include "real_type.H"
+#include "mp_math.H"
 
 namespace util {
 
     template <typename T>
     T rel_error(T a, T b) {
-        T err = std::abs(a - b) / std::abs(b);
+        T err = mp::abs(a - b) / mp::abs(b);
         return err;
     }
 
@@ -74,7 +75,7 @@ namespace util {
         auto s = std::format(fmt, printable_cast(std::forward<Args>(args))...);
         constexpr auto red = "\033[91m";
         constexpr auto reset = "\033[0m";
-        if (std::abs(static_cast<long double>(val)) > threshold) {
+        if (mp::abs(val) > threshold) {
             std::println("{}{}{}", red, s, reset);
         } else {
             std::println("{}", s);
@@ -103,7 +104,7 @@ namespace util {
 
         constexpr auto red = "\033[91m";
         constexpr auto reset = "\033[0m";
-        if (std::abs(val) > threshold) {
+        if (mp::abs(val) > threshold) {
             std::println("{}{}{}", red,
                          std::format(fmt, std::forward<Args>(args)...),
                          reset);

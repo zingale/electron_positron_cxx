@@ -250,7 +250,7 @@ int main() {
                     FermiIntegral<real_t> f(k, eta, beta);
                     f.evaluate(2);
 
-                    const real_t _h = (eta == 0) ? h : h * std::abs(eta);
+                    const real_t _h = (eta == 0) ? h : h * mp::abs(eta);
 
                     // check dF/dη
                     auto [diff, err] =
@@ -261,7 +261,7 @@ int main() {
                             return _f.F;
                         }, eta, _h);
 
-                    real_t rel_err = std::abs(f.dF_deta - diff) / std::abs(f.dF_deta);
+                    real_t rel_err = mp::abs(f.dF_deta - diff) / mp::abs(f.dF_deta);
 
                     util::threshold_println(rel_err,
                                             "k = {:5.2f}, eta = {:9.3f}, beta = {:9.3g}, dF/dη= {:15.8g}, error = {:15.8g}",
@@ -285,7 +285,7 @@ int main() {
                     FermiIntegral<real_t> f(k, eta, beta);
                     f.evaluate(2);
 
-                    const real_t _h = (beta == 0) ? 1.e-4_rt : h * std::abs(beta);
+                    const real_t _h = (beta == 0) ? 1.e-4_rt : h * mp::abs(beta);
 
                     // check dF/dβ
                     auto [diff, err] =
@@ -296,7 +296,7 @@ int main() {
                             return _f.F;
                         }, beta, _h);
 
-                    real_t rel_err = std::abs(f.dF_dbeta - diff) / std::abs(f.dF_dbeta);
+                    real_t rel_err = mp::abs(f.dF_dbeta - diff) / mp::abs(f.dF_dbeta);
 
                     util::threshold_println(rel_err,
                                             "k = {:5.2f}, eta = {:9.3f}, beta = {:9.3g}, dF/dβ = {:15.8g}, error = {:15.8g}",
@@ -320,7 +320,7 @@ int main() {
                     FermiIntegral<real_t> f(k, eta, beta);
                     f.evaluate(2);
 
-                    const real_t _h = (eta == 0) ? h : h * std::abs(eta);
+                    const real_t _h = (eta == 0) ? h : h * mp::abs(eta);
 
                     // check d²F/dη²
 
@@ -333,7 +333,7 @@ int main() {
                             return _f.F;
                         }, eta, _h);
 
-                    real_t rel_err = std::abs(f.d2F_deta2 - diff) / std::abs(f.d2F_deta2);
+                    real_t rel_err = mp::abs(f.d2F_deta2 - diff) / mp::abs(f.d2F_deta2);
 
                     // next do a first order deriv on dF/dη
                     auto [diff2, err2] =
@@ -344,7 +344,7 @@ int main() {
                             return _f.dF_deta;
                         }, eta, _h);
 
-                    real_t rel_err2 = std::abs(f.d2F_deta2 - diff2) / std::abs(f.d2F_deta2);
+                    real_t rel_err2 = mp::abs(f.d2F_deta2 - diff2) / mp::abs(f.d2F_deta2);
 
 
                     util::threshold_println(rel_err,
@@ -369,7 +369,7 @@ int main() {
                     FermiIntegral<real_t> f(k, eta, beta);
                     f.evaluate(2);
 
-                    const real_t _h = (beta == 0) ? h : h * std::abs(beta);
+                    const real_t _h = (beta == 0) ? h : h * mp::abs(beta);
 
                     // check d²F/dβ²
 
@@ -382,7 +382,7 @@ int main() {
                             return _f.F;
                         }, beta, _h);
 
-                    real_t rel_err = std::abs(f.d2F_dbeta2 - diff) / std::abs(f.d2F_dbeta2);
+                    real_t rel_err = mp::abs(f.d2F_dbeta2 - diff) / mp::abs(f.d2F_dbeta2);
 
                     // next do a second order deriv on dF/dβ
                     auto [diff2, err2] =
@@ -393,7 +393,7 @@ int main() {
                             return _f.dF_dbeta;
                         }, beta, _h);
 
-                    real_t rel_err2 = std::abs(f.d2F_dbeta2 - diff2) / std::abs(f.d2F_dbeta2);
+                    real_t rel_err2 = mp::abs(f.d2F_dbeta2 - diff2) / mp::abs(f.d2F_dbeta2);
 
                     util::threshold_println(rel_err,
                                             "k = {:5.2f}, eta = {:9.3f}, beta = {:9.3g}, d²F/dβ² = {:15.8g}, error (D2F) = {:15.8g}, error (DF') = {:15.8g}",

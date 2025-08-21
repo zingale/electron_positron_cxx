@@ -267,7 +267,7 @@ private:
         // this is 1.0 / (2.0 + exp(-delta) + exp(delta)
         // which is 1.0 / (2.0 * (1.0 + cosh(delta))
         T inv_cosh_term{};
-        if (std::abs(delta) < max_exponent) {
+        if (mp::abs(delta) < max_exponent) {
             inv_cosh_term = 0.5_rt / (1.0_rt + mp::cosh(delta));
             //inv_cosh_term = 1.0_rt / (2.0_rt + std::exp(-delta) + std::exp(delta));
         }
@@ -339,7 +339,7 @@ private:
         // this is 1.0 / (2.0 + exp(-delta) + exp(delta)
         // which is 1.0 / (2.0 * (1.0 + cosh(delta))
         T inv_cosh_term{};
-        if (std::abs(delta) < max_exponent) {
+        if (mp::abs(delta) < max_exponent) {
             inv_cosh_term = 0.5_rt / (1.0_rt + mp::cosh(delta));
             //inv_cosh_term = 1.0_rt / (2.0_rt + std::exp(-delta) + std::exp(delta));
         }

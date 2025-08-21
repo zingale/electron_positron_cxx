@@ -35,7 +35,7 @@ test_se_rho_derivs() {
                     return es_eps.s_e;
                 }, rho, drho);
 
-            real_t err = std::abs(es.dse_drho - deriv) / std::abs(es.dse_drho);
+            real_t err = mp::abs(es.dse_drho - deriv) / mp::abs(es.dse_drho);
             util::threshold_println(err,
                                     "ρ = {:8.3g} T = {:8.3g},  ∂s⁻/∂ρ = {:15.8g},  error = {:11.5g}",
                                     rho, T, es.dse_drho, err);
@@ -68,7 +68,7 @@ test_sp_rho_derivs() {
                     return es_eps.s_pos;
                 }, rho, drho);
 
-            real_t err = std::abs(es.dsp_drho - deriv) / std::abs(es.dsp_drho);
+            real_t err = mp::abs(es.dsp_drho - deriv) / mp::abs(es.dsp_drho);
             util::threshold_println(err,
                                     "ρ = {:8.3g} T = {:8.3g},  ∂s⁺/∂ρ = {:15.8g},  error = {:11.5g}",
                                     rho, T, es.dsp_drho, err);
@@ -103,9 +103,9 @@ test_se_T_derivs() {
             real_t err{};
             if (es.dse_dT == 0.0_rt) {
                 const real_t scale = es.s_e / T;
-                err = std::abs(es.dse_dT - deriv / scale) ;
+                err = mp::abs(es.dse_dT - deriv / scale) ;
             } else {
-                err = std::abs(es.dse_dT - deriv) / std::abs(es.dse_dT);
+                err = mp::abs(es.dse_dT - deriv) / mp::abs(es.dse_dT);
             }
             util::threshold_println(err,
                                     "ρ = {:8.3g} T = {:8.3g},  ∂s⁻/∂T = {:15.8g},  error = {:11.5g}",
@@ -142,9 +142,9 @@ test_sp_T_derivs() {
             real_t err{};
             if (es.dsp_dT == 0.0_rt) {
                 const real_t scale = es.s_pos / T;
-                err = std::abs(es.dsp_dT - deriv / scale) ;
+                err = mp::abs(es.dsp_dT - deriv / scale) ;
             } else {
-                err = std::abs(es.dsp_dT - deriv) / std::abs(es.dsp_dT);
+                err = mp::abs(es.dsp_dT - deriv) / mp::abs(es.dsp_dT);
             }
             util::threshold_println(err,
                                     "ρ = {:8.3g} T = {:8.3g},  ∂s⁺/∂T = {:15.8g},  error = {:11.5g}",
@@ -177,7 +177,7 @@ test_se_rho2_derivs() {
                     return es_eps.s_e;
                 }, rho, drho);
 
-            real_t err = std::abs(es.d2se_drho2 - deriv) / std::abs(es.d2se_drho2);
+            real_t err = mp::abs(es.d2se_drho2 - deriv) / mp::abs(es.d2se_drho2);
             util::threshold_println(err,
                                     "ρ = {:8.3g} T = {:8.3g},  ∂²s⁻/∂ρ² = {:15.8g},  error = {:11.5g}",
                                     rho, T, es.d2se_drho2, err);
@@ -210,7 +210,7 @@ test_sp_rho2_derivs() {
                     return es_eps.s_pos;
                 }, rho, drho);
 
-            real_t err = std::abs(es.d2sp_drho2 - deriv) / std::abs(es.d2sp_drho2);
+            real_t err = mp::abs(es.d2sp_drho2 - deriv) / mp::abs(es.d2sp_drho2);
             util::threshold_println(err,
                                     "ρ = {:8.3g} T = {:8.3g},  ∂²s⁺/∂ρ² = {:15.8g},  error = {:11.5g}",
                                     rho, T, es.d2sp_drho2, err);
@@ -246,9 +246,9 @@ test_se_T2_derivs() {
             real_t err{};
             if (es.d2se_dT2 == 0.0_rt) {
                 const real_t scale = es.s_e / T / T;
-                err = std::abs(es.d2se_dT2 - deriv / scale) ;
+                err = mp::abs(es.d2se_dT2 - deriv / scale) ;
             } else {
-                err = std::abs(es.d2se_dT2 - deriv) / std::abs(es.d2se_dT2);
+                err = mp::abs(es.d2se_dT2 - deriv) / mp::abs(es.d2se_dT2);
             }
             util::threshold_println(err,
                                     "ρ = {:8.3g} T = {:8.3g},  ∂²s⁻/∂T² = {:15.8g},  error = {:11.5g}",
@@ -285,9 +285,9 @@ test_sp_T2_derivs() {
             real_t err{};
             if (es.d2sp_dT2 == 0.0_rt) {
                 const real_t scale = es.s_pos / T / T;
-                err = std::abs(es.d2sp_dT2 - deriv / scale) ;
+                err = mp::abs(es.d2sp_dT2 - deriv / scale) ;
             } else {
-                err = std::abs(es.d2sp_dT2 - deriv) / std::abs(es.d2sp_dT2);
+                err = mp::abs(es.d2sp_dT2 - deriv) / mp::abs(es.d2sp_dT2);
             }
             util::threshold_println(err,
                                     "ρ = {:8.3g} T = {:8.3g},  ∂²s⁺/∂T² = {:15.8g},  error = {:11.5g}",
@@ -323,9 +323,9 @@ test_se_rhoT_derivs() {
             real_t err{};
             if (es.d2se_drhodT == 0.0_rt) {
                 const real_t scale = es.s_e / rho / T;
-                err = std::abs(es.d2se_drhodT - deriv / scale) ;
+                err = mp::abs(es.d2se_drhodT - deriv / scale) ;
             } else {
-                err = std::abs(es.d2se_drhodT - deriv) / std::abs(es.d2se_drhodT);
+                err = mp::abs(es.d2se_drhodT - deriv) / mp::abs(es.d2se_drhodT);
             }
             util::threshold_println(err,
                                     "ρ = {:8.3g} T = {:8.3g},  ∂²s⁻/∂ρ∂T = {:15.8g},  error = {:11.5g}",
@@ -362,9 +362,9 @@ test_sp_rhoT_derivs() {
             real_t err{};
             if (es.d2sp_drhodT == 0.0_rt) {
                 const real_t scale = es.s_pos / rho / T;
-                err = std::abs(es.d2sp_drhodT - deriv / scale) ;
+                err = mp::abs(es.d2sp_drhodT - deriv / scale) ;
             } else {
-                err = std::abs(es.d2sp_drhodT - deriv) / std::abs(es.d2sp_drhodT);
+                err = mp::abs(es.d2sp_drhodT - deriv) / mp::abs(es.d2sp_drhodT);
             }
             util::threshold_println(err,
                                     "ρ = {:8.3g} T = {:8.3g},  ∂²s⁺/∂ρ∂T = {:15.8g},  error = {:11.5g}",

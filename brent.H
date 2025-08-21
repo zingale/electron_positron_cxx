@@ -9,6 +9,7 @@
 #include <stdexcept>
 
 #include "real_type.H"
+#include "mp_math.H"
 
 using namespace literals;
 
@@ -46,7 +47,7 @@ T brent(const std::function<T(T)>& f, T a, T b, T atol=1.e-100_rt) {
 
     while (true) {
 
-        if (std::abs(fc) < std::abs(fb)) {
+        if (mp::abs(fc) < mp::abs(fb)) {
             // make |f(b)| the smallest
             a = b;
             fa = fb;
@@ -64,14 +65,14 @@ T brent(const std::function<T(T)>& f, T a, T b, T atol=1.e-100_rt) {
         // we create a tolerance that is a combination
         // of a relative tolerance (twice machine epsilon)
         // and an absolute tolerance
-        T tol = 2 * std::numeric_limits<T>::epsilon() * std::abs(b) + atol;
+        T tol = 2 * std::numeric_limits<T>::epsilon() * mp::abs(b) + atol;
 
         // m here is (currently) the increment that when added to b
         // would give bisection
 
         T m = 0.5_rt * (c - b);
 
-        if (std::abs(m) <= tol || fb == 0.0_rt) {
+        if (mp::abs(m) <= tol || fb == 0.0_rt) {
             // we've converged
             return b;
         }
@@ -79,7 +80,7 @@ T brent(const std::function<T(T)>& f, T a, T b, T atol=1.e-100_rt) {
         T p{};
         T q{};
 
-        if (std::abs(e) >= tol && std::abs(fa) > std::abs(fb)) {
+        if (mp::abs(e) >= tol && mp::abs(fa) > mp::abs(fb)) {
             // attempt interpolation
             if (a == c) {
                 // secant method
@@ -102,7 +103,7 @@ T brent(const std::function<T(T)>& f, T a, T b, T atol=1.e-100_rt) {
             }
 
             // accept interpolation only if it falls within bounds
-            if (2.0_rt * p < std::min(3.0_rt * m * q - std::abs(tol * q), std::abs(e * q))) {
+            if (2.0_rt * p < std::min(3.0_rt * m * q - mp::abs(tol * q), mp::abs(e * q))) {
                 e = d;
                 d = p / q;
             } else {
@@ -118,7 +119,7 @@ T brent(const std::function<T(T)>& f, T a, T b, T atol=1.e-100_rt) {
 
         a = b;
         fa = fb;
-        if (std::abs(d) > tol) {
+        if (mp::abs(d) > tol) {
             b += d;
         } else {
             b += (m > 0.0_rt ? tol : -tol);

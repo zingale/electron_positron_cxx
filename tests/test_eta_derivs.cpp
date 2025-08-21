@@ -33,7 +33,7 @@ test_eta_rho_derivs() {
                     return es_eps.eta;
                 }, rho, drho);
 
-            real_t err = std::abs(es.deta_drho - deriv) / std::abs(es.deta_drho);
+            real_t err = mp::abs(es.deta_drho - deriv) / mp::abs(es.deta_drho);
             util::threshold_println(err,
                                     "ρ = {:8.3g} T = {:8.3g} η = {:11.5}:  ∂η/∂ρ = {:11.5g},  error = {:11.5g}",
                                     rho, T, es.eta, es.deta_drho, err);
@@ -63,7 +63,7 @@ test_eta_T_derivs() {
                 }, T, dT);
 
             real_t err{};
-            err = std::abs(es.deta_dT - deriv) / std::abs(es.deta_dT);
+            err = mp::abs(es.deta_dT - deriv) / mp::abs(es.deta_dT);
             util::threshold_println(err,
                                     "ρ = {:8.3g} T = {:8.3g} η = {:11.5}:  ∂η/∂T = {:11.5g},  error = {:11.5g}",
                                     rho, T, es.eta, es.deta_dT, err);
@@ -95,7 +95,7 @@ test_eta_rho2_derivs() {
                     return es_eps.eta;
                 }, rho, drho);
 
-            real_t err2 = std::abs(es.d2eta_drho2 - deriv2) / std::abs(es.d2eta_drho2);
+            real_t err2 = mp::abs(es.d2eta_drho2 - deriv2) / mp::abs(es.d2eta_drho2);
 
             // D(deta/drho)
 
@@ -105,7 +105,7 @@ test_eta_rho2_derivs() {
                     return es_eps.deta_drho;
                 }, rho, drho);
 
-            real_t err = std::abs(es.d2eta_drho2 - deriv) / std::abs(es.d2eta_drho2);
+            real_t err = mp::abs(es.d2eta_drho2 - deriv) / mp::abs(es.d2eta_drho2);
 
             util::threshold_println(err,
                                     "ρ = {:8.3g} T = {:8.3g} η = {:11.5}:  ∂²η/∂ρ² = {:11.5g},  D²(η) error = {:11.5g},  D(∂η/∂ρ) error = {:11.5g}",
@@ -138,7 +138,7 @@ test_eta_T2_derivs() {
                     return es_eps.eta;
                 }, T, dT);
 
-            real_t err2 = std::abs(es.d2eta_dT2 - deriv2) / std::abs(es.d2eta_dT2);
+            real_t err2 = mp::abs(es.d2eta_dT2 - deriv2) / mp::abs(es.d2eta_dT2);
 
             // D(deta/dT)
 
@@ -148,7 +148,7 @@ test_eta_T2_derivs() {
                     return es_eps.deta_dT;
                 }, T, dT);
 
-            real_t err = std::abs(es.d2eta_dT2 - deriv) / std::abs(es.d2eta_dT2);
+            real_t err = mp::abs(es.d2eta_dT2 - deriv) / mp::abs(es.d2eta_dT2);
 
             util::threshold_println(err,
                                     "ρ = {:8.3g} T = {:8.3g} η = {:11.5}:  ∂²η/∂T² = {:11.5g},  D²(η) error = {:11.5g}  D(∂η/∂T) error = {:11.5g}",
