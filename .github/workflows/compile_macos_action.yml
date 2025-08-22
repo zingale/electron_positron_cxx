@@ -1,0 +1,32 @@
+name: Test compilation
+
+on: [pull_request]
+jobs:
+  compilation:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Install dependencies
+        run: |
+          brew update
+          brew install make
+
+      - name: Print system info
+        run: |
+          echo '::group::CPU info'
+          sysctl -a | grep machdep.cpu
+          echo '::endgroup::'
+          echo '::group::build tool versions'
+          xcode-select -p
+          clang++ --version
+          python --version
+          make --version | head -1
+          echo '::endgroup::'
+
+      - name: Compile problems with long double
+        run: |
+          cd tests
+          make clean
+          make PRECISION=LONG_DOUBLE COMP=clang
+
