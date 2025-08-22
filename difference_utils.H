@@ -8,6 +8,7 @@
 #include <utility>
 
 #include "real_type.H"
+#include "mp_math.H"
 
 using namespace literals;
 
@@ -168,13 +169,13 @@ namespace fd {
             // for the current column n, fill in all the rows m > 0
             for (int m = 1; m <= n; ++m) {
 
-                A[m][n] = (std::pow(jump * jump, m) * A[m-1][n] - A[m-1][n-1]) /
-                    (std::pow(jump * jump, m) - 1);
+                A[m][n] = (mp::pow(jump * jump, m) * A[m-1][n] - A[m-1][n-1]) /
+                    (mp::pow(jump * jump, m) - 1);
 
                 // estimate the error so far, using the current row
                 // and the estimates in the row above us
-                T err_m = std::max(std::abs(A[m][n] - A[m-1][n]),
-                                   std::abs(A[m][n] - A[m-1][n-1]));
+                T err_m = std::max(mp::abs(A[m][n] - A[m-1][n]),
+                                   mp::abs(A[m][n] - A[m-1][n-1]));
 
                 if (err_m < err) {
                     err = err_m;
@@ -185,7 +186,7 @@ namespace fd {
             // at this point, A(n, n) should be the most accurate estimate
             // for the derivative, but it's possible that things have
             // become worse -- let's check
-            if (std::abs(A[n][n] - A[n-1][n-1]) > 2.0_rt * err) {
+            if (mp::abs(A[n][n] - A[n-1][n-1]) > 2.0_rt * err) {
                 break;
             }
 
@@ -229,13 +230,13 @@ namespace fd {
             // for the current column n, fill in all the rows m > 0
             for (int m = 1; m <= n; ++m) {
 
-                A[m][n] = (std::pow(jump * jump, m) * A[m-1][n] - A[m-1][n-1]) /
-                    (std::pow(jump * jump, m) - 1);
+                A[m][n] = (mp::pow(jump * jump, m) * A[m-1][n] - A[m-1][n-1]) /
+                    (mp::pow(jump * jump, m) - 1);
 
                 // estimate the error so far, using the current row
                 // and the estimates in the row above us
-                T err_m = std::max(std::abs(A[m][n] - A[m-1][n]),
-                                   std::abs(A[m][n] - A[m-1][n-1]));
+                T err_m = std::max(mp::abs(A[m][n] - A[m-1][n]),
+                                   mp::abs(A[m][n] - A[m-1][n-1]));
 
                 if (err_m < err) {
                     err = err_m;
@@ -246,7 +247,7 @@ namespace fd {
             // at this point, A(n, n) should be the most accurate estimate
             // for the derivative, but it's possible that things have
             // become worse -- let's check
-            if (std::abs(A[n][n] - A[n-1][n-1]) > 2.0_rt * err) {
+            if (mp::abs(A[n][n] - A[n-1][n-1]) > 2.0_rt * err) {
                 break;
             }
 

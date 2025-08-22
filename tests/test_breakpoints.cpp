@@ -1,8 +1,7 @@
 #include "fermi_integrals.H"
 
-#include <print>
-
 #include "real_type.H"
+#include "util.H"
 
 using namespace literals;
 
@@ -12,6 +11,6 @@ int main() {
 
     auto [s1, s2, s3] = b.get_points(100.0);
 
-    std::print("s1 = {}, s2 = {}, s3 = {}", s1, s2, s3);
+    util::println("s1 = {}, s2 = {}, s3 = {}", s1, s2, s3);
 
 }

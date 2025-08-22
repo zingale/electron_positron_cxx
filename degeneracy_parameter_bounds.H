@@ -3,19 +3,19 @@
 
 #include <algorithm>
 #include <array>
-#include <print>
 
 #include "real_type.H"
+#include "util.H"
 
 using namespace literals;
 
 namespace bounds {
 
-    constexpr std::array<real_t, 10> Ts{
+    const std::array<real_t, 10> Ts{
         {1.e+03_rt, 1.e+04_rt, 1.e+05_rt, 1.e+06_rt, 1.e+07_rt,
          1.e+08_rt, 1.e+09_rt, 1.e+10_rt, 1.e+11_rt, 1.e+12_rt}};
 
-    constexpr std::array<real_t, 24> rhoYes{
+    const std::array<real_t, 24> rhoYes{
         {1.e-12_rt, 1.e-11_rt, 1.e-10_rt, 1.e-09_rt, 1.e-08_rt, 1.e-07_rt,
          1.e-06_rt, 1.e-05_rt, 1.e-04_rt, 1.e-03_rt, 1.e-02_rt, 1.e-01_rt,
          1.e+00_rt, 1.e+01_rt, 1.e+02_rt, 1.e+03_rt, 1.e+04_rt, 1.e+05_rt,
@@ -23,7 +23,7 @@ namespace bounds {
 
     // degeneracy parameters for electrons + positrons
 
-    constexpr std::array<std::array<real_t, 10>, 24> eta_pos{
+    const std::array<std::array<real_t, 10>, 24> eta_pos{
         {{   -19.35_rt,    -22.81_rt,    -26.26_rt,    -29.71_rt,    -33.17_rt,    -36.65_rt,    -40.37_rt,    -45.29_rt,    -51.75_rt,     -58.6_rt},
          {   -17.05_rt,     -20.5_rt,    -23.96_rt,    -27.41_rt,    -30.87_rt,    -34.35_rt,    -38.06_rt,    -42.99_rt,    -49.44_rt,     -56.3_rt},
          {   -14.75_rt,     -18.2_rt,    -21.65_rt,    -25.11_rt,    -28.56_rt,    -32.05_rt,    -35.76_rt,    -40.69_rt,    -47.14_rt,       -54_rt},
@@ -73,7 +73,7 @@ namespace bounds {
         }
 
         if (it < 0 || ir < 0) {
-            std::println("thermodynamic state (T = {}, rhoYe = {}) out of bounds", temp0, rhoYe0);
+            util::println("thermodynamic state (T = {}, rhoYe = {}) out of bounds", temp0, rhoYe0);
             abort();
         }
 

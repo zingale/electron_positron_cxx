@@ -3,12 +3,14 @@
 #include <fstream>
 
 #include "real_type.H"
+#include "mp_math.H"
 #include "electron_positron.H"
 #include "maxwell_relations.H"
+#include "util.H"
 
 int main() {
 
-    constexpr real_t Ye{0.5_rt};
+    const real_t Ye{0.5_rt};
 
     const std::vector<real_t> Ts{1.e4, 1.e5, 1.e6, 1.e7, 1.e8, 1.e9, 1.e10, 1.e11};
 
@@ -17,10 +19,10 @@ int main() {
     real_t rho_max = 1.e10_rt;
     int npts = 71;
 
-    real_t dlogrho = (std::log10(rho_max) - std::log10(rho_min)) / static_cast<real_t>(npts-1);
+    real_t dlogrho = (mp::log10(rho_max) - mp::log10(rho_min)) / static_cast<real_t>(npts-1);
 
     for (int i = 0; i < npts; ++i) {
-        rhos.push_back(std::pow(10.0_rt, std::log10(rho_min) + i * dlogrho));
+        rhos.push_back(mp::pow(10.0_rt, mp::log10(rho_min) + i * dlogrho));
     }
 
     std::string qnpts;
@@ -36,12 +38,15 @@ int main() {
     qnpts("400");
 #endif
 
-#if defined(USE_FLOAT128)
-    std::string precision("128");
+    std::string precision;
+#if defined(USE_BOOST256)
+    precision = "256";
+#elif defined(USE_FLOAT128)
+    precision = "128";
 #elif defined(USE_LONG_DOUBLE)
-    std::string precision("80");
+    precision = "80";
 #else
-    std::string precision("64");
+    precision = "64";
 #endif
 
     std::ofstream of(std::format("maxwell_p{}_npts{}.txt", precision, qnpts));
@@ -53,8 +58,8 @@ int main() {
             auto [scale2, error2] = maxwell_2<real_t>(rho, T, Ye);
             auto [scale3, error3] = maxwell_3<real_t>(rho, T, Ye);
 
-            of << std::format("{:8.3g} {:8.3g} {:15.10g} {:15.10g} {:15.10g}\n",
-                              T, rho, error1, error2, error3);
+            of << util::format("{:8.3g} {:8.3g} {:15.10g} {:15.10g} {:15.10g}\n",
+                               T, rho, error1, error2, error3);
         }
     }
 

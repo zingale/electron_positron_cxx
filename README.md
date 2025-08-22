@@ -21,12 +21,15 @@ This needs a C++23 compiler.  For GCC, you need GCC >= 15.1
 
 The precision can be changed via the `PRECISION` make variable, e.g.,
 
+* `make PRECISION=BOOST256` builds with 256-bit precision (using
+  the boost multiprecision library).
+
 * `make PRECISION=FLOAT128` builds with 128-bit precision (using the
-  `__float128` data type.
+  `__float128` data type).
 
   Note: at the moment, this is only supported with GCC, and not
-  CLANG because of an incompatibility with 128-bit floats and
-  `std::println()` in C++ under CLANG.
+  LLVM/clang++ because clang++'s math functions don't work with
+  `__float128` directly.
 
 * `make PRECISION=LONG_DOUBLE` builds with a `long double`, which is
   80 bits on x86 architectures.
@@ -65,8 +68,8 @@ make
 An example usage is:
 
 ```
-$ echo 1.e-2 1.e9 0.5 | ./eos 
-Enter rho, T, Ye (space-separated): 
+$ echo 1.e-2 1.e9 0.5 | ./eos
+Enter rho, T, Ye (space-separated):
 
  ρ =            0.01       T  =           1e+09      Yₑ  =             0.5
 

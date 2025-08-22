@@ -1,15 +1,15 @@
 #include <print>
 
 #include <array>
-#include <cmath>
 
 #include "real_type.H"
 #include "electron_positron.H"
 #include "difference_utils.H"
 #include "util.H"
+#include "mp_math.H"
 
-constexpr std::array<real_t, 4> Ts{1.e4_rt, 1.e6_rt, 1.e8_rt, 5.e9_rt};
-constexpr std::array<real_t, 5> rhos{1.e-2_rt, 1.e2_rt, 1.e5_rt, 1.e7_rt, 5.e9_rt};
+const std::array<real_t, 4> Ts{1.e4_rt, 1.e6_rt, 1.e8_rt, 5.e9_rt};
+const std::array<real_t, 5> rhos{1.e-2_rt, 1.e2_rt, 1.e5_rt, 1.e7_rt, 5.e9_rt};
 
 // ∂e/∂ρ
 
@@ -17,9 +17,9 @@ void
 test_ee_rho_derivs() {
 
     ElectronPositronEOS<real_t> eos;
-    constexpr real_t Ye{0.5_rt};
+    const real_t Ye{0.5_rt};
 
-    constexpr real_t eps{0.01_rt};
+    const real_t eps{0.01_rt};
 
     std::println("");
     util::green_println("testing ∂e⁻/∂ρ via differencing");
@@ -34,7 +34,7 @@ test_ee_rho_derivs() {
                     return es_eps.e_e;
                 }, rho, drho);
 
-            real_t err = std::abs(es.dee_drho - deriv) / std::abs(es.dee_drho);
+            real_t err = mp::abs(es.dee_drho - deriv) / mp::abs(es.dee_drho);
             util::threshold_println(err,
                                     "ρ = {:8.3g} T = {:8.3g},  ∂e⁻/∂ρ = {:15.8g},  error = {:11.5g}",
                                     rho, T, es.dee_drho, err);
@@ -47,9 +47,9 @@ void
 test_ep_rho_derivs() {
 
     ElectronPositronEOS<real_t> eos;
-    constexpr real_t Ye{0.5_rt};
+    const real_t Ye{0.5_rt};
 
-    constexpr real_t eps{0.01_rt};
+    const real_t eps{0.01_rt};
 
     std::println("");
     util::green_println("testing ∂e⁺/∂ρ via differencing");
@@ -67,7 +67,7 @@ test_ep_rho_derivs() {
                     return es_eps.e_pos;
                 }, rho, drho);
 
-            real_t err = std::abs(es.dep_drho - deriv) / std::abs(es.dep_drho);
+            real_t err = mp::abs(es.dep_drho - deriv) / mp::abs(es.dep_drho);
             util::threshold_println(err,
                                     "ρ = {:8.3g} T = {:8.3g},  ∂e⁺/∂ρ = {:15.8g},  error = {:11.5g}",
                                     rho, T, es.dep_drho, err);
@@ -82,9 +82,9 @@ void
 test_ee_T_derivs() {
 
     ElectronPositronEOS<real_t> eos;
-    constexpr real_t Ye{0.5_rt};
+    const real_t Ye{0.5_rt};
 
-    constexpr real_t eps{0.01_rt};
+    const real_t eps{0.01_rt};
 
     std::println("");
     util::green_println("testing ∂e⁻/∂T via differencing");
@@ -102,9 +102,9 @@ test_ee_T_derivs() {
             real_t err{};
             if (es.dee_dT == 0.0_rt) {
                 const real_t scale = es.e_e / T;
-                err = std::abs(es.dee_dT - deriv / scale) ;
+                err = mp::abs(es.dee_dT - deriv / scale) ;
             } else {
-                err = std::abs(es.dee_dT - deriv) / std::abs(es.dee_dT);
+                err = mp::abs(es.dee_dT - deriv) / mp::abs(es.dee_dT);
             }
             util::threshold_println(err,
                                     "ρ = {:8.3g} T = {:8.3g},  ∂e⁻/∂T = {:15.8g},  error = {:11.5g}",
@@ -118,9 +118,9 @@ void
 test_ep_T_derivs() {
 
     ElectronPositronEOS<real_t> eos;
-    constexpr real_t Ye{0.5_rt};
+    const real_t Ye{0.5_rt};
 
-    constexpr real_t eps{0.01_rt};
+    const real_t eps{0.01_rt};
 
     std::println("");
     util::green_println("testing ∂e⁺/∂T via differencing");
@@ -141,9 +141,9 @@ test_ep_T_derivs() {
             real_t err{};
             if (es.dep_dT == 0.0_rt) {
                 const real_t scale = es.e_pos / T;
-                err = std::abs(es.dep_dT - deriv / scale) ;
+                err = mp::abs(es.dep_dT - deriv / scale) ;
             } else {
-                err = std::abs(es.dep_dT - deriv) / std::abs(es.dep_dT);
+                err = mp::abs(es.dep_dT - deriv) / mp::abs(es.dep_dT);
             }
             util::threshold_println(err,
                                     "ρ = {:8.3g} T = {:8.3g},  ∂e⁺/∂T = {:15.8g},  error = {:11.5g}",
@@ -159,9 +159,9 @@ void
 test_ee_rho2_derivs() {
 
     ElectronPositronEOS<real_t> eos;
-    constexpr real_t Ye{0.5_rt};
+    const real_t Ye{0.5_rt};
 
-    constexpr real_t eps{0.01_rt};
+    const real_t eps{0.01_rt};
 
     std::println("");
     util::green_println("testing ∂²e⁻/∂ρ² via differencing");
@@ -176,7 +176,7 @@ test_ee_rho2_derivs() {
                     return es_eps.e_e;
                 }, rho, drho);
 
-            real_t err = std::abs(es.d2ee_drho2 - deriv) / std::abs(es.d2ee_drho2);
+            real_t err = mp::abs(es.d2ee_drho2 - deriv) / mp::abs(es.d2ee_drho2);
             util::threshold_println(err,
                                     "ρ = {:8.3g} T = {:8.3g},  ∂²e⁻/∂ρ² = {:15.8g},  error = {:11.5g}",
                                     rho, T, es.d2ee_drho2, err);
@@ -189,9 +189,9 @@ void
 test_ep_rho2_derivs() {
 
     ElectronPositronEOS<real_t> eos;
-    constexpr real_t Ye{0.5_rt};
+    const real_t Ye{0.5_rt};
 
-    constexpr real_t eps{0.01_rt};
+    const real_t eps{0.01_rt};
 
     std::println("");
     util::green_println("testing ∂²e⁺/∂ρ² via differencing");
@@ -209,7 +209,7 @@ test_ep_rho2_derivs() {
                     return es_eps.e_pos;
                 }, rho, drho);
 
-            real_t err = std::abs(es.d2ep_drho2 - deriv) / std::abs(es.d2ep_drho2);
+            real_t err = mp::abs(es.d2ep_drho2 - deriv) / mp::abs(es.d2ep_drho2);
             util::threshold_println(err,
                                     "ρ = {:8.3g} T = {:8.3g},  ∂²e⁺/∂ρ² = {:15.8g},  error = {:11.5g}",
                                     rho, T, es.d2ep_drho2, err);
@@ -225,9 +225,9 @@ void
 test_ee_T2_derivs() {
 
     ElectronPositronEOS<real_t> eos;
-    constexpr real_t Ye{0.5_rt};
+    const real_t Ye{0.5_rt};
 
-    constexpr real_t eps{0.01_rt};
+    const real_t eps{0.01_rt};
 
     std::println("");
     util::green_println("testing ∂²e⁻/∂T² via differencing");
@@ -245,9 +245,9 @@ test_ee_T2_derivs() {
             real_t err{};
             if (es.d2ee_dT2 == 0.0_rt) {
                 const real_t scale = es.e_e / T / T;
-                err = std::abs(es.d2ee_dT2 - deriv / scale) ;
+                err = mp::abs(es.d2ee_dT2 - deriv / scale) ;
             } else {
-                err = std::abs(es.d2ee_dT2 - deriv) / std::abs(es.d2ee_dT2);
+                err = mp::abs(es.d2ee_dT2 - deriv) / mp::abs(es.d2ee_dT2);
             }
             util::threshold_println(err,
                                     "ρ = {:8.3g} T = {:8.3g},  ∂²e⁻/∂T² = {:15.8g},  error = {:11.5g}",
@@ -261,9 +261,9 @@ void
 test_ep_T2_derivs() {
 
     ElectronPositronEOS<real_t> eos;
-    constexpr real_t Ye{0.5_rt};
+    const real_t Ye{0.5_rt};
 
-    constexpr real_t eps{0.01_rt};
+    const real_t eps{0.01_rt};
 
     std::println("");
     util::green_println("testing ∂²e⁺/∂T² via differencing");
@@ -284,9 +284,9 @@ test_ep_T2_derivs() {
             real_t err{};
             if (es.d2ep_dT2 == 0.0_rt) {
                 const real_t scale = es.e_pos / T / T;
-                err = std::abs(es.d2ep_dT2 - deriv / scale) ;
+                err = mp::abs(es.d2ep_dT2 - deriv / scale) ;
             } else {
-                err = std::abs(es.d2ep_dT2 - deriv) / std::abs(es.d2ep_dT2);
+                err = mp::abs(es.d2ep_dT2 - deriv) / mp::abs(es.d2ep_dT2);
             }
             util::threshold_println(err,
                                     "ρ = {:8.3g} T = {:8.3g},  ∂²e⁺/∂T² = {:15.8g},  error = {:11.5g}",
@@ -302,9 +302,9 @@ void
 test_ee_rhoT_derivs() {
 
     ElectronPositronEOS<real_t> eos;
-    constexpr real_t Ye{0.5_rt};
+    const real_t Ye{0.5_rt};
 
-    constexpr real_t eps{0.01_rt};
+    const real_t eps{0.01_rt};
 
     std::println("");
     util::green_println("testing ∂²e⁻/∂ρ∂T via differencing");
@@ -322,9 +322,9 @@ test_ee_rhoT_derivs() {
             real_t err{};
             if (es.d2ee_drhodT == 0.0_rt) {
                 const real_t scale = es.e_e / rho / T;
-                err = std::abs(es.d2ee_drhodT - deriv / scale) ;
+                err = mp::abs(es.d2ee_drhodT - deriv / scale) ;
             } else {
-                err = std::abs(es.d2ee_drhodT - deriv) / std::abs(es.d2ee_drhodT);
+                err = mp::abs(es.d2ee_drhodT - deriv) / mp::abs(es.d2ee_drhodT);
             }
             util::threshold_println(err,
                                     "ρ = {:8.3g} T = {:8.3g},  ∂²e⁻/∂ρ∂T = {:15.8g},  error = {:11.5g}",
@@ -338,9 +338,9 @@ void
 test_ep_rhoT_derivs() {
 
     ElectronPositronEOS<real_t> eos;
-    constexpr real_t Ye{0.5_rt};
+    const real_t Ye{0.5_rt};
 
-    constexpr real_t eps{0.01_rt};
+    const real_t eps{0.01_rt};
 
     std::println("");
     util::green_println("testing ∂²e⁺/∂ρ∂T via differencing");
@@ -361,9 +361,9 @@ test_ep_rhoT_derivs() {
             real_t err{};
             if (es.d2ep_drhodT == 0.0_rt) {
                 const real_t scale = es.e_pos / rho / T;
-                err = std::abs(es.d2ep_drhodT - deriv / scale) ;
+                err = mp::abs(es.d2ep_drhodT - deriv / scale) ;
             } else {
-                err = std::abs(es.d2ep_drhodT - deriv) / std::abs(es.d2ep_drhodT);
+                err = mp::abs(es.d2ep_drhodT - deriv) / mp::abs(es.d2ep_drhodT);
             }
             util::threshold_println(err,
                                     "ρ = {:8.3g} T = {:8.3g},  ∂²e⁺/∂ρ∂T = {:15.8g},  error = {:11.5g}",
