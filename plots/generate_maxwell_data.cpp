@@ -23,14 +23,17 @@ int main() {
         rhos.push_back(std::pow(10.0_rt, std::log10(rho_min) + i * dlogrho));
     }
 
-#if defined(QUAD50)
-    std::string qnpts("50");
+    std::string qnpts;
+#if defined(QUAD20)
+    qnpts = "20";
+#elif defined(QUAD50)
+    qnpts = "50";
 #elif defined(QUAD100)
-    std::string qnpts("100");
+    qnpts("100");
 #elif defined(QUAD200)
-    std::string qnpts("200");
+    qnpts("200");
 #elif defined(QUAD400)
-    std::string qnpts("400");
+    qnpts("400");
 #endif
 
 #if defined(USE_FLOAT128)
