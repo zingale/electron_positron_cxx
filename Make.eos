@@ -27,7 +27,10 @@ endif
 
 QUAD_PTS ?= 200
 
-ifeq ($(QUAD_PTS), 50)
+
+ifeq ($(QUAD_PTS), 20)
+  DEFINES += -DQUAD20
+else ifeq ($(QUAD_PTS), 50)
   DEFINES += -DQUAD50
 else ifeq ($(QUAD_PTS), 100)
   DEFINES += -DQUAD100

@@ -34,14 +34,14 @@ The precision can be changed via the `PRECISION` make variable, e.g.,
 * `make PRECISION=DOUBLE` will build with 64-bit precision, using
    `double`.
 
-The number of quadrature points used in the integration can be set via
-`QUAD_PTS`, e.g., as:
+The number of quadrature points used for each subinterval in the
+overall integration can be set via `QUAD_PTS`, e.g., as:
 
 ```
 make QUAD_PTS=100
 ```
 
-for 100 points.  Valid options are `50`, `100`, `200` (the default),
+for 100 points.  Valid options are `20`, `50`, `100`, `200` (the default),
 and `400`.
 
 Be sure to do
