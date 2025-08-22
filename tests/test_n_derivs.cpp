@@ -12,7 +12,7 @@
 int main() {
 
     // value below which we assume that the positron contribution is zero
-    constexpr real_t pos_thresh{1.e-500_rt};
+    constexpr real_t pos_thresh{1.e-300_rt};
 
     {
 
