@@ -21,12 +21,12 @@ jobs:
           xcode-select -p
           clang++ --version
           python --version
-          make --version | head -1
+          gmake --version | head -1
           echo '::endgroup::'
 
       - name: Compile problems with long double
         run: |
           cd tests
-          make clean
-          make PRECISION=LONG_DOUBLE COMP=CLANG
+          gmake clean
+          gmake PRECISION=LONG_DOUBLE COMP=CLANG
 
