@@ -26,14 +26,16 @@ int main() {
     }
 
     std::string qnpts;
-#if defined(QUAD50)
+#if defined(QUAD20)
+    qnpts = "20";
+#elif defined(QUAD50)
     qnpts = "50";
 #elif defined(QUAD100)
-    qnpts = "100";
+    qnpts("100");
 #elif defined(QUAD200)
-    qnpts = "200";
+    qnpts("200");
 #elif defined(QUAD400)
-    qnpts = "400";
+    qnpts("400");
 #endif
 
     std::string precision;

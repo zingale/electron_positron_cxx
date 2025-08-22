@@ -29,7 +29,9 @@
 #include "real_type.H"
 #include "mp_math.H"
 
-#if defined(QUAD50)
+#if defined(QUAD20)
+#include "quadrature_weights_20.H"
+#elif defined(QUAD50)
 #include "quadrature_weights_50.H"
 #elif defined(QUAD100)
 #include "quadrature_weights_100.H"
