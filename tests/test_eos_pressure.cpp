@@ -1,15 +1,15 @@
 #include <print>
 
 #include <array>
-#include <cmath>
 
 #include "real_type.H"
 #include "electron_positron.H"
 #include "difference_utils.H"
 #include "util.H"
+#include "mp_math.H"
 
-constexpr std::array<real_t, 4> Ts{1.e4_rt, 1.e6_rt, 1.e8_rt, 5.e9_rt};
-constexpr std::array<real_t, 5> rhos{1.e-2_rt, 1.e2_rt, 1.e5_rt, 1.e7_rt, 5.e9_rt};
+const std::array<real_t, 4> Ts{1.e4_rt, 1.e6_rt, 1.e8_rt, 5.e9_rt};
+const std::array<real_t, 5> rhos{1.e-2_rt, 1.e2_rt, 1.e5_rt, 1.e7_rt, 5.e9_rt};
 
 
 // ∂p/∂ρ
@@ -18,9 +18,9 @@ void
 test_pe_rho_derivs() {
 
     ElectronPositronEOS<real_t> eos;
-    constexpr real_t Ye{0.5_rt};
+    const real_t Ye{0.5_rt};
 
-    constexpr real_t eps{0.01_rt};
+    const real_t eps{0.01_rt};
 
     std::println("");
     util::green_println("testing ∂p⁻/∂ρ via differencing");
@@ -48,9 +48,9 @@ void
 test_pp_rho_derivs() {
 
     ElectronPositronEOS<real_t> eos;
-    constexpr real_t Ye{0.5_rt};
+    const real_t Ye{0.5_rt};
 
-    constexpr real_t eps{0.01_rt};
+    const real_t eps{0.01_rt};
 
     std::println("");
     util::green_println("testing ∂p⁺/∂ρ via differencing");
@@ -83,9 +83,9 @@ void
 test_pe_T_derivs() {
 
     ElectronPositronEOS<real_t> eos;
-    constexpr real_t Ye{0.5_rt};
+    const real_t Ye{0.5_rt};
 
-    constexpr real_t eps{0.01_rt};
+    const real_t eps{0.01_rt};
 
     std::println("");
     util::green_println("testing ∂p⁻/∂T via differencing");
@@ -119,9 +119,9 @@ void
 test_pp_T_derivs() {
 
     ElectronPositronEOS<real_t> eos;
-    constexpr real_t Ye{0.5_rt};
+    const real_t Ye{0.5_rt};
 
-    constexpr real_t eps{0.01_rt};
+    const real_t eps{0.01_rt};
 
     std::println("");
     util::green_println("testing ∂p⁺/∂T via differencing");
@@ -159,9 +159,9 @@ void
 test_pe_rho2_derivs() {
 
     ElectronPositronEOS<real_t> eos;
-    constexpr real_t Ye{0.5_rt};
+    const real_t Ye{0.5_rt};
 
-    constexpr real_t eps{0.01_rt};
+    const real_t eps{0.01_rt};
 
     std::println("");
     util::green_println("testing ∂²p⁻/∂ρ² via differencing");
@@ -189,9 +189,9 @@ void
 test_pp_rho2_derivs() {
 
     ElectronPositronEOS<real_t> eos;
-    constexpr real_t Ye{0.5_rt};
+    const real_t Ye{0.5_rt};
 
-    constexpr real_t eps{0.01_rt};
+    const real_t eps{0.01_rt};
 
     std::println("");
     util::green_println("testing ∂²p⁺/∂ρ² via differencing");
@@ -225,9 +225,9 @@ void
 test_pe_T2_derivs() {
 
     ElectronPositronEOS<real_t> eos;
-    constexpr real_t Ye{0.5_rt};
+    const real_t Ye{0.5_rt};
 
-    constexpr real_t eps{0.01_rt};
+    const real_t eps{0.01_rt};
 
     std::println("");
     util::green_println("testing ∂²p⁻/∂T² via differencing");
@@ -261,9 +261,9 @@ void
 test_pp_T2_derivs() {
 
     ElectronPositronEOS<real_t> eos;
-    constexpr real_t Ye{0.5_rt};
+    const real_t Ye{0.5_rt};
 
-    constexpr real_t eps{0.01_rt};
+    const real_t eps{0.01_rt};
 
     std::println("");
     util::green_println("testing ∂²p⁺/∂T² via differencing");
@@ -302,9 +302,9 @@ void
 test_pe_rhoT_derivs() {
 
     ElectronPositronEOS<real_t> eos;
-    constexpr real_t Ye{0.5_rt};
+    const real_t Ye{0.5_rt};
 
-    constexpr real_t eps{0.01_rt};
+    const real_t eps{0.01_rt};
 
     std::println("");
     util::green_println("testing ∂²p⁻/∂ρ∂T via differencing");
@@ -338,9 +338,9 @@ void
 test_pp_rhoT_derivs() {
 
     ElectronPositronEOS<real_t> eos;
-    constexpr real_t Ye{0.5_rt};
+    const real_t Ye{0.5_rt};
 
-    constexpr real_t eps{0.01_rt};
+    const real_t eps{0.01_rt};
 
     std::println("");
     util::green_println("testing ∂²p⁺/∂ρ∂T via differencing");

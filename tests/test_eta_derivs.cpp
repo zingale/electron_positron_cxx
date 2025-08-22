@@ -1,15 +1,15 @@
 #include <print>
 
 #include <array>
-#include <cmath>
 
 #include "real_type.H"
 #include "electron_positron.H"
 #include "difference_utils.H"
 #include "util.H"
+#include "mp_math.H"
 
-constexpr std::array<real_t, 4> Ts{1.e4_rt, 1.e6_rt, 1.e8_rt, 5.e9_rt};
-constexpr std::array<real_t, 5> rhos{1.e-2_rt, 1.e2_rt, 1.e5_rt, 1.e7_rt, 5.e9_rt};
+const std::array<real_t, 4> Ts{1.e4_rt, 1.e6_rt, 1.e8_rt, 5.e9_rt};
+const std::array<real_t, 5> rhos{1.e-2_rt, 1.e2_rt, 1.e5_rt, 1.e7_rt, 5.e9_rt};
 
 // number density
 
@@ -17,9 +17,9 @@ void
 test_eta_rho_derivs() {
 
     ElectronPositronEOS<real_t> eos;
-    constexpr real_t Ye{0.5_rt};
+    const real_t Ye{0.5_rt};
 
-    constexpr real_t eps{0.01_rt};
+    const real_t eps{0.01_rt};
 
     util::green_println("testing ∂η/∂ρ via differencing");
 
@@ -45,9 +45,9 @@ void
 test_eta_T_derivs() {
 
     ElectronPositronEOS<real_t> eos;
-    constexpr real_t Ye{0.5_rt};
+    const real_t Ye{0.5_rt};
 
-    constexpr real_t eps{0.01_rt};
+    const real_t eps{0.01_rt};
 
     std::println("");
     util::green_println("testing ∂η/∂T via differencing");
@@ -75,9 +75,9 @@ void
 test_eta_rho2_derivs() {
 
     ElectronPositronEOS<real_t> eos;
-    constexpr real_t Ye{0.5_rt};
+    const real_t Ye{0.5_rt};
 
-    constexpr real_t eps{0.01_rt};
+    const real_t eps{0.01_rt};
 
     std::println("");
     util::green_println("testing ∂²η/∂ρ² via differencing");
@@ -118,9 +118,9 @@ void
 test_eta_T2_derivs() {
 
     ElectronPositronEOS<real_t> eos;
-    constexpr real_t Ye{0.5_rt};
+    const real_t Ye{0.5_rt};
 
-    constexpr real_t eps{0.01_rt};
+    const real_t eps{0.01_rt};
 
     std::println("");
     util::green_println("testing ∂²η/∂T² via differencing");

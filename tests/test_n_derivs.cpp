@@ -1,5 +1,4 @@
 #include <cassert>
-#include <cmath>
 #include <print>
 
 #include "real_type.H"
@@ -7,12 +6,13 @@
 #include "difference_utils.H"
 #include "electron_positron.H"
 #include "util.H"
+#include "mp_math.H"
 
 
 int main() {
 
     // value below which we assume that the positron contribution is zero
-    constexpr real_t pos_thresh{1.e-500_rt};
+    const real_t pos_thresh{1.e-500_rt};
 
     {
 
