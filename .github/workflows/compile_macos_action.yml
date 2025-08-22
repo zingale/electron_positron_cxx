@@ -1,0 +1,32 @@
+name: Test MacOS compilation
+
+on: [pull_request]
+jobs:
+  macos-compilation:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Install dependencies
+        run: |
+          brew update
+          brew install make
+
+      - name: Print system info
+        run: |
+          echo '::group::CPU info'
+          sysctl -a | grep machdep.cpu
+          echo '::endgroup::'
+          echo '::group::build tool versions'
+          xcode-select -p
+          clang++ --version
+          python --version
+          gmake --version | head -1
+          echo '::endgroup::'
+
+      - name: Compile problems with long double
+        run: |
+          cd tests
+          gmake clean
+          gmake PRECISION=LONG_DOUBLE COMP=CLANG
+
