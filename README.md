@@ -17,25 +17,98 @@ To get good results, this uses 128-bit precision, relying on GCC's
 
 This needs a C++23 compiler.  For GCC, you need GCC >= 15.1
 
-## Options
+## Floating point precision
 
-The precision can be changed via the `PRECISION` make variable, e.g.,
+Several different floating point standards are supported.  The entire
+EOS is templated on a `real_t` type, which enables any real data type
+to be used.  The precision can be changed via the `PRECISION`, as
+described below.
 
-* `make PRECISION=BOOST256` builds with 256-bit precision (using
-  the boost multiprecision library).
+### 256-bit floating point
 
-* `make PRECISION=FLOAT128` builds with 128-bit precision (using the
-  `__float128` data type).
+256-bit is enabled via the Boost library, `boost::multiprecision`.
+The floating point properties are:
 
-  Note: at the moment, this is only supported with GCC, and not
-  LLVM/clang++ because clang++'s math functions don't work with
-  `__float128` directly.
+```
+size of real_t is 64 bytes
+machine epsilon is 9.055679078826712368e-72
+minimum exponent is 10**-78862
+maximum exponent is 10**78862
+```
 
-* `make PRECISION=LONG_DOUBLE` builds with a `long double`, which is
-  80 bits on x86 architectures.
+This is built as:
 
-* `make PRECISION=DOUBLE` will build with 64-bit precision, using
-   `double`.
+```
+make PRECISION=BOOST256
+```
+
+
+### 128-bit floating point
+
+128-bit is enabled via the GCC `__float128` data type and the quadmath
+library.  The floating point properties are:
+
+```
+size of real_t is 16 bytes
+machine epsilon is 1.9259299443872358530559779425849273e-34
+minimum exponent is 10**-4931
+maximum exponent is 10**4932
+```
+
+This is built as:
+
+```
+make PRECISION=FLOAT128
+```
+
+Note: at the moment, this is only supported with GCC, and not
+LLVM/clang++ because clang++'s math functions don't work with
+`__float128` directly.
+
+
+### 80-bit floating point
+
+80-bit precision is enabled via the x87 extensions on Intel
+architectures, and uses a `long double` datatype.  The floating
+point properties are:
+
+```
+size of real_t is 16 bytes
+machine epsilon is 1.084202172485504434e-19
+minimum exponent is 10**-4931
+maximum exponent is 10**4932
+```
+
+This is built as:
+
+```
+make PRECISION=LONG_DOUBLE
+```
+
+Note: on Macs with ARM processors, a `long double` is the same as
+a `double` and will give only 64-bit precision.
+
+
+### 64-bit floating point
+
+64-bit precision uses the normal `double` data type.  The
+floating point properties are:
+
+```
+size of real_t is 8 bytes
+machine epsilon is 2.220446049250313e-16
+minimum exponent is 10**-307
+maximum exponent is 10**308
+```
+
+This is build as:
+
+```
+make PRECISION=DOUBLE
+```
+
+
+## Quadrature
 
 The number of quadrature points used for each subinterval in the
 overall integration can be set via `QUAD_PTS`, e.g., as:
@@ -54,6 +127,14 @@ make clean
 ```
 
 before building with any different options.
+
+
+### Generating quadrature points / weights
+
+The Gauss-Legendre and Gauss-Leguerre quadrature roots and weights are
+generated via the notebook `generate_quadrature_weights.ipynb` using
+SymPy.  This will directly write the C++ header file with the desired
+number of quadrature points.
 
 
 ## Driver
@@ -120,13 +201,6 @@ using SymPy.
 
 These are the expressions that are coded up in `electron_positron.H`.
 
-
-## Generating quadrature points / weights
-
-The Gauss-Legendre and Gauss-Leguerre quadrature roots and weights are
-generated via the notebook `generate_quadrature_weights.ipynb` using
-SymPy.  This will directly write the C++ header file with the desired
-number of quadrature points.
 
 
 ## clang-tidy
