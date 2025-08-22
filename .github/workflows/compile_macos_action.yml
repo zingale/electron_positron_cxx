@@ -28,5 +28,5 @@ jobs:
         run: |
           cd tests
           make clean
-          make PRECISION=LONG_DOUBLE COMP=clang
+          make PRECISION=LONG_DOUBLE COMP=CLANG
 
