@@ -26,8 +26,10 @@ void green_println(std::format_string<Args...> fmt, Args&&... args) {
 }
 
 // print in red if we go above a threshold
-template <real_t threshold=1.e-10_rt, typename... Args>
+template <typename... Args>
 void threshold_println(real_t val, std::format_string<Args...> fmt, Args&&... args) {
+    constexpr real_t threshold=1.e-10_rt;
+
     constexpr auto red = "\033[91m";
     constexpr auto reset = "\033[0m";
     if (std::abs(val) > threshold) {
