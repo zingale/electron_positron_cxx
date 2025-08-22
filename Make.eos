@@ -49,7 +49,7 @@ ifeq ($(strip $(PATH_TO_QUADMATH)),)
   PATH_TO_QUADMATH := $(shell dirname $(shell find ~/miniconda/ -name quadmath.h 2> /dev/null | grep $(shell gcc -dumpversion)))
 endif
 
-INCLUDES := $(TOP)
+INCLUDES := $(TOP)/src
 
 ifeq ($(COMP), CLANG)
   INCLUDES += $(PATH_TO_QUADMATH)
