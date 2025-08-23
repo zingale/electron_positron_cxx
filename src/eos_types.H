@@ -88,6 +88,24 @@ public:
 
 
 template <typename T>
+class Helmholtz {
+
+    T F{};
+    T dF_drho{};
+    T dF_dT{};
+    T d2F_drho2{};
+    T d2F_dT2{};
+    T d2F_drhodT{};
+    T d3F_drhodT2{};
+    T d3F_drho2dT{};
+    T d4F_drho2dT2{};
+
+    Helmholtz() = default;
+
+};
+
+
+template <typename T>
 class EtaBetaDerivs {
 
 public:
