@@ -12,7 +12,8 @@
 namespace util {
 
     template <typename T>
-    T rel_error(T a, T b) {
+    auto rel_error(T a, T b) -> T
+    {
         T err = mp::abs(a - b) / mp::abs(b);
         return err;
     }

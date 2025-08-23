@@ -23,23 +23,25 @@ inline namespace literals {
 // literal for floating-point constants
 // one is for 1.0_rt, and the other is for 1_rt
 
-    constexpr real_t operator""_rt(long double x) {
+    constexpr auto operator""_rt(long double x) -> real_t
+    {
         return static_cast<real_t>(x);
     }
 
-    constexpr real_t operator""_rt(unsigned long long x) {
+    constexpr auto operator""_rt(unsigned long long x) -> real_t
+    {
         return static_cast<real_t>(x);
     }
 }
 
 // std::numbers does not work with __float128
 
-inline
-real_t str_to_real_t(const char* s) {
+inline auto str_to_real_t(const char* s) -> real_t
+{
 #if defined(USE_BOOST256)
     return real_t(s);
 #elif defined(USE_FLOAT128)
-    return strtoflt128(s, nullptr); 
+    return strtoflt128(s, nullptr);
 #elif defined (USE_LONG_DOUBLE)
     return std::stold(s);
 #else

@@ -4,7 +4,8 @@
 
 using namespace literals;
 
-int main() {
+auto main() -> int
+{
 
     auto [eta_min, eta_max] = bounds::get_eta_bounds<real_t>(2.e4_rt, 2.e6_rt);
 
