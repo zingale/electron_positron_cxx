@@ -1,0 +1,52 @@
+name: Plot generation
+
+on: [pull_request]
+jobs:
+  plot-generator:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: update
+        run: |
+          sudo apt-get update -y -qq
+
+      - name: install conda
+        run: |
+          wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh
+          bash miniconda.sh -b -p $HOME/miniconda
+          echo "$HOME/miniconda/bin" >> $GITHUB_PATH
+
+      - name: install GCC 15
+        run: |
+          source $HOME/miniconda/etc/profile.d/conda.sh
+          conda create -y -n gcc15 -c conda-forge gcc=15.1.0 gxx=15.1.0
+
+      - name: Set environment variables
+        run: |
+          source $HOME/miniconda/etc/profile.d/conda.sh
+          conda activate gcc15
+          echo "CC=$(which gcc)" >> $GITHUB_ENV
+          echo "CXX=$(which g++)" >> $GITHUB_ENV
+          echo "$(dirname $(which gcc))" >> $GITHUB_PATH
+
+      - name: Print system info
+        run: |
+          echo '::group::CPU info'
+          lscpu
+          echo '::endgroup::'
+          echo '::group::GCC version'
+          gcc --version
+          echo '::endgroup::'
+
+      - name: Compile plot generator
+        run: |
+          cd plots
+          make clean
+          make PRECISION=DOUBLE FULL_OPTIMIZE=FALSE
+
+      - name: check results
+        run: |
+          cd plots
+          ./generate_maxwell_data
+          diff maxwell_p64_npts200.txt ci-benchmarks/maxwell_p64_npts200.txt
