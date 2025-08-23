@@ -1,5 +1,7 @@
 # eos
 
+## `eos.cpp`
+
 This is a sample driver for the equation of state.  It queries for the
 density, temperature, and electron fraction and then outputs the
 thermodynamic state and the first- and second-derivatives.
@@ -13,3 +15,8 @@ echo 1.e4 1.e7 0.5 | ./eos
 will set a density of 1.e4 g/cc, temperature of 1.e7 K, and electron
 fraction of 0.5.
 
+## `helm.cpp`
+
+This computes the Helmholtz free energy and all the derivatives needed
+for the biquintic Hermite polynomial interpolation uses in Timmes &
+Swesty (2000).
