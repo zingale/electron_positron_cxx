@@ -13,7 +13,6 @@ Checks: >
        -misc-non-private-member-variables-in-classes,
        -misc-use-internal-linkage,
      modernize-*,
-       -modernize-use-trailing-return-type,
      performance-*,
        -performance-avoid-endl,
      portability-*,

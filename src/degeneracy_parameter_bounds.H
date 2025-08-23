@@ -51,8 +51,8 @@ namespace bounds {
     };
 
     template <typename T>
-    inline
-    std::pair<T, T> get_eta_bounds(T rhoYe0, T temp0) {
+    inline auto get_eta_bounds(T rhoYe0, T temp0) -> std::pair<T, T>
+    {
 
         // find the index into the table such that
         //   rhoYes[ir] <= rhoYe0 < rhoYe[ir+1]

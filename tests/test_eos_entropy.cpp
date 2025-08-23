@@ -374,7 +374,8 @@ test_sp_rhoT_derivs() {
 }
 
 
-int main() {
+auto main() -> int
+{
 
     test_se_rho_derivs();
     test_se_T_derivs();

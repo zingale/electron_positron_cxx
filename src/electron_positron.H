@@ -22,8 +22,8 @@ const real_t coeff = 8.0_rt * constants::pi * constants::sqrt2 *
 // for the root finding eta
 
 template <typename T>
-inline
-T n_e_constraint(T eta, T beta) {
+inline auto n_e_constraint(T eta, T beta) -> T
+{
     FermiIntegral<T> f12(0.5_rt, eta, beta);
     f12.evaluate(0);
 
@@ -36,8 +36,8 @@ T n_e_constraint(T eta, T beta) {
 
 
 template <typename T>
-inline
-T n_p_constraint(T eta, T beta) {
+inline auto n_p_constraint(T eta, T beta) -> T
+{
     T eta_tilde = -eta - 2.0_rt / beta;
 
     FermiIntegral<T> f12_pos(0.5_rt, eta_tilde, beta);
@@ -51,8 +51,8 @@ T n_p_constraint(T eta, T beta) {
 }
 
 template <typename T>
-inline
-T get_eta(T rhoYe, T temp) {
+inline auto get_eta(T rhoYe, T temp) -> T
+{
     // compute the degeneracy parameter
 
     T n_e_net = rhoYe * C::N_A;
@@ -89,11 +89,11 @@ T get_eta(T rhoYe, T temp) {
 
 
 template <typename T>
-inline
-std::pair<EtaBetaDerivs<T>, EtaBetaDerivs<T>>
-get_n_derivs(const T beta,
-             const FermiIntegral<T>& fx, const FermiIntegral<T>& fy,
-             const FermiIntegral<T>& fx_pos, const FermiIntegral<T>& fy_pos) {
+inline auto get_n_derivs(const T beta,
+                         const FermiIntegral<T>& fx, const FermiIntegral<T>& fy,
+                         const FermiIntegral<T>& fx_pos, const FermiIntegral<T>& fy_pos)
+    -> std::pair<EtaBetaDerivs<T>, EtaBetaDerivs<T>>
+{
     // convenience wrapper for testing number density derivatives with respect
     // to η and β
 
@@ -102,11 +102,11 @@ get_n_derivs(const T beta,
 
 
 template <typename T>
-inline
-std::pair<EtaBetaDerivs<T>, EtaBetaDerivs<T>>
-get_eta_beta_derivs(const T A, const T c, const T p, const T beta,
-                    const FermiIntegral<T>& fx, const FermiIntegral<T>& fy,
-                    const FermiIntegral<T>& fx_pos, const FermiIntegral<T>& fy_pos) {
+inline auto get_eta_beta_derivs(const T A, const T c, const T p, const T beta,
+                                const FermiIntegral<T>& fx, const FermiIntegral<T>& fy,
+                                const FermiIntegral<T>& fx_pos, const FermiIntegral<T>& fy_pos) 
+    -> std::pair<EtaBetaDerivs<T>, EtaBetaDerivs<T>>
+{
     // we can write number density, pressure, and energy density for electrons as
     //
     // q = A β**(p/2) (F_x(η, β) + c β F_y(η, β))
@@ -182,10 +182,10 @@ get_eta_beta_derivs(const T A, const T c, const T p, const T beta,
 
 
 template <typename T>
-inline
-RhoTDerivs<T>
-get_eta_thermo_derivs(const T Ye,
-                      const EtaBetaDerivs<T>& dn_e, const EtaBetaDerivs<T>& dn_pos) {
+inline auto get_eta_thermo_derivs(const T Ye,
+                                  const EtaBetaDerivs<T>& dn_e, const EtaBetaDerivs<T>& dn_pos)
+    -> RhoTDerivs<T>
+{
     // Compute the first- and second-derivatives of η with respect to
     // ρ and T.  This requires the derivatives of n⁻ and n⁺ with
     // respect to η and β.
@@ -216,9 +216,10 @@ get_eta_thermo_derivs(const T Ye,
 
 
 template <typename T>
-inline
-RhoTDerivs<T>
-chain_rule(const EtaBetaDerivs<T>& df, const RhoTDerivs<T>& deta) {
+inline auto chain_rule(const EtaBetaDerivs<T>& df,
+                       const RhoTDerivs<T>& deta)
+    -> RhoTDerivs<T>
+{
     // Compute the thermodynamic derivatives of f via the chain rule
     // and the derivatives with respect to η and β
 
@@ -256,7 +257,8 @@ public:
 
     ElectronPositronEOS() = default;
 
-    EOSState<T> pe_state(T rho, T temp, T Ye) {
+    auto pe_state(T rho, T temp, T Ye) -> EOSState<T>
+    {
 
         EOSState<T> es;
 

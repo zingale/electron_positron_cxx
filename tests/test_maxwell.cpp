@@ -7,11 +7,9 @@
 const std::array<real_t, 5> Ts{1.e4_rt, 1.e5_rt, 1.e6_rt, 1.e8_rt, 5.e9_rt};
 const std::array<real_t, 5> rhos{1.e-2_rt, 1.e2_rt, 1.e5_rt, 1.e7_rt, 5.e9_rt};
 
-// number density
 
-
-
-int main() {
+auto main() -> int
+{
 
     const real_t Ye{0.5_rt};
 

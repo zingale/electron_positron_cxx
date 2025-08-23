@@ -4,7 +4,8 @@
 #include "util.H"
 #include "mp_math.H"
 
-int main() {
+auto main() -> int
+{
 
     const real_t a = -4.0_rt;
     const real_t b = 4.0_rt / 3.0_rt;

@@ -7,7 +7,8 @@
 #include "util.H"
 #include "mp_math.H"
 
-int main() {
+auto main() -> int
+{
 
     // compare against the Gong et al. code
 

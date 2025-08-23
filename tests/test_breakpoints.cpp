@@ -5,7 +5,8 @@
 
 using namespace literals;
 
-int main() {
+auto main() -> int
+{
 
     BreakPoints<real_t> b(0);
 

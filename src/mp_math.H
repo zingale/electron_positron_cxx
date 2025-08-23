@@ -11,7 +11,8 @@ namespace mp {
 
     // power
 
-    inline real_t pow(const real_t& x, const real_t& y) {
+    inline auto pow(const real_t& x, const real_t& y) -> real_t
+    {
 #if defined(USE_BOOST256)
         return boost::multiprecision::pow(x, y);
 #else
@@ -19,7 +20,8 @@ namespace mp {
 #endif
     }
 
-    inline real_t sqrt(const real_t& x) {
+    inline auto sqrt(const real_t& x) -> real_t
+    {
 #if defined(USE_BOOST256)
         return boost::multiprecision::sqrt(x);
 #else
@@ -29,7 +31,8 @@ namespace mp {
 
     // exponentiation
 
-    inline real_t exp(const real_t& x) {
+    inline auto exp(const real_t& x) -> real_t
+    {
 #if defined(USE_BOOST256)
         return boost::multiprecision::exp(x);
 #else
@@ -39,7 +42,8 @@ namespace mp {
 
     // log
 
-    inline real_t log(const real_t& x) {
+    inline auto log(const real_t& x) -> real_t
+    {
 #if defined(USE_BOOST256)
         return boost::multiprecision::log(x);
 #else
@@ -47,7 +51,8 @@ namespace mp {
 #endif
     }
 
-    inline real_t log10(const real_t& x) {
+    inline auto log10(const real_t& x) -> real_t
+    {
 #if defined(USE_BOOST256)
         return boost::multiprecision::log10(x);
 #else
@@ -55,7 +60,8 @@ namespace mp {
 #endif
     }
 
-    inline real_t log1p(const real_t& x) {
+    inline auto log1p(const real_t& x) -> real_t
+    {
 #if defined(USE_BOOST256)
         return boost::multiprecision::log1p(x);
 #else
@@ -65,7 +71,8 @@ namespace mp {
 
     // trig
 
-    inline real_t sin(const real_t& x) {
+    inline auto sin(const real_t& x) -> real_t
+    {
 #if defined(USE_BOOST256)
         return boost::multiprecision::sin(x);
 #else
@@ -73,7 +80,8 @@ namespace mp {
 #endif
     }
 
-    inline real_t cos(const real_t& x) {
+    inline auto cos(const real_t& x) -> real_t
+    {
 #if defined(USE_BOOST256)
         return boost::multiprecision::cos(x);
 #else
@@ -81,7 +89,8 @@ namespace mp {
 #endif
     }
 
-    inline real_t cosh(const real_t& x) {
+    inline auto cosh(const real_t& x) -> real_t
+    {
 #if defined(USE_BOOST256)
         return boost::multiprecision::cosh(x);
 #else
@@ -89,7 +98,8 @@ namespace mp {
 #endif
     }
 
-    inline real_t tanh(const real_t& x) {
+    inline auto tanh(const real_t& x) -> real_t
+    {
 #if defined(USE_BOOST256)
         return boost::multiprecision::tanh(x);
 #else
@@ -99,7 +109,8 @@ namespace mp {
 
     // basic math
 
-    inline real_t trunc(const real_t& x) {
+    inline auto trunc(const real_t& x) -> real_t
+    {
 #if defined(USE_BOOST256)
         return boost::multiprecision::trunc(x);
 #else
@@ -107,7 +118,8 @@ namespace mp {
 #endif
     }
 
-    inline real_t abs(const real_t& x) {
+    inline auto abs(const real_t& x) -> real_t
+    {
 #if defined(USE_BOOST256)
         return boost::multiprecision::abs(x);
 #else

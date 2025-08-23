@@ -158,7 +158,8 @@ test_eta_T2_derivs() {
 }
 
 
-int main() {
+auto main() -> int
+{
 
     test_eta_rho_derivs();
     test_eta_T_derivs();

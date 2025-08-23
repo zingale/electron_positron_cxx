@@ -20,8 +20,9 @@ namespace fd {
     // https://en.wikipedia.org/wiki/Finite_difference_coefficient
 
     template <typename T>
-    inline
-    T fourth_order_diff(const std::function<T(T)>& func, T x0, T delta) {
+    inline auto fourth_order_diff(const std::function<T(T)>& func,
+                                  T x0, T delta) -> T
+    {
         // Compute a 4th order accurate centered difference approximation
         // of a function, and allow us to specify the component of the
         // object that is returned (if applicable)
@@ -46,8 +47,9 @@ namespace fd {
     }
 
     template <typename T>
-    inline
-    T sixth_order_diff(const std::function<T(T)>& func, T x0, T delta) {
+    inline auto sixth_order_diff(const std::function<T(T)>& func,
+                                 T x0, T delta) -> T
+    {
         // Compute a 6th order accurate centered difference approximation
         // of a function, and allow us to specify the component of the
         // object that is returned (if applicable)
@@ -73,8 +75,9 @@ namespace fd {
     }
 
     template <typename T>
-    inline
-    T eighth_order_diff(const std::function<T(T)>& func, T x0, T delta) {
+    inline auto eighth_order_diff(const std::function<T(T)>& func,
+                                  T x0, T delta) -> T
+    {
         // Compute an 8th order accurate centered difference approximation
         // of a function, and allow us to specify the component of the
         // object that is returned (if applicable)
@@ -100,9 +103,9 @@ namespace fd {
     }
 
     template <typename T>
-    inline
-    std::pair<T, T>
-    adaptive_diff(const std::function<T(T)>& func, T x0, T h, int nlevels=25) {
+    inline auto adaptive_diff(const std::function<T(T)>& func,
+                              T x0, T h, int nlevels=25) -> std::pair<T, T>
+    {
         // Perform an adaptive centered-difference estimate to the first
         // derivative using Richardson-extrapolation / Ridders' method.
 
@@ -196,9 +199,9 @@ namespace fd {
     }
 
     template <typename T>
-    inline
-    std::pair<T, T>
-    adaptive_diff2(const std::function<T(T)>& func, T x0, T h, int nlevels=25) {
+    inline auto adaptive_diff2(const std::function<T(T)>& func,
+                               T x0, T h, int nlevels=25) -> std::pair<T, T>
+    {
         // This is like adaptive_diff, but for the second derivative.
 
         std::vector<std::vector<T>> A(nlevels, std::vector<T>(nlevels, 0.0_rt));
