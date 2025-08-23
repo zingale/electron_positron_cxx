@@ -57,7 +57,16 @@ endif
 
 INCLUDE_FLAGS := $(patsubst %,-I%,$(INCLUDES))
 
-CXXFLAGS := -O3 -std=c++23 -Wall -Wextra -Wshadow
+
+CXXFLAGS := -std=c++23 -Wall -Wextra -Wshadow
+
+FULL_OPTIMIZE ?= TRUE
+
+ifeq ($(FULL_OPTIMIZE), TRUE)
+   CXXFLAGS += -O3
+else
+   CXXFLAGS += -O2
+endif
 
 EXTRA_CXX_FLAGS :=
 ifeq ($(COMP), GCC)

@@ -30,13 +30,20 @@ jobs:
           echo "CXX=$(which g++)" >> $GITHUB_ENV
           echo "$(dirname $(which gcc))" >> $GITHUB_PATH
 
-      - name: report GCC version
-        run: gcc --version
+      - name: Print system info
+        run: |
+          echo '::group::CPU info'
+          lscpu
+          echo '::endgroup::'
+          echo '::group::GCC version'
+          gcc --version
+          echo '::endgroup::'
 
       - name: Compile plot generator
         run: |
           cd plots
-          make PRECISION=LONG_DOUBLE
+          make clean
+          make PRECISION=LONG_DOUBLE FULL_OPTIMIZE=FALSE
 
       - name: check results
         run: |
