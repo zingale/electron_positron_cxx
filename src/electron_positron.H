@@ -469,6 +469,35 @@ public:
             -C::k * rho_inv * rho_inv * (es.eta * es.dnp_dT + es.n_pos * es.deta_dT)
             + temp_inv * (d2hp_drhodT - dhp_drho * temp_inv);
 
+        // now fill the total values of each of the thermodynamic quantities
+        es.n = es.n_e + es.n_pos;
+        es.dn_drho = es.dne_drho + es.dnp_drho;
+        es.dn_dT = es.dne_dT + es.dnp_dT;
+        es.d2n_drho2 = es.d2ne_drho2 + es.d2np_drho2;
+        es.d2n_dT2 = es.d2ne_dT2 + es.d2np_dT2;
+        es.d2n_drhodT = es.d2ne_drhodT + es.d2np_drhodT;
+
+        es.p = es.p_e + es.p_pos;
+        es.dp_drho = es.dpe_drho + es.dpp_drho;
+        es.dp_dT = es.dpe_dT + es.dpp_dT;
+        es.d2p_drho2 = es.d2pe_drho2 + es.d2pp_drho2;
+        es.d2p_dT2 = es.d2pe_dT2 + es.d2pp_dT2;
+        es.d2p_drhodT = es.d2pe_drhodT + es.d2pp_drhodT;
+
+        es.e = es.e_e + es.e_pos;
+        es.de_drho = es.dee_drho + es.dep_drho;
+        es.de_dT = es.dee_dT + es.dep_dT;
+        es.d2e_drho2 = es.d2ee_drho2 + es.d2ep_drho2;
+        es.d2e_dT2 = es.d2ee_dT2 + es.d2ep_dT2;
+        es.d2e_drhodT = es.d2ee_drhodT + es.d2ep_drhodT;
+
+        es.s = es.s_e + es.s_pos;
+        es.ds_drho = es.dse_drho + es.dsp_drho;
+        es.ds_dT = es.dse_dT + es.dsp_dT;
+        es.d2s_drho2 = es.d2se_drho2 + es.d2sp_drho2;
+        es.d2s_dT2 = es.d2se_dT2 + es.d2sp_dT2;
+        es.d2s_drhodT = es.d2se_drhodT + es.d2sp_drhodT;
+
         return es;
     }
 
