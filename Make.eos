@@ -5,7 +5,7 @@ TOP ?= .
 ALL: $(EXECUTABLES)
 
 
-HEADERS := $(wildcard $(TOP)/*.H)
+HEADERS := $(wildcard $(TOP)/src/*.H)
 
 # compiler -- allowed options are GCC or CLANG
 COMP ?= GCC
