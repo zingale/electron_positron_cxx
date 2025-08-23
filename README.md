@@ -15,7 +15,12 @@ To get good results, this uses 128-bit precision, relying on GCC's
 
 ## Requirements
 
-This needs a C++23 compiler.  For GCC, you need GCC >= 15.1
+* a C++23 compiler.  For GCC, you need GCC >= 15.1.
+
+* [libquadmath](https://gcc.gnu.org/onlinedocs/libquadmath/) for 128-bit precision
+
+* [boost](https://www.boost.org/) for 256-bit precision
+
 
 ## Floating point precision
 
@@ -27,7 +32,8 @@ described below.
 ### 256-bit floating point
 
 256-bit is enabled via the Boost library, `boost::multiprecision`.
-The floating point properties are:
+The floating point properties (as output by `tests/test_precision`)
+are:
 
 ```
 size of real_t is 64 bytes
@@ -61,9 +67,10 @@ This is built as:
 make PRECISION=FLOAT128
 ```
 
-Note: at the moment, this is only supported with GCC, and not
-LLVM/clang++ because clang++'s math functions don't work with
-`__float128` directly.
+> [!NOTE]
+> At the moment, this is only supported with GCC, and not
+> LLVM/clang++ because clang++'s math functions don't work with
+> `__float128` directly.
 
 
 ### 80-bit floating point
@@ -85,8 +92,9 @@ This is built as:
 make PRECISION=LONG_DOUBLE
 ```
 
-Note: on Macs with ARM processors, a `long double` is the same as
-a `double` and will give only 64-bit precision.
+> [!NOTE]
+> On Macs with ARM processors, a `long double` is the same as
+> a `double` and will give only 64-bit precision.
 
 
 ### 64-bit floating point
