@@ -115,6 +115,30 @@ public:
 
 
 template <typename T>
+class Helmholtz {
+
+public:
+
+    T rho{};  // density (g/cm^3)
+    T temp{};  // temperature (Kelvin)
+    T Y_e{};  // electron fraction
+
+    T F{};
+    T dF_drho{};
+    T dF_dT{};
+    T d2F_drho2{};
+    T d2F_dT2{};
+    T d2F_drhodT{};
+    T d3F_drhodT2{};
+    T d3F_drho2dT{};
+    T d4F_drho2dT2{};
+
+    Helmholtz() = default;
+
+};
+
+
+template <typename T>
 class EtaBetaDerivs {
 
 public:
@@ -181,6 +205,28 @@ inline auto operator<< (std::ostream& os, EOSState<T>& es) -> std::ostream&
     out += util::format("s  = {:15.8g}   ∂s/∂ρ   = {:15.8g}   ∂s/∂T   = {:15.8g}\n", es.s, es.ds_drho, es.ds_dT);
     out += util::format("     {:15}  ∂²s/∂ρ²  = {:15.8g}  ∂²s/∂T²  = {:15.8g}  ∂²s/∂ρ∂T  = {:15.8g}\n\n", " ", es.d2s_drho2, es.d2s_dT2, es.d2s_drhodT);
 
+    os << out;
+    return os;
+}
+
+
+template<typename T>
+inline auto operator<< (std::ostream& os, Helmholtz<T>& helm) -> std::ostream&
+{
+
+    std::string out{"\n"};
+
+    out += util::format(" ρ = {:15.8g}       T  = {:15.8g}      Yₑ  = {:15.8g}\n\n", helm.rho, helm.temp, helm.Y_e);
+
+    out += util::format("  F        = {:15.8g}\n", helm.F);
+    out += util::format(" ∂F/∂ρ     = {:15.8g}   ∂F/∂T    = {:15.8g}\n",
+                        helm.dF_drho, helm.dF_dT);
+    out += util::format("∂²F/∂ρ²    = {:15.8g}  ∂²F/∂T²   = {:15.8g}  ∂²F/∂ρ∂T  = {:15.8g}\n",
+                        helm.d2F_drho2, helm.d2F_dT2, helm.d2F_drhodT);
+    out += util::format("∂³F/∂ρ²∂T  = {:15.8g}  ∂³F/∂ρ∂T² = {:15.8g}\n",
+                        helm.d3F_drho2dT, helm.d3F_drhodT2);
+    out += util::format("∂⁴F/∂ρ²∂T² = {:15.8g}\n\n",
+                        helm.d4F_drho2dT2);
     os << out;
     return os;
 }
