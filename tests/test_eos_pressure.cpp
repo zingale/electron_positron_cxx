@@ -373,7 +373,8 @@ test_pp_rhoT_derivs() {
 }
 
 
-int main() {
+auto main() -> int
+{
 
     test_pe_rho_derivs();
     test_pp_rho_derivs();

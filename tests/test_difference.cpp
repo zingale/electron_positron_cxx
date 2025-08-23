@@ -4,18 +4,21 @@
 #include "util.H"
 
 template <typename T>
-T f1(T x) {
+auto f1(T x) -> T
+{
     return mp::exp(x) / (mp::sin(x) - x * x);
 }
 
 template <typename T>
-T df1dx(T x) {
+auto df1dx(T x) -> T
+{
     return mp::exp(x) * (-x * x + 2.0_rt * x - constants::sqrt2 * mp::cos(x + 0.25_rt * constants::pi)) /
         mp::pow(x * x - mp::sin(x), 2);
 }
 
 template <typename T>
-T d2f1dx2(T x) {
+auto d2f1dx2(T x) -> T
+{
     return (-2.0_rt * mp::pow(2.0_rt * x - mp::cos(x), 2) +
            2.0_rt * (2.0_rt * x - mp::cos(x)) * (x * x - mp::sin(x)) -
            mp::pow(x * x - mp::sin(x), 2) + (x * x - mp::sin(x)) *
@@ -23,7 +26,8 @@ T d2f1dx2(T x) {
         mp::exp(x) / mp::pow(x * x - mp::sin(x), 3);
 }
 
-int main() {
+auto main() -> int 
+{
 
     const real_t x0 = 1.0_rt;
     const real_t h = 1.e-3_rt;

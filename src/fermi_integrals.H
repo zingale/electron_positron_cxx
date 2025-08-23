@@ -179,8 +179,8 @@ public:
         }
     }
 
-    std::tuple<T, T, T>
-    get_points(T eta) {
+    auto get_points(T eta) -> std::tuple<T, T, T>
+    {
         // Return the 3 break points that define the 4 sub-intervals
         // of integration
 
@@ -251,7 +251,8 @@ public:
 
 private:
 
-    T kernel_p(T x, int eta_der, int beta_der) {
+    auto kernel_p(T x, int eta_der, int beta_der) -> T
+    {
 
         T result{};
 
@@ -326,7 +327,8 @@ private:
 
     }
 
-    T kernel_E(T x, int eta_der, int beta_der) {
+    auto kernel_E(T x, int eta_der, int beta_der) -> T
+    {
 
         T result{};
 
@@ -396,9 +398,8 @@ private:
         return result;
     }
 
-    T compute_legendre(int mode,
-                       T a, T b,
-                       int eta_der, int beta_der) {
+    auto compute_legendre(int mode, T a, T b, int eta_der, int beta_der) -> T
+    {
 
         // mode = 0 means we integrate x**2
         // mode = 1 means we integrate x
@@ -427,7 +428,8 @@ private:
         return integral;
     }
 
-    T compute_laguerre(T a, int eta_der, int beta_der) {
+    auto compute_laguerre(T a, int eta_der, int beta_der) -> T
+    {
 
         // Laguerre quadrature solves and integral of the form:
         //
@@ -464,7 +466,8 @@ private:
         return integral;
     }
 
-    T compute_fermi(int eta_der, int beta_der) {
+    auto compute_fermi(int eta_der, int beta_der) -> T
+    {
 
         BreakPoints<T> bp(eta_der);
         auto [S_1, S_2, S_3] = bp.get_points(eta);
@@ -512,8 +515,8 @@ public:
 };
 
 template<typename T>
-inline
-std::ostream& operator<< (std::ostream& os, FermiIntegral<T>& f) {
+inline auto operator<< (std::ostream& os, FermiIntegral<T>& f) -> std::ostream&
+{
 
     std::string out{};
     out += std::format("F        = {:20.10g}\n", f.F);

@@ -384,7 +384,8 @@ test_np_rhoT_derivs() {
 }
 
 
-int main() {
+auto main() -> int
+{
 
     test_ne_rho_derivs();
     test_np_rho_derivs();

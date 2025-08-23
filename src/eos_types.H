@@ -120,8 +120,8 @@ public:
 
 
 template<typename T>
-inline
-std::ostream& operator<< (std::ostream& os, EOSState<T>& es) {
+inline auto operator<< (std::ostream& os, EOSState<T>& es) -> std::ostream&
+{
 
     std::string out{"\n"};
 

@@ -7,9 +7,8 @@
 #include "electron_positron.H"
 
 template <typename T>
-std::pair<T, T>
-inline
-maxwell_1(T rho, T temp, T Ye) {
+inline auto maxwell_1(T rho, T temp, T Ye) -> std::pair<T, T>
+{
 
     ElectronPositronEOS<T> eos;
     auto es = eos.pe_state(rho, temp, Ye);
@@ -25,9 +24,8 @@ maxwell_1(T rho, T temp, T Ye) {
 }
 
 template <typename T>
-std::pair<T, T>
-inline
-maxwell_2(T rho, T temp, T Ye) {
+inline auto maxwell_2(T rho, T temp, T Ye) -> std::pair<T, T>
+{
 
     ElectronPositronEOS<T> eos;
     auto es = eos.pe_state(rho, temp, Ye);
@@ -43,9 +41,8 @@ maxwell_2(T rho, T temp, T Ye) {
 }
 
 template <typename T>
-std::pair<T, T>
-inline
-maxwell_3(T rho, T temp, T Ye) {
+inline auto maxwell_3(T rho, T temp, T Ye) -> std::pair<T, T>
+{
 
     ElectronPositronEOS<T> eos;
     auto es = eos.pe_state(rho, temp, Ye);

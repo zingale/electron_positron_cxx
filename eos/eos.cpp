@@ -6,7 +6,8 @@
 #include "electron_positron.H"
 
 
-int main() {
+auto main() -> int
+{
 
     std::println("Enter rho, T, Ye (space-separated): ");
     double rho_{};

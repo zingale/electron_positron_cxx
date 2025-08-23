@@ -373,7 +373,8 @@ test_ep_rhoT_derivs() {
 }
 
 
-int main() {
+auto main() -> int
+{
 
     test_ee_rho_derivs();
     test_ep_rho_derivs();

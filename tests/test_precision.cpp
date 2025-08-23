@@ -3,7 +3,8 @@
 #include "real_type.H"
 #include "util.H"
 
-int main() {
+auto main() -> int
+{
 
     // this will be interpreted as a long double regardless of real_t,
     // so we might get error in the later bits when building with 128-
