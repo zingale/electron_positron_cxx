@@ -41,6 +41,9 @@ The following tests exercise different parts of the EOS algorithm:
   second-derivatives (with respect to η and β) computed via quadrature
   by comparing to finite-difference approximations.
 
+* `test_helmholtz.cpp` : check the derivatives of the Helmholtz free
+  energy by comparing to difference approximations.
+  
 * `test_maxwell.cpp` : check the Maxwell relations for thermodynamic
   consistency.
 

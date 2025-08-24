@@ -174,6 +174,71 @@ test_helm_rhoT_derivs() {
 }
 
 
+// ∂³F/∂ρ∂T²
+
+void
+test_helm_rhoT2_derivs() {
+
+    const real_t Ye{0.5_rt};
+
+    const real_t eps{0.01_rt};
+
+    std::println("");
+    util::green_println("testing ∂³F/∂ρ∂T² via differencing");
+
+    for (auto T : Ts) {
+        for (auto rho : rhos) {
+            auto helm = get_helmholtz_terms(rho, T, Ye);
+
+            auto drho{eps * rho};
+            auto [deriv, _err] = fd::adaptive_diff<real_t>([&] (real_t _rho) -> real_t
+                {
+                    auto helm_eps = get_helmholtz_terms(_rho, T, Ye);
+                    return helm_eps.d2F_dT2;
+                }, rho, drho);
+
+            real_t err = mp::abs(helm.d3F_drhodT2 - deriv) / mp::abs(helm.d3F_drhodT2);
+            util::threshold_println(err,
+                                    "ρ = {:8.3g} T = {:8.3g},  ∂³F/∂ρ∂T² = {:15.8g},  error = {:11.5g}",
+                                    rho, T, helm.d3F_drhodT2, err);
+        }
+    }
+}
+
+
+// ∂³F/∂ρ²∂T²
+
+void
+test_helm_rho2T_derivs() {
+
+    const real_t Ye{0.5_rt};
+
+    const real_t eps{0.01_rt};
+
+    std::println("");
+    util::green_println("testing ∂³F/∂ρ²∂T via differencing");
+
+    for (auto T : Ts) {
+        for (auto rho : rhos) {
+            auto helm = get_helmholtz_terms(rho, T, Ye);
+
+            auto dT{eps * T};
+            auto [deriv, _err] = fd::adaptive_diff<real_t>([&] (real_t T_) -> real_t
+                {
+                    auto helm_eps = get_helmholtz_terms(rho, T_, Ye);
+                    return helm_eps.d2F_drho2;
+                }, T, dT);
+
+            real_t err = mp::abs(helm.d3F_drho2dT - deriv) / mp::abs(helm.d3F_drho2dT);
+            util::threshold_println(err,
+                                    "ρ = {:8.3g} T = {:8.3g},  ∂³F/∂ρ²∂T = {:15.8g},  error = {:11.5g}",
+                                    rho, T, helm.d3F_drho2dT, err);
+        }
+    }
+}
+
+
+
 auto main() -> int
 {
 
@@ -183,5 +248,8 @@ auto main() -> int
     test_helm_rho2_derivs();
     test_helm_T2_derivs();
     test_helm_rhoT_derivs();
+
+    test_helm_rhoT2_derivs();
+    test_helm_rho2T_derivs();
 
 }
