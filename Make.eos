@@ -63,7 +63,7 @@ CXXFLAGS := -std=c++23 -Wall -Wextra -Wshadow
 FULL_OPTIMIZE ?= TRUE
 
 ifeq ($(FULL_OPTIMIZE), TRUE)
-   CXXFLAGS += -O3
+   CXXFLAGS += -O3 -DNDEBUG
 else
    CXXFLAGS += -O2
 endif
