@@ -13,13 +13,16 @@
 #include "fermi_integrals.H"
 #include "fundamental_constants.H"
 
-// our Fermi integrals will use a dimensionless temperature
+// coefficient for number density expression in terms of Fermi
+// integrals.
 
 const real_t coeff = 8.0_rt * constants::pi * constants::sqrt2 *
     C::inv_compton_wavelength * C::inv_compton_wavelength * C::inv_compton_wavelength;
 
 
-// for the root finding eta
+// for the root finding eta, we need to know the number density of
+// electrons and positrons.  These will be constrained to the number
+// density of electrons from charge neutrality.
 
 template <typename T>
 inline auto n_e_constraint(T eta, T beta) -> T
@@ -53,10 +56,14 @@ inline auto n_p_constraint(T eta, T beta) -> T
 template <typename T>
 inline auto get_eta(T rhoYe, T temp) -> T
 {
-    // compute the degeneracy parameter
+    // compute the degeneracy parameter via root finding on
+    // n_e_tot = n_e + n_pos, where n_e and n_pos are found
+    // via integrating the Fermi distribution.
 
     T n_e_net = rhoYe * C::N_A;
     T beta = C::dbeta_dT * temp;
+
+    // get a reasonable guess for the bounds of η
 
     auto [eta_min, eta_max] = bounds::get_eta_bounds(rhoYe, temp);
 
@@ -277,6 +284,7 @@ public:
 
         // get the degeneracy parameter for these thermodynamic
         // conditions
+
         auto eta = get_eta(rho * Ye, temp);
 
         es.eta = eta;
@@ -287,6 +295,7 @@ public:
         T eta_pos = -eta;  // see C&G 24.334
 
         // compute the number density, pressure and energy
+
         T pcoeff = coeff * (2.0_rt / 3.0_rt) * C::rest_mass;
         T ecoeff = coeff * C::rest_mass;
 
@@ -302,7 +311,9 @@ public:
         es.n_e = coeff * beta32 * (f12.F + beta * f32.F);
         es.p_e = pcoeff * beta52 * (f32.F + 0.5_rt * beta * f52.F);
 
-        // this is (energy / volume, what we usually write as rho e)
+        // E_e is (energy / volume, what we usually write as rho e)
+        // We'll correct it to specific energy later.
+
         T E_e = ecoeff * beta52 * (f32.F + beta * f52.F);
 
         FermiIntegral<T> f12_pos(0.5_rt, eta_tilde, beta);
@@ -323,15 +334,18 @@ public:
 
         // first we get the derivatives of number density with respect
         // to η and β
+
         const auto [dn_e, dn_pos] = get_eta_beta_derivs<T>(coeff, 1.0_rt, 3.0_rt,
                                                            beta, f12, f32, f12_pos, f32_pos);
 
         // note that ∂β/∂ρ = 0
 
         // now get the derivatives of η with respect to ρ and T
+
         auto deta = get_eta_thermo_derivs(Ye, dn_e, dn_pos);
 
         // store the derivatives
+
         es.deta_drho = deta.drho;
         es.deta_dT = deta.dT;
 
@@ -361,6 +375,7 @@ public:
         // via the chain rule.
 
         // First we get the derivatives of p with respect to η and β
+
         const auto [dp_e, dp_pos] = get_eta_beta_derivs<T>(pcoeff, 0.5_rt, 5.0_rt,
                                                            beta, f32, f52, f32_pos, f52_pos);
 
@@ -382,6 +397,7 @@ public:
         // temperature via the chain rule.
 
         // First we get the derivatives of p with respect to η and β
+
         const auto [dE_e, dE_pos] = get_eta_beta_derivs<T>(ecoeff, 1.0_rt, 5.0_rt,
                                                            beta, f32, f52, f32_pos, f52_pos);
 
@@ -397,6 +413,7 @@ public:
         dEp_thermo.drhodT += 2.0_rt * C::rest_mass * es.d2np_drhodT;
 
         // correct energy to be specific energy
+
         es.e_e = E_e * rho_inv;
         es.dee_drho = (dEe_thermo.drho - E_e * rho_inv) * rho_inv;
         es.dee_dT = dEe_thermo.dT * rho_inv;
@@ -415,6 +432,7 @@ public:
 
         // compute entropy -- this follows from Arnett's text, Eq. B.6
         // also C&G 24.368d
+
         T h_e = es.e_e + es.p_e * rho_inv;
         T dhe_drho = es.dee_drho + es.dpe_drho * rho_inv - es.p_e * rho_inv * rho_inv;
         T dhe_dT = es.dee_dT + es.dpe_dT * rho_inv;
@@ -470,6 +488,7 @@ public:
             + temp_inv * (d2hp_drhodT - dhp_drho * temp_inv);
 
         // now fill the total values of each of the thermodynamic quantities
+
         es.n = es.n_e + es.n_pos;
         es.dn_drho = es.dne_drho + es.dnp_drho;
         es.dn_dT = es.dne_dT + es.dnp_dT;
