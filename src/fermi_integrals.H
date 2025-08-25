@@ -1,17 +1,13 @@
 #ifndef FERMI_INTEGRALS_H
 #define FERMI_INTEGRALS_H
 
-// Classes that enable the computation of Fermi-Dirac integrals to
-// high precision.  This uses the methods of Aparicio (1998) and Gong
-// (2001), described in
-// https://iopscience.iop.org/article/10.1086/313121 and
+// Compute the Fermi-Dirac integrals using the method of Gong (2001),
 // https://www.sciencedirect.com/science/article/abs/pii/S001046550100145X?via%3Dihub.
 
-// The method consist on breaking down the Fermi-integrals (eta,
-// theta) integration domain into four subintervals and apply
-// Gauss-Legendre or the Gauss laguerre quadrature methods with 200
-// points over each domain to guarantee accuracy beyond
-// double-precision.
+// The method consist on breaking down the Fermi-integrals integration
+// domain into four subintervals and apply Gauss-Legendre or the Gauss
+// laguerre quadrature methods with a large number of points in each
+// subdomain to guarantee accuracy beyond double-precision.
 
 // In the first subinterval, a x=z^2 change of variable is applied to
 // overcome the kernel singularity near the origin.
@@ -265,10 +261,12 @@ private:
         T num = 2.0_rt * mp::pow(x, 2.0_rt * k + 1.0_rt) * sqrt_term;
 
         // this is what we are usually exponentiating
+
         T delta = xsq - eta;
 
         // this is 1.0 / (2.0 + exp(-delta) + exp(delta)
         // which is 1.0 / (2.0 * (1.0 + cosh(delta))
+
         T inv_cosh_term{};
         if (mp::abs(delta) < max_exponent) {
             inv_cosh_term = 0.5_rt / (1.0_rt + mp::cosh(delta));
@@ -276,6 +274,7 @@ private:
         }
 
         // this is (exp(xsq - eta) - 1.0) / (exp(xsq - eta) + 1.0)
+
         T tanh_half_delta = mp::tanh(0.5_rt * delta);
 
         T denomi{};
@@ -294,6 +293,7 @@ private:
         }
 
         // now construct the integrand for what we are actual computing
+
         if (eta_der == 0 && beta_der == 0) {
             result = num * denomi;
 
@@ -366,6 +366,7 @@ private:
         }
 
         // now construct the integrand for what we are actual computing
+
         if (eta_der == 0 && beta_der == 0) {
             result = num * denomi;
 
@@ -469,6 +470,8 @@ private:
     auto compute_fermi(int eta_der, int beta_der) -> T
     {
 
+        // Perform the actual integration over the 4 subdomains.
+
         BreakPoints<T> bp(eta_der);
         auto [S_1, S_2, S_3] = bp.get_points(eta);
 
@@ -489,6 +492,7 @@ private:
 public:
 
     void evaluate(int mode) {
+
         // Perform the integration for the Fermi-Dirac function and
         // its derivatives (if desired)
         //
