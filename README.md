@@ -1,3 +1,6 @@
+[![DOI](https://zenodo.org/badge/1026869302.svg)](https://doi.org/10.5281/zenodo.16942327)
+
+
 # Electron-Positron Equation of State
 
 This is an electron-positron equation of state that computes the
