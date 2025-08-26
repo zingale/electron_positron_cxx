@@ -1,19 +1,16 @@
-This has a script that loops over T and rho and checks the 3 Maxwell
-relations and outputs the relative errors.  The idea is to run it
-at different precisions and compare the error.  For example:
+The program ``generate_maxwell_data.cpp`` loops over T and rho and
+checks the 3 Maxwell relations and outputs the relative errors to a
+file.  The idea is to run it at different precisions and number of
+quadrature points and compare the error.
+
+A script to run some combinations can be run as:
 
 ```
-make clean
-make PRECISION=FLOAT128
-./generate_maxwell_data > maxwell_128.txt
-
-make clean
-make PRECISION=LONG_DOUBLE
-./generate_maxwell_data > maxwell_80.txt
-
-make clean
-make PRECISION=DOUBLE
-./generate_maxwell_data > maxwell_64.txt
+./create_data.sh
 ```
 
+This will build it with various options and run.  Note: this can take
+a long time, because of the 256-bit case.
 
+A Jupyter notebook to plot the results and data from a previous run is
+in `data/`
