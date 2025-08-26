@@ -66,6 +66,16 @@ namespace util {
         std::println("{}{}{}", green, s, reset);
     }
 
+    template<typename... Args>
+    inline void red_println(const std::format_string<decltype(printable_cast(std::declval<Args>()))...> fmt,
+                              Args&&... args)
+    {
+        auto s = std::format(fmt, printable_cast(std::forward<Args>(args))...);
+        constexpr auto red = "\033[91m";
+        constexpr auto reset = "\033[0m";
+        std::println("{}{}{}", red, s, reset);
+    }
+
     template <typename... Args>
     inline void threshold_println(real_t val,
                                   const std::format_string<decltype(printable_cast(std::declval<Args>()))...> fmt,
@@ -94,6 +104,14 @@ namespace util {
         constexpr auto green = "\033[92m";
         constexpr auto reset = "\033[0m";
         std::println("{}{}{}", green, s, reset);
+    }
+
+    template<typename... Args>
+    inline void red_println(const std::format_string<Args...> fmt, Args&&... args) {
+        auto s = std::format(fmt, std::forward<Args>(args)...);
+        constexpr auto red = "\033[91m";
+        constexpr auto reset = "\033[0m";
+        std::println("{}{}{}", red, s, reset);
     }
 
     // print in red if we go above a threshold
