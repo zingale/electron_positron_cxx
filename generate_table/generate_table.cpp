@@ -12,13 +12,13 @@
 constexpr int rho_pts{421};  // density
 constexpr int T_pts{161};  // temperature
 
-const real_t dlo{-10.0e0_rt};
-const real_t dhi{11.0e0_rt};
-const real_t dstp = (dhi - dlo) / (static_cast<real_t>(rho_pts-1));
+const real_t rho_lo{-10.0e0_rt};
+const real_t rho_hi{11.0e0_rt};
+const real_t dlogrho = (rho_hi - rho_lo) / (static_cast<real_t>(rho_pts-1));
 
-const real_t tlo{3.0e0_rt};
-const real_t thi{11.0e0_rt};
-const real_t tstp = (thi - tlo) / (static_cast<real_t>(T_pts-1));
+const real_t T_lo{3.0e0_rt};
+const real_t T_hi{11.0e0_rt};
+const real_t dlogT = (T_hi - T_lo) / (static_cast<real_t>(T_pts-1));
 
 
 auto main() -> int
@@ -61,10 +61,10 @@ auto main() -> int
 
     #pragma omp parallel for schedule(static, 1)
     for (int j = 0; j < T_pts; ++j) {
-        real_t T = std::pow(10.0_rt, tlo + static_cast<real_t>(j) * tstp);
+        real_t T = std::pow(10.0_rt, T_lo + static_cast<real_t>(j) * dlogT);
 
         for (int i = 0; i < rho_pts; ++i) {
-            real_t rho = std::pow(10.0_rt, dlo + static_cast<real_t>(i) * dstp);
+            real_t rho = std::pow(10.0_rt, rho_lo + static_cast<real_t>(i) * dlogrho);
 
             // in the table, density varies fastest
 
