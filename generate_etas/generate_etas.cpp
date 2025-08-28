@@ -10,15 +10,21 @@
 using namespace literals;
 
 const std::array<real_t, 19> Ts_v{
-    {1.e3_rt, 3.e3_rt, 1.e4_rt, 3.e4_rt, 1.e5_rt, 3.e5_rt, 1.e6_rt, 3.e6_rt, 1.e7_rt, 3.e7_rt,
-     1.e8_rt, 3.e8_rt, 1.e9_rt, 3.e9_rt, 1.e10_rt, 3.e10_rt, 1.e11_rt, 3.e11_rt, 1.e12_rt}};
+    {1.e3_rt, 3.e3_rt, 1.e4_rt, 3.e4_rt, 1.e5_rt,
+     3.e5_rt, 1.e6_rt, 3.e6_rt, 1.e7_rt, 3.e7_rt,
+     1.e8_rt, 3.e8_rt, 1.e9_rt, 3.e9_rt, 1.e10_rt,
+     3.e10_rt, 1.e11_rt, 3.e11_rt, 1.e12_rt}};
 
-const std::array<real_t, 25> rhoYes_v{
-    {1.e-12_rt, 1.e-11_rt, 1.e-10_rt, 1.e-09_rt, 1.e-08_rt, 1.e-07_rt,
-     1.e-06_rt, 1.e-05_rt, 1.e-04_rt, 1.e-03_rt, 1.e-02_rt, 1.e-01_rt,
-     1.e+00_rt, 1.e+01_rt, 1.e+02_rt, 1.e+03_rt, 1.e+04_rt, 1.e+05_rt,
-     1.e+06_rt, 1.e+07_rt, 1.e+08_rt, 1.e+09_rt, 1.e+10_rt, 1.e+11_rt,
-     1.e+12_rt}};
+const std::array<real_t, 49> rhoYes_v{
+    {1.e-12_rt, 3.e-12_rt, 1.e-11_rt, 3.e-11_rt, 1.e-10_rt, 3.e-10_rt,
+     1.e-9_rt,  3.e-9_rt,  1.e-8_rt,  3.e-8_rt,  1.e-7_rt,  3.e-7_rt,
+     1.e-6_rt,  3.e-6_rt,  1.e-5_rt,  3.e-5_rt,  1.e-4_rt,  3.e-4_rt,
+     1.e-3_rt,  3.e-3_rt,  1.e-2_rt,  3.e-2_rt,  1.e-1_rt,  3.e-1_rt,
+     1.e0_rt,   3.e0_rt,   1.e1_rt,   3.e1_rt,   1.e2_rt,   3.e2_rt,
+     1.e3_rt,   3.e3_rt,   1.e4_rt,   3.e4_rt,   1.e5_rt,   3.e5_rt,
+     1.e6_rt,   3.e6_rt,   1.e7_rt,   3.e7_rt,   1.e8_rt,   3.e8_rt,
+     1.e9_rt,   3.e9_rt,   1.e10_rt,  3.e10_rt,  1.e11_rt,  3.e11_rt,
+     1.e12_rt}};
 
 auto main() -> int
 {
