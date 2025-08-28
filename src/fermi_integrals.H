@@ -218,7 +218,7 @@ class FermiIntegral {
     // done to avoid singularities (effectively integrating in terms
     // of momentum instead of energy).
 
-    // First and second derivatives with respect to $\eta$ and $\beta$
+    // First through third derivatives with respect to $\eta$ and $\beta$
     // are supported.
 
 
@@ -236,9 +236,15 @@ public:
     T F{};
     T dF_deta{};
     T dF_dbeta{};
+
     T d2F_deta2{};
     T d2F_detadbeta{};
     T d2F_dbeta2{};
+
+    T d3F_deta3{};
+    T d3F_deta2dbeta{};
+    T d3F_detadbeta2{};
+    T d3F_dbeta3{};
 
     FermiIntegral(T _k, T _eta, T _beta) :
         max_exponent{mp::trunc(mp::log(std::numeric_limits<T>::max()))},
@@ -321,7 +327,21 @@ private:
             // this is IB = 5 from Gong et al.
             // this corresponds to eq A.5 in terms of x**2
             result = -0.125_rt * mp::pow(x, 2.0_rt * k + 5.0_rt) / mp::pow(sqrt_term, 3) * denomi;
-        }
+        } else if (eta_der == 3 && beta_der == 0) {
+            // this is IB = 6 from Gong et al.
+            // this corresponds to eq A.6 in terms of x**2
+
+        } else if (eta_der == 2 && beta_der == 1) {
+            // this is IB = 7 from Gong et al.
+            // this corresponds to eq A.7 in terms of x**2
+
+        } else if (eta_der == 1 && beta_der == 2) {
+            // this is IB = 8 from Gong et al.
+            // this corresponds to eq A.8 in terms of x**2
+
+        } else if (eta_der == 0 && beta_der == 3) {
+            // this is IB = 9 from Gong et al.
+            // this corresponds to eq A.9 in terms of x**2
 
         return result;
 
@@ -508,10 +528,17 @@ public:
             dF_dbeta = compute_fermi(0, 1);
         }
 
-        if (mode == 2) {
+        if (mode >= 2) {
             d2F_deta2 = compute_fermi(2, 0);
             d2F_detadbeta = compute_fermi(1, 1);
             d2F_dbeta2 = compute_fermi(0, 2);
+        }
+
+        if (mode == 3) {
+            d3F_deta3 = compute_fermi(3, 0);
+            d3F_deta2dbeta = compute_fermi(2, 1);
+            d3F_detadbeta2 = compute_fermi(1, 2);
+            d3F_dbeta3 = compute_fermi(0, 3);
         }
 
     }
@@ -523,12 +550,18 @@ inline auto operator<< (std::ostream& os, FermiIntegral<T>& f) -> std::ostream&
 {
 
     std::string out{};
-    out += std::format("F        = {:20.10g}\n", f.F);
-    out += std::format("dF/dη    = {:20.10g}\n", f.dF_deta);
-    out += std::format("dF/dβ    = {:20.10g}\n", f.dF_dbeta);
-    out += std::format("d²F/dη²  = {:20.10g}\n", f.d2F_deta2);
-    out += std::format("d²F/dηdβ = {:20.10g}\n", f.d2F_detadbeta);
-    out += std::format("d²F/dβ²  = {:20.10g}\n", f.d2F_dbeta2);
+    out += std::format("F         = {:20.10g}\n", f.F);
+    out += std::format("∂F/∂η     = {:20.10g}\n", f.dF_deta);
+    out += std::format("∂F/∂β     = {:20.10g}\n", f.dF_dbeta);
+
+    out += std::format("∂²F/∂η²   = {:20.10g}\n", f.d2F_deta2);
+    out += std::format("∂²F/∂η∂β  = {:20.10g}\n", f.d2F_detadbeta);
+    out += std::format("∂²F/∂β²   = {:20.10g}\n", f.d2F_dbeta2);
+
+    out += std::format("∂³F/∂η³   = {:20.10g}\n", f.d3F_deta3);
+    out += std::format("∂³F/∂η²∂β = {:20.10g}\n", f.d3F_deta2dbeta);
+    out += std::format("∂³F/∂η∂β² = {:20.10g}\n", f.d3F_detadbeta2);
+    out += std::format("∂³F/∂β³   = {:20.10g}\n", f.d3F_dbeta3);
 
     os << out;
     return os;
