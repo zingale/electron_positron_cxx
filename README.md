@@ -12,8 +12,10 @@ This uses the method of Gong et al. 2001 to compute the Fermi-Dirac
 integrals, and follows the notation from Timmes and Arnett 1999 for
 the forms of the thermodynamic quantities.
 
-To get good results, this uses 128-bit precision, relying on GCC's
-`__float128` implementation.
+To get good results, this can use 128- or 256-bit precision.
+
+Overall, this code is slow, and it is mainly intended to be used
+to tabulate EOS properties.
 
 
 ## Requirements
@@ -28,10 +30,10 @@ To get good results, this uses 128-bit precision, relying on GCC's
 ## Root-finding for degeneracy parameter
 
 The first step in finding the thermodynamic state is to solve for the
-degeneracy parameter, η, via a root-finding process that ensures charge
-neutrality (the number density of electrons from the mass density must
-equal the number density of electrons minus the number density of
-positrons).
+degeneracy parameter, η, via a root-finding process that ensures
+charge neutrality (the number density of electrons from the mass
+density must equal the number density of electrons minus the number
+density of positrons).
 
 We use Brent's method to do this solve, which requires a bracket that
 contains the roots.  We precompute the degeneracy parameter on a grid
@@ -141,8 +143,8 @@ overall integration can be set via `QUAD_PTS`, e.g., as:
 make QUAD_PTS=100
 ```
 
-for 100 points.  Valid options are `20`, `50`, `100`, `200` (the default),
-and `400`.
+for 100 points.  Valid options are `20`, `50`, `100`, `200` (the
+default), and `400`.
 
 Be sure to do
 
@@ -211,6 +213,13 @@ s  =   1.3042445e+14   ∂s/∂ρ   =  -1.3042445e+16   ∂s/∂T   =       9180
                       ∂²s/∂ρ²  =   2.6084889e+18  ∂²s/∂T²  =    0.0048326469  ∂²s/∂ρ∂T  =       -91802389
 ```
 
+## Generating an EOS table
+
+The code in `generate_table/` will compute a
+Helmholtz-free-energy-based table in the format used by the popular
+Timmes & Swesty (2000) helmeos.  It uses OpenMP to parallelize over
+the points in the table.
+
 ## Tests
 
 There are a large number of tests that exercise different parts of the
@@ -223,6 +232,9 @@ make
 You can optionally set the precision and number of quadrature points
 as described above.  The `tests/README.md` describes the basic
 functionality of the tests.
+
+Many of these will compare a difference approximation to the
+derivatives to the derivative computed by the EOS by integration.
 
 
 ## Derivations
