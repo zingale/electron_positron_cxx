@@ -25,6 +25,19 @@ To get good results, this uses 128-bit precision, relying on GCC's
 * [boost](https://www.boost.org/) for 256-bit precision
 
 
+## Root-finding for degeneracy parameter
+
+The first step in finding the thermodynamic state is to solve for the
+degeneracy parameter, η, via a root-finding process that ensures charge
+neutrality (the number density of electrons from the mass density must
+equal the number density of electrons minus the number density of
+positrons).
+
+We use Brent's method to do this solve, which requires a bracket that
+contains the roots.  We precompute the degeneracy parameter on a grid
+of ρYₑ and T, and use this to provide bounds.  The code
+`generate_eta/generate_etas.cpp` will compute this grid.
+
 ## Floating point precision
 
 Several different floating point standards are supported.  The entire
