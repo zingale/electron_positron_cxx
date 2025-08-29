@@ -449,7 +449,7 @@ auto main() -> int
                     real_t rel_err2 = mp::abs(f.d2F_detadbeta - diff2) / mp::abs(f.d2F_detadbeta);
 
                     util::threshold_println(rel_err,
-                                            "k = {:5.2f}, η = {:9.3f}, β = {:9.3g}, ∂²F/∂η∂β = {:15.8g}, error (D(∂F/∂β) = {:15.8g}, error (D(∂F/∂η) = {:15.8g}",
+                                            "k = {:5.2f}, η = {:9.3f}, β = {:9.3g}, ∂²F/∂η∂β = {:15.8g}, error (D(∂F/∂β)) = {:15.8g}, error (D(∂F/∂η)) = {:15.8g}",
                                             k, eta, beta, f.dF_dbeta, rel_err, rel_err2);
                 }
             }
