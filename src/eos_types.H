@@ -170,11 +170,6 @@ public:
     T drhodT{};
     T dT2{};
 
-    T drho3{};
-    T drho2dT{};
-    T drhodT2{};
-    T dT3{};
-
     RhoTDerivs() = default;
 
 };

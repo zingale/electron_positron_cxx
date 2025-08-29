@@ -203,8 +203,6 @@ inline auto get_eta_thermo_derivs(const T Ye,
     deta.drho = C::N_A * Ye / (dn_e.deta - dn_pos.deta);
     deta.dT = -C::dbeta_dT * (dn_e.dbeta - dn_pos.dbeta) / (dn_e.deta - dn_pos.deta);
 
-    // second derivs
-
     // ∂²η/∂T²
     deta.dT2 = (mp::pow(C::dbeta_dT, 2.0_rt) * (dn_pos.dbeta2 - dn_e.dbeta2) +
                 2.0_rt * C::dbeta_dT * deta.dT * (dn_pos.detadbeta - dn_e.detadbeta) +
@@ -219,10 +217,6 @@ inline auto get_eta_thermo_derivs(const T Ye,
     // ∂²η/∂ρ²
     deta.drho2 = deta.drho * deta.drho * (dn_pos.deta2 - dn_e.deta2) /
         (dn_e.deta - dn_pos.deta);
-
-    // third derivs
-
-
 
     return deta;
 }
