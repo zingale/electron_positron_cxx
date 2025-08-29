@@ -255,7 +255,7 @@ auto main() -> int
 
                     const real_t _h = (eta == 0) ? h : h * mp::abs(eta);
 
-                    // check dF/dη
+                    // check ∂F/∂η
                     auto [diff, err] =
                         fd::adaptive_diff<real_t>([=] (real_t _eta) -> real_t
                         {
@@ -290,7 +290,7 @@ auto main() -> int
 
                     const real_t _h = (beta == 0) ? 1.e-4_rt : h * mp::abs(beta);
 
-                    // check dF/dβ
+                    // check ∂F/∂β
                     auto [diff, err] =
                         fd::adaptive_diff<real_t>([=] (real_t _beta) -> real_t
                         {
@@ -327,7 +327,7 @@ auto main() -> int
 
                     const real_t _h = (eta == 0) ? h : h * mp::abs(eta);
 
-                    // check d²F/dη²
+                    // check ∂²F/∂η²
 
                     // first do a second deriv difference on F
                     auto [diff, err] =
@@ -340,7 +340,7 @@ auto main() -> int
 
                     real_t rel_err = mp::abs(f.d2F_deta2 - diff) / mp::abs(f.d2F_deta2);
 
-                    // next do a first order deriv on dF/dη
+                    // next do a first order deriv on ∂F/∂η
                     auto [diff2, err2] =
                         fd::adaptive_diff<real_t>([=] (real_t _eta) -> real_t
                         {
@@ -376,7 +376,7 @@ auto main() -> int
 
                     const real_t _h = (beta == 0) ? h : h * mp::abs(beta);
 
-                    // check d²F/dβ²
+                    // check ∂²F/∂β²
 
                     // first do a second deriv difference on F
                     auto [diff, err] =
@@ -389,7 +389,7 @@ auto main() -> int
 
                     real_t rel_err = mp::abs(f.d2F_dbeta2 - diff) / mp::abs(f.d2F_dbeta2);
 
-                    // next do a second order deriv on dF/dβ
+                    // next do a second order deriv on ∂F/∂β
                     auto [diff2, err2] =
                         fd::adaptive_diff<real_t>([=] (real_t _beta) -> real_t
                         {
@@ -455,7 +455,5 @@ auto main() -> int
             }
         }
     }
-
-    // third derivatives
 
 }
