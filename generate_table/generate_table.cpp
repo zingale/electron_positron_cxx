@@ -104,31 +104,31 @@ auto main() -> int
     // there are 4 tables.  First is the free energy table
 
     for (auto & h : helm_v) {
-        util::println("{:32.24g}  {:32.24g}  {:32.24g}  {:32.24g}  {:32.24g}  {:32.24g}  {:32.24g}  {:32.24g}  {:32.24g}",
-                      h.F, h.dF_drho, h.dF_dT,
-                      h.d2F_drho2, h.d2F_dT2, h.d2F_drhodT,
-                      h.d3F_drho2dT, h.d3F_drhodT2, h.d4F_drho2dT2);
+        of << util::format("{:32.24g}  {:32.24g}  {:32.24g}  {:32.24g}  {:32.24g}  {:32.24g}  {:32.24g}  {:32.24g}  {:32.24g}\n",
+                           h.F, h.dF_drho, h.dF_dT,
+                           h.d2F_drho2, h.d2F_dT2, h.d2F_drhodT,
+                           h.d3F_drho2dT, h.d3F_drhodT2, h.d4F_drho2dT2);
     }
 
     // next is the pressure derivative table
 
     for (auto [e, d3p_drho2dT] : std::views::zip(eos_v, d3p_drho2dT_v)) {
-        util::println("{:32.24g}  {:32.24g}  {:32.24g}  {:32.24g}",
-                      e.dp_drho, e.d2p_drho2, e.d2p_drhodT, d3p_drho2dT);
+        of << util::format("{:32.24g}  {:32.24g}  {:32.24g}  {:32.24g}\n",
+                           e.dp_drho, e.d2p_drho2, e.d2p_drhodT, d3p_drho2dT);
     }
 
     // next is degeneracy parameter
 
     for (auto & e : eos_v) {
-        util::println("{:32.24g}  {:32.24g}  {:32.24g}  {:32.24g}",
-                      e.eta, e.deta_drho, e.deta_dT, e.d2eta_drhodT);
+        of << util::format("{:32.24g}  {:32.24g}  {:32.24g}  {:32.24g}\n",
+                           e.eta, e.deta_drho, e.deta_dT, e.d2eta_drhodT);
     }
 
     // finally number density
 
     for (auto & e : eos_v) {
-        util::println("{:32.24g}  {:32.24g}  {:32.24g}  {:32.24g}",
-                      e.n, e.dn_drho, e.dn_dT, e.d2n_drhodT);
+        of << util::format("{:32.24g}  {:32.24g}  {:32.24g}  {:32.24g}\n",
+                           e.n, e.dn_drho, e.dn_dT, e.d2n_drhodT);
     }
 
 }
