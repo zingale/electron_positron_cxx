@@ -184,6 +184,25 @@ inline auto get_eta_beta_derivs(const T A, const T c, const T p, const T beta,
                                                 16.0_rt * beta2 * (fx_pos.d2F_detadbeta + c * beta * fy_pos.d2F_detadbeta) +
                                                 16.0_rt * (fx_pos.d2F_deta2 + c * beta * fy_pos.d2F_deta2));
 
+    // third derivatives
+
+    // ∂³q/∂η³
+
+    // ∂³q/∂η²∂β
+
+    // ∂³q/∂η∂β²
+
+    // ∂³q/∂β³
+
+
+    // ∂³w/∂η³
+
+    // ∂³w/∂η²∂β
+
+    // ∂³w/∂η∂β²
+
+    // ∂³w/∂β³
+
     return {dq, dw};
 }
 
@@ -199,24 +218,60 @@ inline auto get_eta_thermo_derivs(const T Ye,
 
     RhoTDerivs<T> deta;
 
+    real_t dbdT = C::dbeta_dT;
+    real_t dbdT2 = C::dbeta_dT * C::dbeta_dT;
+    real_t dbdT3 = dbdT2 * C::dbeta_dT;
+
+    real_t denomi = 1.0_rt / (dn_e.deta - dn_pos.deta);
+    // first derivs
+
     // ∂η/∂ρ and ∂η/∂T
-    deta.drho = C::N_A * Ye / (dn_e.deta - dn_pos.deta);
-    deta.dT = -C::dbeta_dT * (dn_e.dbeta - dn_pos.dbeta) / (dn_e.deta - dn_pos.deta);
+    deta.drho = C::N_A * Ye * denomi;
+    deta.dT = -dbdT * (dn_e.dbeta - dn_pos.dbeta) * denomi;
+
+    // second derivs
 
     // ∂²η/∂T²
-    deta.dT2 = (mp::pow(C::dbeta_dT, 2.0_rt) * (dn_pos.dbeta2 - dn_e.dbeta2) +
-                2.0_rt * C::dbeta_dT * deta.dT * (dn_pos.detadbeta - dn_e.detadbeta) +
-                mp::pow(deta.dT, 2.0_rt) * (dn_pos.deta2 - dn_e.deta2)) /
-        (dn_e.deta - dn_pos.deta);
+    deta.dT2 = (dbdT2 * (dn_pos.dbeta2 - dn_e.dbeta2) +
+                2.0_rt * dbdT * deta.dT * (dn_pos.detadbeta - dn_e.detadbeta) +
+                mp::pow(deta.dT, 2.0_rt) * (dn_pos.deta2 - dn_e.deta2)) * denomi;
+
 
     // ∂²η/∂ρ∂T
-    deta.drhodT = (C::dbeta_dT * (dn_pos.detadbeta - dn_e.detadbeta) +
-                   deta.dT * (dn_pos.deta2 - dn_e.deta2)) * deta.drho /
-        (dn_e.deta - dn_pos.deta);
+    deta.drhodT = (dbdT * (dn_pos.detadbeta - dn_e.detadbeta) +
+                   deta.dT * (dn_pos.deta2 - dn_e.deta2)) * deta.drho * denomi;
 
     // ∂²η/∂ρ²
-    deta.drho2 = deta.drho * deta.drho * (dn_pos.deta2 - dn_e.deta2) /
-        (dn_e.deta - dn_pos.deta);
+    deta.drho2 = deta.drho * deta.drho * (dn_pos.deta2 - dn_e.deta2) * denomi;
+
+    // third derivs
+
+    // ∂³η/∂T³
+    deta.dT3 = (dbdT3 * (dn_pos.dbeta3 - dn_e.dbeta3) +
+                3.0_rt * dbdT2 * deta.dT * (dn_pos.detadbeta2 - dn_e.detadbeta2) +
+                3.0_rt * C::dbeta_dT * mp::pow(deta.dT, 2.0_rt) * (dn_pos.deta2dbeta - dn_e.deta2dbeta) +
+                3.0_rt * C::dbeta_dT * deta.dT2 * (dn_pos.detadbeta - dn_e.detadbeta) +
+                mp::pow(deta.dT, 3.0_rt) * (dn_pos.deta3 - dn_e.deta3) +
+                3.0_rt * deta.dT * deta.dT2 * (dn_pos.deta2 - dn_e.deta2)) * denomi;
+
+    // ∂³η/∂ρ∂T²
+    deta.drhodT2 = (dbdT2 * deta.drho * (dn_pos.detadbeta2 - dn_e.detadbeta2) +
+                    2.0_rt * dbdT * deta.drho * deta.dT * (dn_pos.deta2dbeta - dn_e.deta2dbeta) +
+                    2.0_rt * dbdT * deta.drhodT * (dn_pos.detadbeta - dn_e.detadbeta) +
+                    mp::pow(deta.dT, 2.0_rt) * deta.drho * (dn_pos.deta3 - dn_e.deta3) +
+                    2.0_rt * deta.dT * deta.drhodT * (dn_pos.deta2 - dn_e.deta2) +
+                    deta.dT2 * deta.drho * (dn_pos.deta2 - dn_e.deta2)) * denomi;
+
+    // ∂³η/∂ρ²∂T
+    deta.drho2dT = (dbdT * mp::pow(deta.drho, 2.0_rt) * (dn_pos.deta2dbeta - dn_e.deta2dbeta) +
+                    dbdT * deta.drho2 * (dn_pos.detadbeta - dn_e.detadbeta) +
+                    deta.dT * mp::pow(deta.drho, 2.0_rt) * (dn_pos.deta3 - dn_e.deta3) +
+                    deta.dT * deta.drho2 * (dn_pos.deta2 - dn_e.deta2) +
+                    2.0_rt * deta.drho * deta.drhodT * (dn_pos.deta2 - dn_e.deta2)) * denomi;
+
+    // ∂³η/∂ρ³
+    deta.drho3 = (mp::pow(deta.drho, 2.0_rt) * (dn_pos.deta3 - dn_e.deta3) +
+                  3.0_rt * deta.drho2 * (dn_pos.deta2 - dn_e.deta2)) * deta.drho * denomi;
 
     return deta;
 }
@@ -352,6 +407,11 @@ public:
         es.d2eta_drho2 = deta.drho2;
         es.d2eta_drhodT = deta.drhodT;
         es.d2eta_dT2 = deta.dT2;
+
+        es.d3eta_drho3 = deta.drho3;
+        es.d3eta_drho2dT = deta.drho2dT;
+        es.d3eta_drhodT2 = deta.drhodT2;
+        es.d3eta_dT3 = deta.dT3;
 
         // now we can compute the first and second derivatives of all
         // the thermodynamic quantities

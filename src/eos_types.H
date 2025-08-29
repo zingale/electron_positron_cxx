@@ -108,6 +108,10 @@ public:
     T d2eta_drho2{};
     T d2eta_drhodT{};
     T d2eta_dT2{};
+    T d3eta_drho3{};
+    T d3eta_drho2dT{};
+    T d3eta_drhodT2{};
+    T d3eta_dT3{};
 
     EOSState() = default;
 
@@ -170,6 +174,11 @@ public:
     T drhodT{};
     T dT2{};
 
+    T drho3{};
+    T drho2dT{};
+    T drhodT2{};
+    T dT3{};
+
     RhoTDerivs() = default;
 
 };
@@ -184,7 +193,8 @@ inline auto operator<< (std::ostream& os, EOSState<T>& es) -> std::ostream&
     out += util::format(" ρ = {:15.8g}       T  = {:15.8g}      Yₑ  = {:15.8g}\n\n", es.rho, es.temp, es.Y_e);
     out += util::format(" β = {:15.8g}\n", es.beta);
     out += util::format(" η = {:15.8g}    ∂η/∂ρ  = {:15.8g}    ∂η/∂T  = {:15.8g}\n", es.eta, es.deta_drho, es.deta_dT);
-    out += util::format("     {:15}   ∂²η/∂ρ² = {:15.8g}   ∂²η/∂T² = {:15.8g}   ∂²η/∂ρ∂T = {:15.8g}\n\n", " ", es.d2eta_drho2, es.d2eta_dT2, es.d2eta_drhodT);
+    out += util::format("     {:15}   ∂²η/∂ρ² = {:15.8g}   ∂²η/∂T² = {:15.8g}   ∂²η/∂ρ∂T  = {:15.8g}\n", " ", es.d2eta_drho2, es.d2eta_dT2, es.d2eta_drhodT);
+    out += util::format("     {:15}   ∂³η/∂ρ³ = {:15.8g}   ∂³η/∂T³ = {:15.8g}   ∂³η/∂ρ²∂T = {:15.8g}   ∂³η/∂ρ∂T² = {:15.8g}\n\n", " ", es.d3eta_drho3, es.d3eta_dT3, es.d3eta_drho2dT, es.d3eta_drhodT2);
     out += util::format("n⁻ = {:15.8g}   ∂n⁻/∂ρ  = {:15.8g}   ∂n⁻/∂T  = {:15.8g}\n", es.n_e, es.dne_drho, es.dne_dT);
     out += util::format("     {:15}  ∂²n⁻/∂ρ² = {:15.8g}  ∂²n⁻/∂T² = {:15.8g}  ∂²n⁻/∂ρ∂T = {:15.8g}\n", " ", es.d2ne_drho2, es.d2ne_dT2, es.d2ne_drhodT);
     out += util::format("n⁺ = {:15.8g}   ∂n⁺/∂ρ  = {:15.8g}   ∂n⁺/∂T  = {:15.8g}\n", es.n_pos, es.dnp_drho, es.dnp_dT);
