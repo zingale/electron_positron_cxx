@@ -187,13 +187,22 @@ inline auto get_eta_beta_derivs(const T A, const T c, const T p, const T beta,
     // third derivatives
 
     // ∂³q/∂η³
+    dq.deta3 = A * betap2 * (fx.d3F_deta3 + c * beta * fy.d3F_deta3);
 
     // ∂³q/∂η²∂β
+    dq.deta2dbeta = 0.5_rt * A * betap2 * betai * (p * (fx.d2F_deta2 + c * beta * fy.d2F_deta2) +
+                                                   2.0 * beta * (fx.d3F_deta2dbeta + c * beta * fy.d3F_deta2dbeta + c * fy.d2F_deta2));
 
     // ∂³q/∂η∂β²
+    dq.detadbeta2 = 0.25_rt * A * betap2 / beta2 * (p * (p - 2.0_rt) * (fx.dF_deta + c * beta * fy.dF_deta) +
+                                                    4.0_rt * p * beta * (fx.d2F_detadbeta + c * beta * fy.d2F_detadbeta + c * fy.dF_deta) +
+                                                    4.0_rt * beta2 * (fx.d3F_detadbeta2 + c * beta * fy.d3F_detadbeta2 + 2.0_rt * c * fy.d2F_detadbeta));
 
     // ∂³q/∂β³
-
+    dq.dbeta3 = 0.125_rt * A * betap2 / beta3 * (6.0_rt * p * (p - 2.0_rt) * beta * (fx.dF_dbeta + c * beta * fy.dF_dbeta + c * fy.F) +
+                                                 p * (p * p - 6.0_rt * p + 8.0_rt) * (fx.F + c * beta * fy.F) +
+                                                 12.0_rt * p * beta2 * (fx.d2F_dbeta2 + c * beta * fy.d2F_dbeta2 + 2.0_rt * c * fy.dF_dbeta) +
+                                                 8.0_rt * beta3 * (fx.d3F_dbeta3 + c * beta * fy.d3F_dbeta3 + 3.0_rt * c * fy.d2F_dbeta2));
 
     // ∂³w/∂η³
 
