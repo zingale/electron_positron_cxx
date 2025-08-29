@@ -337,20 +337,20 @@ private:
         } else if (eta_der == 2 && beta_der == 1) {
             // this is IB = 7 from Gong et al.
             // this corresponds to eq A.7 in terms of x**2
-            result = 0.5_rt * mp::pow(x, 2.0_rt *k +3.0_rt) * inv_cosh_term *
+            result = 0.5_rt * mp::pow(x, 2.0_rt *k + 3.0_rt) * inv_cosh_term *
                 tanh_half_delta / sqrt_term;
 
         } else if (eta_der == 1 && beta_der == 2) {
             // this is IB = 8 from Gong et al.
             // this corresponds to eq A.8 in terms of x**2
-            result = -0.125_rt * mp::pow(x, 2.0_rt * k +5.0_rt) * inv_cosh_term /
+            result = -0.125_rt * mp::pow(x, 2.0_rt * k + 5.0_rt) * inv_cosh_term /
                 mp::pow(sqrt_term, 3);
 
         } else if (eta_der == 0 && beta_der == 3) {
             // this is IB = 9 from Gong et al.
             // this corresponds to eq A.9 in terms of x**2
-            result  = 0.03125_rt * mp::pow(x, 2.0 * k + 7.0_rt) *
-                mp::pow(denomi, 3) / mp::pow(sqrt_term, 5);
+            result  = (3.0_rt / 32.0_rt) * mp::pow(x, 2.0 * k + 7.0_rt) *
+                denomi / mp::pow(sqrt_term, 5);
         }
 
         return result;
@@ -440,7 +440,7 @@ private:
         } else if (eta_der == 1 && beta_der == 2) {
             // this is IB = 8 from Gong et al.
             // this corresponds to eq A.8
-            result = -0.625_rt * mp::pow(x, k + 2.0_rt) * inv_cosh_term / mp::pow(sqrt_term, 3);
+            result = -0.0625_rt * mp::pow(x, k + 2.0_rt) * inv_cosh_term / mp::pow(sqrt_term, 3);
 
         } else if (eta_der == 0 && beta_der == 3) {
             // this is IB = 9 from Gong et al.

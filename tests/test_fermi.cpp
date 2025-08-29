@@ -456,4 +456,195 @@ auto main() -> int
         }
     }
 
+    // third derivatives
+
+    {
+        const real_t h = 0.05_rt;
+
+        std::println();
+        util::green_println("∂³F/∂η³");
+
+        for (auto k : {-0.5_rt, 0.5_rt, 1.5_rt, 2.5_rt}) {
+            for (auto eta : {-70.0_rt, 0.0_rt, 50.0_rt, 500.0_rt, 10000.0_rt}) {
+                for (auto beta : {1.e-7_rt, 1.e-3_rt, 30.0_rt, 100.0_rt}) {
+
+                    FermiIntegral<real_t> f(k, eta, beta);
+                    f.evaluate(3);
+
+                    const real_t _h = (eta == 0) ? h : h * mp::abs(eta);
+
+                    // check ∂³F/∂η³
+
+                    // first do a second deriv difference on ∂F/∂η
+                    auto [diff, err] =
+                        fd::adaptive_diff2<real_t>([=] (real_t _eta) -> real_t
+                        {
+                            FermiIntegral<real_t> _f(k, _eta, beta);
+                            _f.evaluate(1);
+                            return _f.dF_deta;
+                        }, eta, _h);
+
+                    real_t rel_err = mp::abs(f.d3F_deta3 - diff) / mp::abs(f.d3F_deta3);
+
+                    // next do a first order deriv on ∂²F/∂η²
+                    auto [diff2, err2] =
+                        fd::adaptive_diff<real_t>([=] (real_t _eta) -> real_t
+                        {
+                            FermiIntegral<real_t> _f(k, _eta, beta);
+                            _f.evaluate(2);
+                            return _f.d2F_deta2;
+                        }, eta, _h);
+
+                    real_t rel_err2 = mp::abs(f.d3F_deta3 - diff2) / mp::abs(f.d3F_deta3);
+
+                    util::threshold_println(rel_err,
+                                            "k = {:5.2f}, η = {:9.3f}, β = {:9.3g}, ∂³F/∂η³ = {:15.8g}, error (D2(∂F/∂η)) = {:15.8g}, error (D(∂²F/∂η²)) = {:15.8g}",
+                                            k, eta, beta, f.d3F_deta3, rel_err, rel_err2);
+                }
+            }
+        }
+    }
+
+    {
+        const real_t h = 0.05_rt;
+
+        std::println();
+        util::green_println("∂³F/∂η²∂β");
+
+        for (auto k : {-0.5_rt, 0.5_rt, 1.5_rt, 2.5_rt}) {
+            for (auto eta : {-70.0_rt, 0.0_rt, 50.0_rt, 500.0_rt, 10000.0_rt}) {
+                for (auto beta : {1.e-7_rt, 1.e-3_rt, 30.0_rt, 100.0_rt}) {
+
+                    FermiIntegral<real_t> f(k, eta, beta);
+                    f.evaluate(3);
+
+                    const real_t _h = (eta == 0) ? h : h * mp::abs(eta);
+
+                    // check ∂³F/∂η²∂β
+
+                    // first do a second deriv difference on ∂F/∂β
+                    auto [diff, err] =
+                        fd::adaptive_diff2<real_t>([=] (real_t _eta) -> real_t
+                        {
+                            FermiIntegral<real_t> _f(k, _eta, beta);
+                            _f.evaluate(1);
+                            return _f.dF_dbeta;
+                        }, eta, _h);
+
+                    real_t rel_err = mp::abs(f.d3F_deta2dbeta - diff) / mp::abs(f.d3F_deta2dbeta);
+
+                    // next do a first order deriv on ∂²F/∂β∂η
+                    auto [diff2, err2] =
+                        fd::adaptive_diff<real_t>([=] (real_t _eta) -> real_t
+                        {
+                            FermiIntegral<real_t> _f(k, _eta, beta);
+                            _f.evaluate(2);
+                            return _f.d2F_detadbeta;
+                        }, eta, _h);
+
+                    real_t rel_err2 = mp::abs(f.d3F_deta2dbeta - diff2) / mp::abs(f.d3F_deta2dbeta);
+
+                    util::threshold_println(rel_err,
+                                            "k = {:5.2f}, η = {:9.3f}, β = {:9.3g}, ∂³F/∂η²∂β = {:15.8g}, error (D2(∂F/∂β)') = {:15.8g}, error (DF(∂²F/∂β∂η)) = {:15.8g}",
+                                            k, eta, beta, f.d3F_deta2dbeta, rel_err, rel_err2);
+                }
+            }
+        }
+    }
+
+    {
+        const real_t h = 0.05_rt;
+
+        std::println();
+        util::green_println("∂³F/∂η∂β²");
+
+        for (auto k : {-0.5_rt, 0.5_rt, 1.5_rt, 2.5_rt}) {
+            for (auto eta : {-70.0_rt, 0.0_rt, 50.0_rt, 500.0_rt, 10000.0_rt}) {
+                for (auto beta : {1.e-7_rt, 1.e-3_rt, 30.0_rt, 100.0_rt}) {
+
+                    FermiIntegral<real_t> f(k, eta, beta);
+                    f.evaluate(3);
+
+                    const real_t _h = h * mp::abs(beta);
+
+                    // check ∂³F/∂η∂β²
+
+                    // first do a second deriv difference on ∂F/∂η
+                    auto [diff, err] =
+                        fd::adaptive_diff2<real_t>([=] (real_t _beta) -> real_t
+                        {
+                            FermiIntegral<real_t> _f(k, eta, _beta);
+                            _f.evaluate(1);
+                            return _f.dF_deta;
+                        }, beta, _h);
+
+                    real_t rel_err = mp::abs(f.d3F_detadbeta2 - diff) / mp::abs(f.d3F_detadbeta2);
+
+                    // next do a first order deriv on ∂²F/∂β∂η
+                    auto [diff2, err2] =
+                        fd::adaptive_diff<real_t>([=] (real_t _beta) -> real_t
+                        {
+                            FermiIntegral<real_t> _f(k, eta, _beta);
+                            _f.evaluate(2);
+                            return _f.d2F_detadbeta;
+                        }, beta, _h);
+
+                    real_t rel_err2 = mp::abs(f.d3F_detadbeta2 - diff2) / mp::abs(f.d3F_detadbeta2);
+
+                    util::threshold_println(rel_err,
+                                            "k = {:5.2f}, η = {:9.3f}, β = {:9.3g}, ∂³F/∂η∂β² = {:15.8g}, error (D2(∂F/∂η)) = {:15.8g}, error (DF(∂²F/∂β∂η)) = {:15.8g}",
+                                            k, eta, beta, f.d3F_detadbeta2, rel_err, rel_err2);
+                }
+            }
+        }
+    }
+
+
+    {
+        const real_t h = 0.05_rt;
+
+        std::println();
+        util::green_println("∂³F/∂β³");
+
+        for (auto k : {-0.5_rt, 0.5_rt, 1.5_rt, 2.5_rt}) {
+            for (auto eta : {-70.0_rt, 0.0_rt, 50.0_rt, 500.0_rt, 10000.0_rt}) {
+                for (auto beta : {1.e-7_rt, 1.e-3_rt, 30.0_rt, 100.0_rt}) {
+
+                    FermiIntegral<real_t> f(k, eta, beta);
+                    f.evaluate(3);
+
+                    const real_t _h = h * mp::abs(beta);
+
+                    // check ∂³F/∂β³
+
+                    // first do a second deriv difference on ∂F/∂β
+                    auto [diff, err] =
+                        fd::adaptive_diff2<real_t>([=] (real_t _beta) -> real_t
+                        {
+                            FermiIntegral<real_t> _f(k, eta, _beta);
+                            _f.evaluate(1);
+                            return _f.dF_dbeta;
+                        }, beta, _h);
+
+                    real_t rel_err = mp::abs(f.d3F_dbeta3 - diff) / mp::abs(f.d3F_dbeta3);
+
+                    // next do a first order deriv on ∂²F/∂β²
+                    auto [diff2, err2] =
+                        fd::adaptive_diff<real_t>([=] (real_t _beta) -> real_t
+                        {
+                            FermiIntegral<real_t> _f(k, eta, _beta);
+                            _f.evaluate(2);
+                            return _f.d2F_dbeta2;
+                        }, beta, _h);
+
+                    real_t rel_err2 = mp::abs(f.d3F_dbeta3 - diff2) / mp::abs(f.d3F_dbeta3);
+
+                    util::threshold_println(rel_err,
+                                            "k = {:5.2f}, η = {:9.3f}, β = {:9.3g}, ∂³F/∂β³ = {:15.8g}, error (D2(∂F/∂β)) = {:15.8g}, error (DF(∂²F/∂β²)) = {:15.8g}",
+                                            k, eta, beta, f.d3F_dbeta3, rel_err, rel_err2);
+                }
+            }
+        }
+    }
+
 }
