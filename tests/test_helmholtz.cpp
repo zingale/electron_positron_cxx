@@ -26,12 +26,12 @@ test_helm_rho_derivs() {
 
     for (auto T : Ts) {
         for (auto rho : rhos) {
-            auto helm = get_helmholtz_terms(rho, T, Ye);
+            auto [helm, eos] = get_helmholtz_terms(rho, T, Ye);
 
             auto drho{eps * rho};
             auto [deriv, _err] = fd::adaptive_diff<real_t>([&] (real_t _rho) -> real_t
                 {
-                    auto helm_eps = get_helmholtz_terms(_rho, T, Ye);
+                    auto [helm_eps, eos_eps] = get_helmholtz_terms(_rho, T, Ye);
                     return helm_eps.F;
                 }, rho, drho);
 
@@ -59,12 +59,12 @@ test_helm_T_derivs() {
 
     for (auto T : Ts) {
         for (auto rho : rhos) {
-            auto helm = get_helmholtz_terms(rho, T, Ye);
+            auto [helm, eos] = get_helmholtz_terms(rho, T, Ye);
 
             auto dT{eps * T};
             auto [deriv, _err] = fd::adaptive_diff<real_t>([&] (real_t T_) -> real_t
                 {
-                    auto helm_eps = get_helmholtz_terms(rho, T_, Ye);
+                    auto [helm_eps, eos_eps] = get_helmholtz_terms(rho, T_, Ye);
                     return helm_eps.F;
                 }, T, dT);
 
@@ -92,12 +92,12 @@ test_helm_rho2_derivs() {
 
     for (auto T : Ts) {
         for (auto rho : rhos) {
-            auto helm = get_helmholtz_terms(rho, T, Ye);
+            auto [helm, eos] = get_helmholtz_terms(rho, T, Ye);
 
             auto drho{eps * rho};
             auto [deriv, _err] = fd::adaptive_diff2<real_t>([&] (real_t _rho) -> real_t
                 {
-                    auto helm_eps = get_helmholtz_terms(_rho, T, Ye);
+                    auto [helm_eps, eos_eps] = get_helmholtz_terms(_rho, T, Ye);
                     return helm_eps.F;
                 }, rho, drho);
 
@@ -124,12 +124,12 @@ test_helm_T2_derivs() {
 
     for (auto T : Ts) {
         for (auto rho : rhos) {
-            auto helm = get_helmholtz_terms(rho, T, Ye);
+            auto [helm, eos] = get_helmholtz_terms(rho, T, Ye);
 
             auto dT{eps * T};
             auto [deriv, _err] = fd::adaptive_diff2<real_t>([&] (real_t T_) -> real_t
                 {
-                    auto helm_eps = get_helmholtz_terms(rho, T_, Ye);
+                    auto [helm_eps, eos_eps] = get_helmholtz_terms(rho, T_, Ye);
                     return helm_eps.F;
                 }, T, dT);
 
@@ -156,12 +156,12 @@ test_helm_rhoT_derivs() {
 
     for (auto T : Ts) {
         for (auto rho : rhos) {
-            auto helm = get_helmholtz_terms(rho, T, Ye);
+            auto [helm, eos] = get_helmholtz_terms(rho, T, Ye);
 
             auto drho{eps * rho};
             auto [deriv, _err] = fd::adaptive_diff<real_t>([&] (real_t rho_) -> real_t
                 {
-                    auto helm_eps = get_helmholtz_terms(rho_, T, Ye);
+                    auto [helm_eps, eos_eps] = get_helmholtz_terms(rho_, T, Ye);
                     return helm_eps.dF_dT;
                 }, rho, drho);
 
@@ -188,12 +188,12 @@ test_helm_rhoT2_derivs() {
 
     for (auto T : Ts) {
         for (auto rho : rhos) {
-            auto helm = get_helmholtz_terms(rho, T, Ye);
+            auto [helm, eos] = get_helmholtz_terms(rho, T, Ye);
 
             auto drho{eps * rho};
             auto [deriv, _err] = fd::adaptive_diff<real_t>([&] (real_t _rho) -> real_t
                 {
-                    auto helm_eps = get_helmholtz_terms(_rho, T, Ye);
+                    auto [helm_eps, eos_eps] = get_helmholtz_terms(_rho, T, Ye);
                     return helm_eps.d2F_dT2;
                 }, rho, drho);
 
@@ -220,12 +220,12 @@ test_helm_rho2T_derivs() {
 
     for (auto T : Ts) {
         for (auto rho : rhos) {
-            auto helm = get_helmholtz_terms(rho, T, Ye);
+            auto [helm, eos] = get_helmholtz_terms(rho, T, Ye);
 
             auto dT{eps * T};
             auto [deriv, _err] = fd::adaptive_diff<real_t>([&] (real_t T_) -> real_t
                 {
-                    auto helm_eps = get_helmholtz_terms(rho, T_, Ye);
+                    auto [helm_eps, eos_eps] = get_helmholtz_terms(rho, T_, Ye);
                     return helm_eps.d2F_drho2;
                 }, T, dT);
 
