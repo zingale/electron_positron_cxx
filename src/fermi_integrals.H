@@ -351,6 +351,7 @@ private:
             // this corresponds to eq A.9 in terms of x**2
             result  = 0.03125_rt * mp::pow(x, 2.0 * k + 7.0_rt) *
                 mp::pow(denomi, 3) / mp::pow(sqrt_term, 5);
+        }
 
         return result;
 
@@ -423,6 +424,28 @@ private:
             // this is IB = 5 from Gong et al.
             // this corresponds to eq A.5
             result = -0.0625_rt * mp::pow(x, k + 2.0_rt) / mp::pow(sqrt_term, 3) * denomi;
+
+        } else if (eta_der == 3 && beta_der == 0) {
+            // this is IB = 6 from Gong et al.
+            // this corresponds to eq A.6
+            result = mp::pow(x, k) * sqrt_term * inv_cosh_term
+                * (1.0_rt - 4.0_rt * mp::exp(-delta) + mp::exp(-2.0_rt * delta)) /
+                mp::pow(1.0_rt + mp::exp(-delta), 2);
+
+        } else if (eta_der == 2 && beta_der == 1) {
+            // this is IB = 7 from Gong et al.
+            // this corresponds to eq A.7
+            result = 0.25_rt * mp::pow(x, k + 1.0_rt) * inv_cosh_term * tanh_half_delta / sqrt_term;
+
+        } else if (eta_der == 1 && beta_der == 2) {
+            // this is IB = 8 from Gong et al.
+            // this corresponds to eq A.8
+            result = -0.625_rt * mp::pow(x, k + 2.0_rt) * inv_cosh_term / mp::pow(sqrt_term, 3);
+
+        } else if (eta_der == 0 && beta_der == 3) {
+            // this is IB = 9 from Gong et al.
+            // this corresponds to eq A.9
+            result = (3.0_rt / 64.0_rt) * mp::pow(x, k + 3.0_rt) * denomi / mp::pow(sqrt_term, 5);
         }
 
         return result;
