@@ -331,8 +331,8 @@ private:
         } else if (eta_der == 3 && beta_der == 0) {
             // this is IB = 6 from Gong et al.
             // this corresponds to eq A.6 in terms of x**2
-            result = 4.0_rt * mp::pow(x, 2.0_rt * k + 1.0_rt) * sqrt_term *
-                (mp::cosh(delta) - 2.0_rt) / mp::pow(2.0_rt * (1.0_rt + mp::cosh(delta)), 2);
+            result = 2.0_rt * mp::pow(x, 2.0_rt * k + 1.0_rt) * sqrt_term *
+               inv_cosh_term * (1.0_rt - 6.0_rt * inv_cosh_term);
 
         } else if (eta_der == 2 && beta_der == 1) {
             // this is IB = 7 from Gong et al.
