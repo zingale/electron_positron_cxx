@@ -1,10 +1,12 @@
 #include <array>
 #include <ranges>
 #include <iostream>
-#include <iomanip>
+#include <stdexcept>
 
 #include "real_type.H"
+#include "brent.H"
 #include "electron_positron.H"
+#include "fundamental_constants.H"
 #include "util.H"
 
 using namespace literals;
@@ -35,8 +37,8 @@ auto main() -> int
         for (auto [it, T] : std::views::enumerate(Ts_v)) {
 
             real_t eta{};
-            real_t beta = C::dbeta_dT * T;
-            real_t n_e_net = rho * Ye * C::N_A;
+            const real_t beta = C::dbeta_dT * T;
+            const real_t n_e_net = rho * Ye * C::N_A;
 
             try {
                 eta = brent<real_t>([=] (real_t _eta) -> real_t
@@ -58,12 +60,12 @@ auto main() -> int
             }
 
             std::cout << util::format("{:12.8g}", eta);
-            if (it < Ts_v.size()-1) {
+            if (it < static_cast<int>(Ts_v.size()-1)) {
                 std::cout << ", ";
             }
 
             if (it == Ts_v.size()-1) {
-                if (ir == rhoYes_v.size()-1) {
+                if (ir == static_cast<int>(rhoYes_v.size()-1)) {
                     std::cout << "}}\n";
                 } else {
                     std::cout << "},\n";
