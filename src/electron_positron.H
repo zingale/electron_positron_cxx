@@ -210,10 +210,10 @@ inline auto get_eta_beta_derivs(const T A, const T c, const T p, const T beta,
     dw.deta3 = -A * betap2 * (fx_pos.d3F_deta3 + c * beta * fy_pos.d3F_deta3);
 
     // ∂³w/∂η²∂β
-    dw.deta2dbeta = -0.5_rt * A * betap2 / beta2 *
+    dw.deta2dbeta = 0.5_rt * A * betap2 / beta2 *
         (beta * (2.0_rt * c * (beta2 * fy_pos.d3F_deta2dbeta + 2.0_rt * fy_pos.d3F_deta3) +
                  p * (fx_pos.d2F_deta2 + c * beta * fy_pos.d2F_deta2)) +
-         2.0_rt * beta2 * (fx_pos.d3F_deta2dbeta + c * fy_pos.d3F_deta3) +
+         2.0_rt * beta2 * (fx_pos.d3F_deta2dbeta + c * fy_pos.d2F_deta2) +
          4.0_rt * fx_pos.d3F_deta3);
 
     // ∂³w/∂η∂β²
