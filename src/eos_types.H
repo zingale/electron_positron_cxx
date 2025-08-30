@@ -149,6 +149,11 @@ public:
     T detadbeta{};
     T dbeta2{};
 
+    T deta3{};
+    T deta2dbeta{};
+    T detadbeta2{};
+    T dbeta3{};
+
     EtaBetaDerivs() = default;
 
 };
