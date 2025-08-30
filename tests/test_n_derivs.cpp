@@ -15,6 +15,9 @@ auto main() -> int
     // value below which we assume that the positron contribution is zero
     const real_t pos_thresh{1.e-300_rt};
 
+#if 0
+    // first derivatives
+
     {
 
         const real_t h = 0.05_rt;
@@ -209,6 +212,8 @@ auto main() -> int
         }
     }
 
+    // second derivatives
+
     {
 
         const real_t h = 0.05_rt;
@@ -303,104 +308,6 @@ auto main() -> int
                 util::threshold_println(rel_err,
                                         "eta = {:9.3f}, beta = {:8.3g},  ∂²n⁺/∂η² = {:12.5g},  error = {:12.5g}",
                                         eta, beta, dn_pos.deta2, rel_err);
-            }
-        }
-    }
-
-    {
-
-        const real_t h = 0.05_rt;
-
-        std::println("");
-        util::green_println("testing ∂²n⁻/∂β²");
-
-        for (auto eta : {-10.0_rt, 0.0_rt, 50.0_rt, 500.0_rt, 10000.0_rt}) {
-            for (auto beta : {1.e-6_rt, 1.e-3_rt, 30.0_rt, 100.0_rt}) {
-
-                const real_t eta_tilde = -eta - 2.0_rt / beta;
-
-                // construct the needed Fermi integrals
-                FermiIntegral<real_t> f12(0.5_rt, eta, beta);
-                f12.evaluate(2);
-
-                FermiIntegral<real_t> f32(1.5_rt, eta, beta);
-                f32.evaluate(2);
-
-                FermiIntegral<real_t> f12_pos(0.5_rt, eta_tilde, beta);
-                f12_pos.evaluate(2);
-
-                FermiIntegral<real_t> f32_pos(1.5_rt, eta_tilde, beta);
-                f32_pos.evaluate(2);
-
-                // get the derivs
-                const auto [dn_e, dn_pos] = get_n_derivs<real_t>(beta, f12, f32, f12_pos, f32_pos);
-
-                const real_t _h = h * mp::abs(beta);
-
-                // check ∂²n⁻/∂β²
-                auto [diff, err] =
-                    fd::adaptive_diff2<real_t>([=] (real_t _beta) -> real_t
-                    {
-                        auto ne = n_e_constraint<real_t>(eta, _beta);
-                        return ne;
-                    }, beta, _h);
-
-                real_t rel_err = mp::abs(dn_e.dbeta2 - diff) / mp::abs(dn_e.dbeta2);
-
-                util::threshold_println(rel_err,
-                                        "eta = {:9.3f}, beta = {:8.3g},  ∂²n⁻/∂β² = {:12.5g},  error = {:12.5g}",
-                                        eta, beta, dn_e.dbeta2, rel_err);
-            }
-        }
-    }
-
-    {
-
-        const real_t h = 0.05_rt;
-
-        std::println("");
-        util::green_println("testing ∂²n⁺/∂β²");
-
-        for (auto eta : {-10.0_rt, 0.0_rt, 50.0_rt, 500.0_rt, 10000.0_rt}) {
-            for (auto beta : {1.e-6_rt, 1.e-3_rt, 30.0_rt, 100.0_rt}) {
-
-                const real_t eta_tilde = -eta - 2.0_rt / beta;
-
-                // construct the needed Fermi integrals
-                FermiIntegral<real_t> f12(0.5_rt, eta, beta);
-                f12.evaluate(2);
-
-                FermiIntegral<real_t> f32(1.5_rt, eta, beta);
-                f32.evaluate(2);
-
-                FermiIntegral<real_t> f12_pos(0.5_rt, eta_tilde, beta);
-                f12_pos.evaluate(2);
-
-                FermiIntegral<real_t> f32_pos(1.5_rt, eta_tilde, beta);
-                f32_pos.evaluate(2);
-
-                // get the derivs
-                const auto [dn_e, dn_pos] = get_n_derivs<real_t>(beta, f12, f32, f12_pos, f32_pos);
-
-                if (mp::abs(dn_pos.dbeta2) < pos_thresh) {
-                    continue;
-                }
-
-                const real_t _h = h * mp::abs(beta);
-
-                // check ∂²n⁺/∂β²
-                auto [diff, err] =
-                    fd::adaptive_diff2<real_t>([=] (real_t _beta) -> real_t
-                    {
-                        auto np = n_p_constraint<real_t>(eta, _beta);
-                        return np;
-                    }, beta, _h);
-
-                real_t rel_err = mp::abs(dn_pos.dbeta2 - diff) / mp::abs(dn_pos.dbeta2);
-
-                util::threshold_println(rel_err,
-                                        "eta = {:9.3f}, beta = {:8.3g},  ∂²n⁺/∂β² = {:12.5g},  error = {:12.5g}",
-                                        eta, beta, dn_pos.dbeta2, rel_err);
             }
         }
     }
@@ -585,6 +492,242 @@ auto main() -> int
                 util::threshold_println(err_eta,
                                         "eta = {:9.3f}, beta = {:8.3g},  ∂²n⁺/∂η∂β = {:12.5g},  D_η(∂n⁺/∂β) error = {:12.5g}  D_β(∂n⁺/∂η) error = {:12.5g}",
                                         eta, beta, dn_pos.detadbeta, err_eta, err_beta);
+            }
+        }
+    }
+
+    {
+
+        const real_t h = 0.05_rt;
+
+        std::println("");
+        util::green_println("testing ∂²n⁻/∂β²");
+
+        for (auto eta : {-10.0_rt, 0.0_rt, 50.0_rt, 500.0_rt, 10000.0_rt}) {
+            for (auto beta : {1.e-6_rt, 1.e-3_rt, 30.0_rt, 100.0_rt}) {
+
+                const real_t eta_tilde = -eta - 2.0_rt / beta;
+
+                // construct the needed Fermi integrals
+                FermiIntegral<real_t> f12(0.5_rt, eta, beta);
+                f12.evaluate(2);
+
+                FermiIntegral<real_t> f32(1.5_rt, eta, beta);
+                f32.evaluate(2);
+
+                FermiIntegral<real_t> f12_pos(0.5_rt, eta_tilde, beta);
+                f12_pos.evaluate(2);
+
+                FermiIntegral<real_t> f32_pos(1.5_rt, eta_tilde, beta);
+                f32_pos.evaluate(2);
+
+                // get the derivs
+                const auto [dn_e, dn_pos] = get_n_derivs<real_t>(beta, f12, f32, f12_pos, f32_pos);
+
+                const real_t _h = h * mp::abs(beta);
+
+                // check ∂²n⁻/∂β²
+                auto [diff, err] =
+                    fd::adaptive_diff2<real_t>([=] (real_t _beta) -> real_t
+                    {
+                        auto ne = n_e_constraint<real_t>(eta, _beta);
+                        return ne;
+                    }, beta, _h);
+
+                real_t rel_err = mp::abs(dn_e.dbeta2 - diff) / mp::abs(dn_e.dbeta2);
+
+                util::threshold_println(rel_err,
+                                        "eta = {:9.3f}, beta = {:8.3g},  ∂²n⁻/∂β² = {:12.5g},  error = {:12.5g}",
+                                        eta, beta, dn_e.dbeta2, rel_err);
+            }
+        }
+    }
+
+    {
+
+        const real_t h = 0.05_rt;
+
+        std::println("");
+        util::green_println("testing ∂²n⁺/∂β²");
+
+        for (auto eta : {-10.0_rt, 0.0_rt, 50.0_rt, 500.0_rt, 10000.0_rt}) {
+            for (auto beta : {1.e-6_rt, 1.e-3_rt, 30.0_rt, 100.0_rt}) {
+
+                const real_t eta_tilde = -eta - 2.0_rt / beta;
+
+                // construct the needed Fermi integrals
+                FermiIntegral<real_t> f12(0.5_rt, eta, beta);
+                f12.evaluate(2);
+
+                FermiIntegral<real_t> f32(1.5_rt, eta, beta);
+                f32.evaluate(2);
+
+                FermiIntegral<real_t> f12_pos(0.5_rt, eta_tilde, beta);
+                f12_pos.evaluate(2);
+
+                FermiIntegral<real_t> f32_pos(1.5_rt, eta_tilde, beta);
+                f32_pos.evaluate(2);
+
+                // get the derivs
+                const auto [dn_e, dn_pos] = get_n_derivs<real_t>(beta, f12, f32, f12_pos, f32_pos);
+
+                if (mp::abs(dn_pos.dbeta2) < pos_thresh) {
+                    continue;
+                }
+
+                const real_t _h = h * mp::abs(beta);
+
+                // check ∂²n⁺/∂β²
+                auto [diff, err] =
+                    fd::adaptive_diff2<real_t>([=] (real_t _beta) -> real_t
+                    {
+                        auto np = n_p_constraint<real_t>(eta, _beta);
+                        return np;
+                    }, beta, _h);
+
+                real_t rel_err = mp::abs(dn_pos.dbeta2 - diff) / mp::abs(dn_pos.dbeta2);
+
+                util::threshold_println(rel_err,
+                                        "eta = {:9.3f}, beta = {:8.3g},  ∂²n⁺/∂β² = {:12.5g},  error = {:12.5g}",
+                                        eta, beta, dn_pos.dbeta2, rel_err);
+            }
+        }
+    }
+
+#endif
+
+    // third derivatives
+
+    {
+
+        const real_t h = 0.05_rt;
+
+        std::println("");
+        util::green_println("testing ∂³n⁻/∂η³");
+
+        for (auto eta : {-10.0_rt, 0.0_rt, 50.0_rt, 500.0_rt, 10000.0_rt}) {
+            for (auto beta : {1.e-6_rt, 1.e-3_rt, 30.0_rt, 100.0_rt}) {
+
+                const real_t eta_tilde = -eta - 2.0_rt / beta;
+
+                // construct the needed Fermi integrals
+                FermiIntegral<real_t> f12(0.5_rt, eta, beta);
+                f12.evaluate(3);
+
+                FermiIntegral<real_t> f32(1.5_rt, eta, beta);
+                f32.evaluate(3);
+
+                FermiIntegral<real_t> f12_pos(0.5_rt, eta_tilde, beta);
+                f12_pos.evaluate(3);
+
+                FermiIntegral<real_t> f32_pos(1.5_rt, eta_tilde, beta);
+                f32_pos.evaluate(3);
+
+                // get the derivs
+                const auto [dn_e, dn_pos] = get_n_derivs<real_t>(beta, f12, f32, f12_pos, f32_pos);
+
+                if (mp::abs(dn_e.deta3) < pos_thresh) {
+                    continue;
+                }
+
+                const real_t _h = (eta == 0) ? h : h * mp::abs(eta);
+
+                // check ∂³n⁻/∂η³ by differencing on ∂n⁻/∂η
+                auto [diff, err] =
+                    fd::adaptive_diff2<real_t>([=] (real_t _eta) -> real_t
+                    {
+                        const real_t eta_tilde_tmp = -_eta - 2.0_rt / beta;
+
+                        FermiIntegral<real_t> f12_tmp(0.5_rt, _eta, beta);
+                        f12_tmp.evaluate(1);
+
+                        FermiIntegral<real_t> f32_tmp(1.5_rt, _eta, beta);
+                        f32_tmp.evaluate(1);
+
+                        FermiIntegral<real_t> f12_pos_tmp(0.5_rt, eta_tilde_tmp, beta);
+                        f12_pos_tmp.evaluate(1);
+
+                        FermiIntegral<real_t> f32_pos_tmp(1.5_rt, eta_tilde_tmp, beta);
+                        f32_pos_tmp.evaluate(1);
+
+                        const auto [dn_e_tmp, dn_pos_tmp] = get_n_derivs<real_t>(beta, f12_tmp, f32_tmp, f12_pos_tmp, f32_pos_tmp);
+                        return dn_e_tmp.deta;
+                    }, eta, _h);
+
+                real_t rel_err = mp::abs(dn_e.deta3 - diff) / mp::abs(dn_e.deta3);
+
+                util::threshold_println(rel_err,
+                                        "eta = {:9.3f}, beta = {:8.3g},  ∂²n⁻/∂η² = {:12.5g},  error (D2(∂n⁻/∂η)) = {:12.5g}",
+                                        eta, beta, dn_e.deta3, rel_err);
+            }
+        }
+    }
+
+    {
+
+        const real_t h = 0.05_rt;
+
+        std::println("");
+        util::green_println("testing ∂³n⁺/∂η³");
+
+        for (auto eta : {-10.0_rt, 0.0_rt, 50.0_rt, 500.0_rt, 10000.0_rt}) {
+            for (auto beta : {1.e-6_rt, 1.e-3_rt, 30.0_rt, 100.0_rt}) {
+
+                const real_t eta_tilde = -eta - 2.0_rt / beta;
+
+                // construct the needed Fermi integrals
+                FermiIntegral<real_t> f12(0.5_rt, eta, beta);
+                f12.evaluate(3);
+
+                FermiIntegral<real_t> f32(1.5_rt, eta, beta);
+                f32.evaluate(3);
+
+                FermiIntegral<real_t> f12_pos(0.5_rt, eta_tilde, beta);
+                f12_pos.evaluate(3);
+
+                FermiIntegral<real_t> f32_pos(1.5_rt, eta_tilde, beta);
+                f32_pos.evaluate(3);
+
+                // get the derivs
+                const auto& [dn_e, dn_pos] = get_n_derivs<real_t>(beta, f12, f32, f12_pos, f32_pos);
+
+                std::cout << dn_pos << std::endl;
+                std::cout << f12_pos << std::endl;
+                std::cout << f32_pos << std::endl;
+
+                if (mp::abs(dn_pos.deta3) < pos_thresh) {
+                    continue;
+                }
+
+                const real_t _h = (eta == 0) ? h : h * mp::abs(eta);
+
+                // check ∂³n⁺/∂η³ by differencing on ∂n⁺/∂η
+                auto [diff, err] =
+                    fd::adaptive_diff2<real_t>([=] (real_t _eta) -> real_t
+                    {
+                        const real_t eta_tilde_tmp = -_eta - 2.0_rt / beta;
+
+                        FermiIntegral<real_t> f12_tmp(0.5_rt, _eta, beta);
+                        f12_tmp.evaluate(1);
+
+                        FermiIntegral<real_t> f32_tmp(1.5_rt, _eta, beta);
+                        f32_tmp.evaluate(1);
+
+                        FermiIntegral<real_t> f12_pos_tmp(0.5_rt, eta_tilde_tmp, beta);
+                        f12_pos_tmp.evaluate(1);
+
+                        FermiIntegral<real_t> f32_pos_tmp(1.5_rt, eta_tilde_tmp, beta);
+                        f32_pos_tmp.evaluate(1);
+
+                        const auto [dn_e_tmp, dn_pos_tmp] = get_n_derivs<real_t>(beta, f12_tmp, f32_tmp, f12_pos_tmp, f32_pos_tmp);
+                        return dn_pos_tmp.deta;
+                    }, eta, _h);
+
+                real_t rel_err = mp::abs(dn_pos.deta3 - diff) / mp::abs(dn_pos.deta3);
+
+                util::threshold_println(rel_err,
+                                        "eta = {:9.3f}, beta = {:8.3g},  ∂³n⁺/∂η³ = {:12.5g},  error (D2(∂n⁺/∂η)) = {:12.5g}",
+                                        eta, beta, dn_pos.deta3, rel_err);
             }
         }
     }

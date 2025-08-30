@@ -194,21 +194,37 @@ inline auto get_eta_beta_derivs(const T A, const T c, const T p, const T beta,
                                                    2.0 * beta * (fx.d3F_deta2dbeta + c * beta * fy.d3F_deta2dbeta + c * fy.d2F_deta2));
 
     // ∂³q/∂η∂β²
-    dq.detadbeta2 = 0.25_rt * A * betap2 / beta2 * (p * (p - 2.0_rt) * (fx.dF_deta + c * beta * fy.dF_deta) +
-                                                    4.0_rt * p * beta * (fx.d2F_detadbeta + c * beta * fy.d2F_detadbeta + c * fy.dF_deta) +
-                                                    4.0_rt * beta2 * (fx.d3F_detadbeta2 + c * beta * fy.d3F_detadbeta2 + 2.0_rt * c * fy.d2F_detadbeta));
+    dq.detadbeta2 = 0.25_rt * A * betap2 / beta2 *
+        (p * (p - 2.0_rt) * (fx.dF_deta + c * beta * fy.dF_deta) +
+         4.0_rt * p * beta * (fx.d2F_detadbeta + c * beta * fy.d2F_detadbeta + c * fy.dF_deta) +
+         4.0_rt * beta2 * (fx.d3F_detadbeta2 + c * beta * fy.d3F_detadbeta2 + 2.0_rt * c * fy.d2F_detadbeta));
 
     // ∂³q/∂β³
-    dq.dbeta3 = 0.125_rt * A * betap2 / beta3 * (6.0_rt * p * (p - 2.0_rt) * beta * (fx.dF_dbeta + c * beta * fy.dF_dbeta + c * fy.F) +
-                                                 p * (p * p - 6.0_rt * p + 8.0_rt) * (fx.F + c * beta * fy.F) +
-                                                 12.0_rt * p * beta2 * (fx.d2F_dbeta2 + c * beta * fy.d2F_dbeta2 + 2.0_rt * c * fy.dF_dbeta) +
-                                                 8.0_rt * beta3 * (fx.d3F_dbeta3 + c * beta * fy.d3F_dbeta3 + 3.0_rt * c * fy.d2F_dbeta2));
+    dq.dbeta3 = 0.125_rt * A * betap2 / beta3 *
+        (6.0_rt * p * (p - 2.0_rt) * beta * (fx.dF_dbeta + c * beta * fy.dF_dbeta + c * fy.F) +
+         p * (p * p - 6.0_rt * p + 8.0_rt) * (fx.F + c * beta * fy.F) +
+         12.0_rt * p * beta2 * (fx.d2F_dbeta2 + c * beta * fy.d2F_dbeta2 + 2.0_rt * c * fy.dF_dbeta) +
+         8.0_rt * beta3 * (fx.d3F_dbeta3 + c * beta * fy.d3F_dbeta3 + 3.0_rt * c * fy.d2F_dbeta2));
 
     // ∂³w/∂η³
+    dw.deta3 = -A * betap2 * (fx_pos.d3F_deta3 + c * beta * fy_pos.d3F_deta3);
 
     // ∂³w/∂η²∂β
+    dw.deta2dbeta = -0.5_rt * A * betap2 / beta2 *
+        (beta * (2.0_rt * c * (beta2 * fy_pos.d3F_deta2dbeta + 2.0_rt * fy_pos.d3F_deta3) +
+                 p * (fx_pos.d2F_deta2 + c * beta * fy_pos.d2F_deta2)) +
+         2.0_rt * beta2 * (fx_pos.d3F_deta2dbeta + c * fy_pos.d3F_deta3) +
+         4.0_rt * fx_pos.d3F_deta3);
 
     // ∂³w/∂η∂β²
+    dw.detadbeta2 = 0.25 * A * betap2 / beta4 *
+        (-c * p * p * beta3 * fy_pos.dF_deta - 4.0_rt * c * p * beta4 * fy_pos.d2F_detadbeta +
+         -2.0_rt * c * p * beta3 * fy_pos.dF_deta - 8.0_rt * c * p * beta2 * fy_pos.d2F_deta2 +
+         -4.0_rt * c * beta4 * (beta * fy_pos.d3F_detadbeta2 + 2.0 * fy_pos.d2F_detadbeta) +
+         -16.0_rt * c * beta * (beta2 * fy_pos.d3F_deta2dbeta + fy_pos.d3F_deta3) +
+         -p * p * beta2 * fx_pos.dF_deta - 4.0 * p * beta3 * fx_pos.d2F_detadbeta +
+         2.0_rt * p * beta2 * fx_pos.dF_deta - 8.0_rt * p * beta * fx_pos.d2F_deta2 - 4.0_rt * beta4 * fx_pos.d3F_detadbeta2
+         -16.0_rt * (beta2 * fx_pos.d3F_deta2dbeta - beta * fx_pos.d2F_deta2 + fx_pos.d3F_deta3));
 
     // ∂³w/∂β³
 
@@ -364,13 +380,13 @@ public:
         T ecoeff = coeff * C::rest_mass;
 
         FermiIntegral<T> f12(0.5_rt, eta, beta);
-        f12.evaluate(2);
+        f12.evaluate(3);
 
         FermiIntegral<T> f32(1.5_rt, eta, beta);
-        f32.evaluate(2);
+        f32.evaluate(3);
 
         FermiIntegral<T> f52(2.5_rt, eta, beta);
-        f52.evaluate(2);
+        f52.evaluate(3);
 
         es.n_e = coeff * beta32 * (f12.F + beta * f32.F);
         es.p_e = pcoeff * beta52 * (f32.F + 0.5_rt * beta * f52.F);
@@ -381,13 +397,13 @@ public:
         T E_e = ecoeff * beta52 * (f32.F + beta * f52.F);
 
         FermiIntegral<T> f12_pos(0.5_rt, eta_tilde, beta);
-        f12_pos.evaluate(2);
+        f12_pos.evaluate(3);
 
         FermiIntegral<T> f32_pos(1.5_rt, eta_tilde, beta);
-        f32_pos.evaluate(2);
+        f32_pos.evaluate(3);
 
         FermiIntegral<T> f52_pos(2.5_rt, eta_tilde, beta);
-        f52_pos.evaluate(2);
+        f52_pos.evaluate(3);
 
         es.n_pos = coeff * beta32 * (f12_pos.F + beta * f32_pos.F);
         es.p_pos = pcoeff * beta52 * (f32_pos.F + 0.5_rt * beta * f52_pos.F);

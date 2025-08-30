@@ -185,7 +185,7 @@ public:
 
 
 template<typename T>
-inline auto operator<< (std::ostream& os, EOSState<T>& es) -> std::ostream&
+inline auto operator<< (std::ostream& os, const EOSState<T>& es) -> std::ostream&
 {
 
     std::string out{"\n"};
@@ -226,7 +226,7 @@ inline auto operator<< (std::ostream& os, EOSState<T>& es) -> std::ostream&
 
 
 template<typename T>
-inline auto operator<< (std::ostream& os, Helmholtz<T>& helm) -> std::ostream&
+inline auto operator<< (std::ostream& os, const Helmholtz<T>& helm) -> std::ostream&
 {
 
     std::string out{"\n"};
@@ -242,6 +242,24 @@ inline auto operator<< (std::ostream& os, Helmholtz<T>& helm) -> std::ostream&
                         helm.d3F_drho2dT, helm.d3F_drhodT2);
     out += util::format("∂⁴F/∂ρ²∂T² = {:15.8g}\n\n",
                         helm.d4F_drho2dT2);
+    os << out;
+    return os;
+}
+
+
+template<typename T>
+inline auto operator<< (std::ostream& os, const EtaBetaDerivs<T>& eb) -> std::ostream&
+{
+
+    std::string out{"\n"};
+
+    out += util::format(" ∂q/∂η   = {:15.8g}   ∂q/∂β    = {:15.8g}\n",
+                        eb.deta, eb.dbeta);
+    out += util::format("∂²q/∂η²  = {:15.8g}  ∂²q/∂η∂β  = {:15.8g}  ∂²q/∂β²   = {:15.8g}\n",
+                        eb.deta2, eb.detadbeta, eb.dbeta2);
+    out += util::format("∂³q/∂η³  = {:15.8g}  ∂³q/∂η²∂β = {:15.8g}  ∂³q/∂η∂β² = {:15.8g}  ∂³q/∂β³ = {:15.8g}\n",
+                        eb.deta3, eb.deta2dbeta, eb.detadbeta2, eb.dbeta3);
+
     os << out;
     return os;
 }

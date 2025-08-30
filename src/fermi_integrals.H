@@ -578,7 +578,7 @@ public:
 };
 
 template<typename T>
-inline auto operator<< (std::ostream& os, FermiIntegral<T>& f) -> std::ostream&
+inline auto operator<< (std::ostream& os, const FermiIntegral<T>& f) -> std::ostream&
 {
 
     std::string out{};
