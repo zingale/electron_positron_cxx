@@ -1,7 +1,12 @@
+#include <array>
+#include <stdexcept>
+
+#include "brent.H"
 #include "degeneracy_parameter_bounds.H"
 #include "real_type.H"
 #include "util.H"
 #include "electron_positron.H"
+#include "fundamental_constants.H"
 
 const std::array<real_t, 5> Ts{1.e4_rt, 1.e5_rt, 1.e6_rt, 1.e8_rt, 5.e9_rt};
 const std::array<real_t, 5> rhos{1.e-2_rt, 1.e2_rt, 1.e5_rt, 1.e7_rt, 5.e9_rt};
@@ -19,8 +24,8 @@ auto main() -> int
             auto [eta_min, eta_max] = bounds::get_eta_bounds(rho * Ye, T);
 
             real_t eta{};
-            real_t beta = C::dbeta_dT * T;
-            real_t n_e_net = rho * Ye * C::N_A;
+            const real_t beta = C::dbeta_dT * T;
+            const real_t n_e_net = rho * Ye * C::N_A;
 
             try {
                 eta = brent<real_t>([=] (real_t _eta) -> real_t
