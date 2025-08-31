@@ -498,15 +498,23 @@ public:
         es.dne_drho = dne_thermo.drho;
         es.dne_dT = dne_thermo.dT;
         es.d2ne_drho2 = dne_thermo.drho2;
-        es.d2ne_dT2 = dne_thermo.dT2;
         es.d2ne_drhodT = dne_thermo.drhodT;
+        es.d2ne_dT2 = dne_thermo.dT2;
+        es.d3ne_drho3 = dne_thermo.drho3;
+        es.d3ne_drho2dT = dne_thermo.drho2dT;
+        es.d3ne_drhodT2 = dne_thermo.drhodT2;
+        es.d3ne_dT3 = dne_thermo.dT3;
 
         auto dnp_thermo = chain_rule(dn_pos, deta);
         es.dnp_drho = dnp_thermo.drho;
         es.dnp_dT = dnp_thermo.dT;
         es.d2np_drho2 = dnp_thermo.drho2;
-        es.d2np_dT2 = dnp_thermo.dT2;
         es.d2np_drhodT = dnp_thermo.drhodT;
+        es.d2np_dT2 = dnp_thermo.dT2;
+        es.d3np_drho3 = dnp_thermo.drho3;
+        es.d3np_drho2dT = dnp_thermo.drho2dT;
+        es.d3np_drhodT2 = dnp_thermo.drhodT2;
+        es.d3np_dT3 = dnp_thermo.dT3;
 
 
         // Compute partials of pressure with density and temperature
@@ -631,8 +639,12 @@ public:
         es.dn_drho = es.dne_drho + es.dnp_drho;
         es.dn_dT = es.dne_dT + es.dnp_dT;
         es.d2n_drho2 = es.d2ne_drho2 + es.d2np_drho2;
-        es.d2n_dT2 = es.d2ne_dT2 + es.d2np_dT2;
         es.d2n_drhodT = es.d2ne_drhodT + es.d2np_drhodT;
+        es.d2n_dT2 = es.d2ne_dT2 + es.d2np_dT2;
+        es.d3n_drho3 = es.d3ne_drho3 + es.d3np_drho3;
+        es.d3n_drho2dT = es.d3ne_drho2dT + es.d3np_drho2dT;
+        es.d3n_drhodT2 = es.d3ne_drhodT2 + es.d3np_drhodT2;
+        es.d3n_dT3 = es.d3ne_dT3 + es.d3np_dT3;
 
         es.p = es.p_e + es.p_pos;
         es.dp_drho = es.dpe_drho + es.dpp_drho;
