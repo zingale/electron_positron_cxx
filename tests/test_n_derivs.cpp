@@ -1,5 +1,6 @@
 #include <cassert>
 #include <print>
+#include <vector>
 
 #include "real_type.H"
 #include "fermi_integrals.H"
@@ -9,13 +10,15 @@
 #include "mp_math.H"
 
 
+const std::vector<real_t> etas{-30.0_rt, -10.0_rt, 0.0_rt, 30.0_rt, 100.0_rt, 300.0_rt, 10000.0_rt};
+const std::vector<real_t> betas{1.e-6_rt, 1.e-3_rt, 1.e-1_rt, 1.0_rt, 30.0_rt, 100.0_rt};
+
 auto main() -> int
 {
 
     // value below which we assume that the positron contribution is zero
     const real_t pos_thresh{1.e-300_rt};
 
-#if 0
     // first derivatives
 
     {
@@ -24,8 +27,8 @@ auto main() -> int
 
         util::green_println("testing ∂n⁻/∂η");
 
-        for (auto eta : {-10.0_rt, 0.0_rt, 50.0_rt, 500.0_rt, 10000.0_rt}) {
-            for (auto beta : {1.e-6_rt, 1.e-3_rt, 30.0_rt, 100.0_rt}) {
+        for (auto eta : etas) {
+            for (auto beta : betas) {
 
                 const real_t eta_tilde = -eta - 2.0_rt / beta;
 
@@ -71,8 +74,8 @@ auto main() -> int
         std::println("");
         util::green_println("testing ∂n⁺/∂η");
 
-        for (auto eta : {-10.0_rt, 0.0_rt, 50.0_rt, 500.0_rt, 10000.0_rt}) {
-            for (auto beta : {1.e-6_rt, 1.e-3_rt, 30.0_rt, 100.0_rt}) {
+        for (auto eta : etas) {
+            for (auto beta : betas) {
 
                 const real_t eta_tilde = -eta - 2.0_rt / beta;
 
@@ -122,8 +125,8 @@ auto main() -> int
         std::println("");
         util::green_println("testing ∂n⁻/∂β");
 
-        for (auto eta : {-10.0_rt, 0.0_rt, 50.0_rt, 500.0_rt, 10000.0_rt}) {
-            for (auto beta : {1.e-6_rt, 1.e-3_rt, 30.0_rt, 100.0_rt}) {
+        for (auto eta : etas) {
+            for (auto beta : betas) {
 
                 const real_t eta_tilde = -eta - 2.0_rt / beta;
 
@@ -168,8 +171,8 @@ auto main() -> int
         std::println("");
         util::green_println("testing ∂n⁺/∂β");
 
-        for (auto eta : {-10.0_rt, 0.0_rt, 50.0_rt, 500.0_rt, 10000.0_rt}) {
-            for (auto beta : {1.e-6_rt, 1.e-3_rt, 30.0_rt, 100.0_rt}) {
+        for (auto eta : etas) {
+            for (auto beta : betas) {
 
                 const real_t eta_tilde = -eta - 2.0_rt / beta;
 
@@ -221,8 +224,8 @@ auto main() -> int
         std::println("");
         util::green_println("testing ∂²n⁻/∂η²");
 
-        for (auto eta : {-10.0_rt, 0.0_rt, 50.0_rt, 500.0_rt, 10000.0_rt}) {
-            for (auto beta : {1.e-6_rt, 1.e-3_rt, 30.0_rt, 100.0_rt}) {
+        for (auto eta : etas) {
+            for (auto beta : betas) {
 
                 const real_t eta_tilde = -eta - 2.0_rt / beta;
 
@@ -268,8 +271,8 @@ auto main() -> int
         std::println("");
         util::green_println("testing ∂²n⁺/∂η²");
 
-        for (auto eta : {-10.0_rt, 0.0_rt, 50.0_rt, 500.0_rt, 10000.0_rt}) {
-            for (auto beta : {1.e-6_rt, 1.e-3_rt, 30.0_rt, 100.0_rt}) {
+        for (auto eta : etas) {
+            for (auto beta : betas) {
 
                 const real_t eta_tilde = -eta - 2.0_rt / beta;
 
@@ -319,8 +322,8 @@ auto main() -> int
         std::println("");
         util::green_println("testing ∂²n⁻/∂η∂β");
 
-        for (auto eta : {-10.0_rt, 0.0_rt, 50.0_rt, 500.0_rt, 10000.0_rt}) {
-            for (auto beta : {1.e-6_rt, 1.e-3_rt, 30.0_rt, 100.0_rt}) {
+        for (auto eta : etas) {
+            for (auto beta : betas) {
 
                 const real_t eta_tilde = -eta - 2.0_rt / beta;
 
@@ -409,8 +412,8 @@ auto main() -> int
         std::println("");
         util::green_println("testing ∂²n⁺/∂η∂β");
 
-        for (auto eta : {-10.0_rt, 0.0_rt, 50.0_rt, 500.0_rt, 10000.0_rt}) {
-            for (auto beta : {1.e-6_rt, 1.e-3_rt, 30.0_rt, 100.0_rt}) {
+        for (auto eta : etas) {
+            for (auto beta : betas) {
 
                 const real_t eta_tilde = -eta - 2.0_rt / beta;
 
@@ -503,8 +506,8 @@ auto main() -> int
         std::println("");
         util::green_println("testing ∂²n⁻/∂β²");
 
-        for (auto eta : {-10.0_rt, 0.0_rt, 50.0_rt, 500.0_rt, 10000.0_rt}) {
-            for (auto beta : {1.e-6_rt, 1.e-3_rt, 30.0_rt, 100.0_rt}) {
+        for (auto eta : etas) {
+            for (auto beta : betas) {
 
                 const real_t eta_tilde = -eta - 2.0_rt / beta;
 
@@ -550,8 +553,8 @@ auto main() -> int
         std::println("");
         util::green_println("testing ∂²n⁺/∂β²");
 
-        for (auto eta : {-10.0_rt, 0.0_rt, 50.0_rt, 500.0_rt, 10000.0_rt}) {
-            for (auto beta : {1.e-6_rt, 1.e-3_rt, 30.0_rt, 100.0_rt}) {
+        for (auto eta : etas) {
+            for (auto beta : betas) {
 
                 const real_t eta_tilde = -eta - 2.0_rt / beta;
 
@@ -594,8 +597,6 @@ auto main() -> int
         }
     }
 
-#endif
-
     // third derivatives
 
     {
@@ -605,8 +606,8 @@ auto main() -> int
         std::println("");
         util::green_println("testing ∂³n⁻/∂η³");
 
-        for (auto eta : {-10.0_rt, 0.0_rt, 50.0_rt, 500.0_rt, 10000.0_rt}) {
-            for (auto beta : {1.e-6_rt, 1.e-3_rt, 30.0_rt, 100.0_rt}) {
+        for (auto eta : etas) {
+            for (auto beta : betas) {
 
                 const real_t eta_tilde = -eta - 2.0_rt / beta;
 
@@ -670,8 +671,8 @@ auto main() -> int
         std::println("");
         util::green_println("testing ∂³n⁺/∂η³");
 
-        for (auto eta : {-10.0_rt, 0.0_rt, 50.0_rt, 500.0_rt, 10000.0_rt}) {
-            for (auto beta : {1.e-6_rt, 1.e-3_rt, 30.0_rt, 100.0_rt}) {
+        for (auto eta : etas) {
+            for (auto beta : betas) {
 
                 const real_t eta_tilde = -eta - 2.0_rt / beta;
 
@@ -735,8 +736,8 @@ auto main() -> int
         std::println("");
         util::green_println("testing ∂³n⁻/∂η²∂β");
 
-        for (auto eta : {-10.0_rt, 0.0_rt, 50.0_rt, 500.0_rt, 10000.0_rt}) {
-            for (auto beta : {1.e-6_rt, 1.e-3_rt, 30.0_rt, 100.0_rt}) {
+        for (auto eta : etas) {
+            for (auto beta : betas) {
 
                 const real_t eta_tilde = -eta - 2.0_rt / beta;
 
@@ -800,8 +801,8 @@ auto main() -> int
         std::println("");
         util::green_println("testing ∂³n⁺/∂η²∂β");
 
-        for (auto eta : {-10.0_rt, 0.0_rt, 50.0_rt, 500.0_rt, 10000.0_rt}) {
-            for (auto beta : {1.e-6_rt, 1.e-3_rt, 30.0_rt, 100.0_rt}) {
+        for (auto eta : etas) {
+            for (auto beta : betas) {
 
                 const real_t eta_tilde = -eta - 2.0_rt / beta;
 
@@ -865,8 +866,8 @@ auto main() -> int
         std::println("");
         util::green_println("testing ∂³n⁻/∂η∂β²");
 
-        for (auto eta : {-10.0_rt, 0.0_rt, 50.0_rt, 500.0_rt, 10000.0_rt}) {
-            for (auto beta : {1.e-6_rt, 1.e-3_rt, 30.0_rt, 100.0_rt}) {
+        for (auto eta : etas) {
+            for (auto beta : betas) {
 
                 const real_t eta_tilde = -eta - 2.0_rt / beta;
 
@@ -930,8 +931,8 @@ auto main() -> int
         std::println("");
         util::green_println("testing ∂³n⁺/∂η∂β²");
 
-        for (auto eta : {-10.0_rt, 0.0_rt, 50.0_rt, 500.0_rt, 10000.0_rt}) {
-            for (auto beta : {1.e-6_rt, 1.e-3_rt, 30.0_rt, 100.0_rt}) {
+        for (auto eta : etas) {
+            for (auto beta : betas) {
 
                 const real_t eta_tilde = -eta - 2.0_rt / beta;
 
@@ -995,8 +996,8 @@ auto main() -> int
         std::println("");
         util::green_println("testing ∂³n⁻/∂β³");
 
-        for (auto eta : {-10.0_rt, 0.0_rt, 50.0_rt, 500.0_rt, 10000.0_rt}) {
-            for (auto beta : {1.e-6_rt, 1.e-3_rt, 30.0_rt, 100.0_rt}) {
+        for (auto eta : etas) {
+            for (auto beta : betas) {
 
                 const real_t eta_tilde = -eta - 2.0_rt / beta;
 
@@ -1060,8 +1061,8 @@ auto main() -> int
         std::println("");
         util::green_println("testing ∂³n⁺/∂β³");
 
-        for (auto eta : {-10.0_rt, 0.0_rt, 50.0_rt, 500.0_rt, 10000.0_rt}) {
-            for (auto beta : {1.e-6_rt, 1.e-3_rt, 30.0_rt, 100.0_rt}) {
+        for (auto eta : etas) {
+            for (auto beta : betas) {
 
                 const real_t eta_tilde = -eta - 2.0_rt / beta;
 
