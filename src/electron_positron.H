@@ -257,11 +257,12 @@ inline auto get_eta_thermo_derivs(const T Ye,
 
     RhoTDerivs<T> deta;
 
-    real_t dbdT = C::dbeta_dT;
-    real_t dbdT2 = C::dbeta_dT * C::dbeta_dT;
-    real_t dbdT3 = dbdT2 * C::dbeta_dT;
+    const real_t dbdT = C::dbeta_dT;
+    const real_t dbdT2 = C::dbeta_dT * C::dbeta_dT;
+    const real_t dbdT3 = dbdT2 * C::dbeta_dT;
 
-    real_t denomi = 1.0_rt / (dn_e.deta - dn_pos.deta);
+    const real_t denomi = 1.0_rt / (dn_e.deta - dn_pos.deta);
+
     // first derivs
 
     // ∂η/∂ρ and ∂η/∂T
