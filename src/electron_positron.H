@@ -327,26 +327,64 @@ inline auto chain_rule(const EtaBetaDerivs<T>& df,
 
     RhoTDerivs<T> df_th;  // thermodynamic derivs
 
+    const real_t dbdT = C::dbeta_dT;
+    const real_t dbdT2 = C::dbeta_dT * C::dbeta_dT;
+    const real_t dbdT3 = dbdT2 * C::dbeta_dT;
+
+    // first derivs
+
     // ∂f/∂ρ
     df_th.drho = deta.drho * df.deta;
 
     // ∂f/∂T
-    df_th.dT = C::dbeta_dT * df.dbeta + deta.dT * df.deta;
+    df_th.dT = dbdT * df.dbeta + deta.dT * df.deta;
+
+    // second derivs
 
     // ∂²f/∂ρ²
     df_th.drho2 = deta.drho * deta.drho * df.deta2 +
                   deta.drho2 * df.deta;
 
+    // ∂²f/∂ρ∂T
+    df_th.drhodT = dbdT * deta.drho * df.detadbeta +
+                   deta.dT * deta.drho * df.deta2 +
+                   deta.drhodT * df.deta;
+
     // ∂²f/∂T²
-    df_th.dT2 = C::dbeta_dT * C::dbeta_dT * df.dbeta2 +
-                2.0_rt * C::dbeta_dT * deta.dT * df.detadbeta +
+    df_th.dT2 = dbdT2 * df.dbeta2 +
+                2.0_rt * dbdT * deta.dT * df.detadbeta +
                 deta.dT * deta.dT * df.deta2 +
                 deta.dT2 * df.deta;
 
-    // ∂²f/∂ρ∂T
-    df_th.drhodT = C::dbeta_dT * deta.drho * df.detadbeta +
-                   deta.dT * deta.drho * df.deta2 +
-                   deta.drhodT * df.deta;
+    // ∂³f/∂ρ³
+    df_th.drho3 = mp::pow(deta.drho, 3.0_rt) * df.deta3 +
+                  3.0_rt * deta.drho * deta.drho2 * df.deta2 +
+                  deta.drho3 * df.deta;
+
+    // ∂³f/∂ρ²∂T
+    df_th.drho2dT = dbdT * deta.drho * deta.drho * df.deta2dbeta +
+                    dbdT * deta.drho2 * df.detadbeta +
+                    deta.dT * deta.drho * deta.drho * df.deta3 +
+                    deta.dT * deta.drho2 * df.deta2 +
+                    2.0_rt * deta.drho * deta.drhodT * df.deta2 +
+                    deta.drho2dT * df.deta;
+
+    // ∂³f/∂ρ∂T²
+    df_th.drhodT2 = dbdT2 * deta.drho * df.detadbeta2 +
+                    2.0_rt * dbdT * deta.dT * deta.drho * df.deta2dbeta +
+                    2.0_rt * dbdT * deta.drhodT * df.detadbeta +
+                    deta.dT * deta.dT * deta.drho * df.deta3 +
+                    2.0_rt * deta.dT * deta.drhodT * df.deta2 +
+                    deta.drho * deta.dT2 * df.deta2 +
+                    deta.drhodT2 * df.deta;
+    // ∂³f/∂T³
+    df_th.dT3 = dbdT3 * df.dbeta3 +
+                3.0_rt * dbdT2 * deta.dT * df.detadbeta2 +
+                3.0_rt * dbdT * deta.dT * deta.dT * df.deta2dbeta +
+                3.0_rt * dbdT * deta.dT2 * df.detadbeta +
+                deta.dT * deta.dT * deta.dT * df.deta3 +
+                3.0_rt * deta.dT * deta.dT2 * df.deta2 +
+                deta.dT3 * df.deta;
 
     return df_th;
 
