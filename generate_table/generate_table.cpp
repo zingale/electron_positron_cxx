@@ -72,7 +72,7 @@ auto main() -> int
 
             // in the table, density varies fastest
 
-            int index = j * T_pts + i;
+            int index = j * rho_pts + i;
 
             util::println("rho = {}, T = {}", rho, T);
 
