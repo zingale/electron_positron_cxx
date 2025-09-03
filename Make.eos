@@ -70,7 +70,7 @@ else
    CXXFLAGS += -O2
 endif
 
-EXTRA_CXX_FLAGS :=
+EXTRA_CXX_FLAGS ?=
 ifeq ($(COMP), GCC)
   EXTRA_CXXFLAGS += -fext-numeric-literals
 endif

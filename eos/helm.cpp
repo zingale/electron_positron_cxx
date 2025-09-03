@@ -22,7 +22,7 @@ auto main() -> int
     auto T = static_cast<real_t>(T_);
     auto Ye = static_cast<real_t>(Ye_);
 
-    auto helm = get_helmholtz_terms(rho, T, Ye);
+    auto [helm, eos] = get_helmholtz_terms(rho, T, Ye);
 
     std::cout << helm << std::endl;
 

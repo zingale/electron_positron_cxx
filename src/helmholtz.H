@@ -7,7 +7,8 @@
 #include "electron_positron.H"
 
 template <typename T>
-inline auto get_helmholtz_terms(T rho, T temp, T Ye) -> Helmholtz<T>
+inline auto get_helmholtz_terms(T rho, T temp, T Ye) 
+    -> std::pair<Helmholtz<T>, EOSState<T>>
 {
 
     Helmholtz<T> helm;
@@ -47,7 +48,7 @@ inline auto get_helmholtz_terms(T rho, T temp, T Ye) -> Helmholtz<T>
 
     helm.d4F_drho2dT2 = deriv;
 
-    return helm;
+    return {helm, state};
 
 }
 
