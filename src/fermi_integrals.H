@@ -33,6 +33,8 @@
 #include "quadrature_weights_100.H"
 #elif defined(QUAD400)
 #include "quadrature_weights_400.H"
+#elif defined(QUAD800)
+#include "quadrature_weights_800.H"
 #else
 #include "quadrature_weights_200.H"
 #endif

@@ -8,6 +8,15 @@
 #include "maxwell_relations.H"
 #include "util.H"
 
+struct MaxwellError {
+    real_t rho{};
+    real_t T{};
+    real_t err1{};
+    real_t err2{};
+    real_t err3{};
+};
+
+
 auto main() -> int
 {
 
@@ -38,6 +47,8 @@ auto main() -> int
     qnpts = "200";
 #elif defined(QUAD400)
     qnpts = "400";
+#elif defined(QUAD800)
+    qnpts = "800";
 #endif
 
     std::string precision;
@@ -51,18 +62,36 @@ auto main() -> int
     precision = "64";
 #endif
 
-    std::ofstream of(std::format("maxwell_p{}_npts{}.txt", precision, qnpts));
 
-    for (auto T : Ts) {
-        for (auto rho : rhos) {
+    std::vector<MaxwellError> max_err(Ts.size() * rhos.size());
+
+    #pragma omp parallel for collapse(2)
+    for (int it = 0; it < static_cast<int>(Ts.size()); ++it) {
+        for (int ir = 0; ir < static_cast<int>(rhos.size()); ++ir) {
+
+            const auto T = Ts[it];
+            const auto rho = rhos[ir];
+
+            const int idx = it * rhos.size() + ir;
 
             auto [scale1, error1] = maxwell_1<real_t>(rho, T, Ye);
             auto [scale2, error2] = maxwell_2<real_t>(rho, T, Ye);
             auto [scale3, error3] = maxwell_3<real_t>(rho, T, Ye);
 
-            of << util::format("{:8.3g} {:8.3g} {:15.10g} {:15.10g} {:15.10g}\n",
-                               T, rho, error1, error2, error3);
+            max_err[idx].rho = rho;
+            max_err[idx].T = T;
+            max_err[idx].err1 = error1;
+            max_err[idx].err2 = error2;
+            max_err[idx].err3 = error3;
+
         }
+    }
+
+    std::ofstream of(std::format("maxwell_p{}_npts{}.txt", precision, qnpts));
+
+    for (const auto & m : max_err) {
+        of << util::format("{:8.3g} {:8.3g} {:15.10g} {:15.10g} {:15.10g}\n",
+                           m.T, m.rho, m.err1, m.err2, m.err3);
     }
 
 }

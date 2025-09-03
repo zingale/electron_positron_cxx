@@ -39,3 +39,7 @@ make PRECISION=FLOAT128 QUAD_PTS=200
 make clean
 make PRECISION=FLOAT128 QUAD_PTS=400
 ./generate_maxwell_data
+
+make clean
+make PRECISION=FLOAT128 QUAD_PTS=800
+./generate_maxwell_data

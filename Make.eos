@@ -38,6 +38,8 @@ else ifeq ($(QUAD_PTS), 100)
   DEFINES += -DQUAD100
 else ifeq ($(QUAD_PTS), 200)
   DEFINES += -DQUAD200
+else ifeq ($(QUAD_PTS), 800)
+  DEFINES += -DQUAD800
 else
   DEFINES += -DQUAD400
 endif
