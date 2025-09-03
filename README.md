@@ -158,7 +158,7 @@ before building with any different options.
 ### Generating quadrature points / weights
 
 The Gauss-Legendre and Gauss-Leguerre quadrature roots and weights are
-generated via the notebook `generate_quadrature_weights.ipynb` using
+generated via the notebook `tools/generate_quadrature_weights.ipynb` using
 SymPy.  This will directly write the C++ header file with the desired
 number of quadrature points.
 
@@ -240,8 +240,8 @@ derivatives to the derivative computed by the EOS by integration.
 ## Derivations
 
 The derivation of the derivatives of the different thermodynamic
-quantities is provided by the notebook `degenerate_derivatives.ipynb`,
-using SymPy.
+quantities is provided by the notebook
+`notes/degenerate_derivatives.ipynb`, using SymPy.
 
 These are the expressions that are coded up in `electron_positron.H`.
 
