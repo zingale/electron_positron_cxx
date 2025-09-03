@@ -65,13 +65,14 @@ auto main() -> int
 
     std::vector<MaxwellError> max_err(Ts.size() * rhos.size());
 
+    #pragma omp parallel for collapse(2)
     for (int it = 0; it < static_cast<int>(Ts.size()); ++it) {
         for (int ir = 0; ir < static_cast<int>(rhos.size()); ++ir) {
 
-            T = Ts[it];
-            rho = rhos[ir];
+            const auto T = Ts[it];
+            const auto rho = rhos[ir];
 
-            int idx = it * rhos.size() + ir;
+            const int idx = it * rhos.size() + ir;
 
             auto [scale1, error1] = maxwell_1<real_t>(rho, T, Ye);
             auto [scale2, error2] = maxwell_2<real_t>(rho, T, Ye);
@@ -89,9 +90,8 @@ auto main() -> int
     std::ofstream of(std::format("maxwell_p{}_npts{}.txt", precision, qnpts));
 
     for (const auto & m : max_err) {
-            of << util::format("{:8.3g} {:8.3g} {:15.10g} {:15.10g} {:15.10g}\n",
-                               m.T, m.rho, m.error1, m.error2, m.error3);
-        }
+        of << util::format("{:8.3g} {:8.3g} {:15.10g} {:15.10g} {:15.10g}\n",
+                           m.T, m.rho, m.err1, m.err2, m.err3);
     }
 
 }
