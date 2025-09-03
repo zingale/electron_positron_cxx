@@ -129,7 +129,7 @@ make QUAD_PTS=100
 ```
 
 for 100 points.  Valid options are `20`, `50`, `100`, `200` (the default),
-and `400`.
+`400`, and `800`.
 
 Be sure to do
 

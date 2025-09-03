@@ -38,6 +38,8 @@ auto main() -> int
     qnpts = "200";
 #elif defined(QUAD400)
     qnpts = "400";
+#elif defined(QUAD800)
+    qnpts = "800";
 #endif
 
     std::string precision;
