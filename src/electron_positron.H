@@ -84,7 +84,7 @@ inline auto get_eta(T rhoYe, T temp) -> T
                     auto n_e = n_e_constraint(_eta, beta);
                     auto n_pos = n_p_constraint(_eta, beta);
                     return n_e_net - (n_e - n_pos);
-                }, -100.0_rt, 1.e7_rt);
+                }, -100.0_rt, 3.e9_rt);
         } catch (...) {
             std::cerr << "unable to solve for eta" << std::endl;
             abort();
