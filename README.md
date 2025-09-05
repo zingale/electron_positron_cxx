@@ -1,8 +1,8 @@
 [![DOI](https://zenodo.org/badge/1026869302.svg)](https://doi.org/10.5281/zenodo.16942327)
 
-[![Test compilation](https://github.com/zingale/electron_positron_cxx/actions/workflows/compile_action.yml/badge.svg?branch=main)](https://github.com/zingale/electron_positron_cxx/actions/workflows/compile_action.yml)
-[![Test MacOS compilation](https://github.com/zingale/electron_positron_cxx/actions/workflows/compile_macos_action.yml/badge.svg?branch=main)](https://github.com/zingale/electron_positron_cxx/actions/workflows/compile_macos_action.yml)
-[![Run tests](https://github.com/zingale/electron_positron_cxx/actions/workflows/run_tests.yml/badge.svg?branch=main)](https://github.com/zingale/electron_positron_cxx/actions/workflows/run_tests.yml)
+[![Test compilation](https://github.com/zingale/electron_positron_cxx/actions/workflows/compile_action.yml/badge.svg)](https://github.com/zingale/electron_positron_cxx/actions/workflows/compile_action.yml)
+[![Test MacOS compilation](https://github.com/zingale/electron_positron_cxx/actions/workflows/compile_macos_action.yml/badge.svg)](https://github.com/zingale/electron_positron_cxx/actions/workflows/compile_macos_action.yml)
+[![Run tests](https://github.com/zingale/electron_positron_cxx/actions/workflows/run_tests.yml/badge.svg)](https://github.com/zingale/electron_positron_cxx/actions/workflows/run_tests.yml)
 
 # Electron-Positron Equation of State
 
