@@ -8,3 +8,4 @@ USE_BOOST256
 USE_FLOAT128
 USE_LONG_DOUBLE
 __clang__
+__aarch64__

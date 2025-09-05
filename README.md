@@ -29,9 +29,9 @@ to tabulate EOS properties.
 * GNU make >= 4.0.
 
 > [!NOTE]
-> On a Mac, you will need to install make via brew, since Apple's version is
-> > 10 years old.  Then use `gmake` instead of `make` in the building
-> examples below.
+> On a Mac, you will need to install make via brew, since Apple's
+> version is more than 10 years old.  Then use `gmake` instead of
+> `make` in the building examples below.
 
 
 ## Root-finding for degeneracy parameter
