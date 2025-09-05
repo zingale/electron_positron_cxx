@@ -26,6 +26,13 @@ to tabulate EOS properties.
 
 * [boost](https://www.boost.org/) for 256-bit precision
 
+* GNU make >= 4.0.
+
+> [!NOTE]
+> On a Mac, you will need to install make via brew, since Apple's version is
+> > 10 years old.  Then use `gmake` instead of `make` in the building
+> examples below.
+
 
 ## Root-finding for degeneracy parameter
 
@@ -86,9 +93,10 @@ make PRECISION=FLOAT128
 ```
 
 > [!NOTE]
-> At the moment, this is only supported with GCC, and not
-> LLVM/clang++ because clang++'s math functions don't work with
-> `__float128` directly.
+> On x86 architectures, this is supported both with GCC and LLVM/clang.
+> On Apple ARM processors, apple-clang does not support `__float128`,
+> so you need to install the latest GCC via `brew` and then build with
+> `CXX=g++-15` on the compile line.
 
 
 ### 80-bit floating point
