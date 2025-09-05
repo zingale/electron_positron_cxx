@@ -11,6 +11,7 @@ jobs:
         run: |
           brew update
           brew install make
+          brew install gcc
 
       - name: Print system info
         run: |
@@ -22,6 +23,7 @@ jobs:
           clang++ --version
           python --version
           gmake --version | head -1
+          g++ --version
           echo '::endgroup::'
 
       - name: Compile problems with long double
@@ -34,5 +36,5 @@ jobs:
         run: |
           cd tests
           gmake clean
-          gmake PRECISION=FLOAT128 COMP=CLANG
+          gmake PRECISION=FLOAT128 COMP=GCC
 
