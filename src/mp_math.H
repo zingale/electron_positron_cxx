@@ -5,7 +5,7 @@
 #include <cmath>
 #if defined(USE_BOOST256)
 #include <boost/multiprecision/cpp_bin_float.hpp>
-#elif defined(USE_FLOAT128) && defined(__clang__)
+#elif defined(USE_FLOAT128) && (defined(__clang__) || defined(__aarch64__))
 #include <quadmath.h>
 #endif
 
@@ -17,7 +17,7 @@ namespace mp {
     {
 #if defined(USE_BOOST256)
         return boost::multiprecision::pow(x, y);
-#elif defined(USE_FLOAT128) && defined(__clang__)
+#elif defined(USE_FLOAT128) && (defined(__clang__) || defined(__aarch64__))
         return powq(x, y);
 #else
         return std::pow(x, y);
@@ -28,7 +28,7 @@ namespace mp {
     {
 #if defined(USE_BOOST256)
         return boost::multiprecision::sqrt(x);
-#elif defined(USE_FLOAT128) && defined(__clang__)
+#elif defined(USE_FLOAT128) && (defined(__clang__) || defined(__aarch64__))
         return sqrtq(x);
 #else
         return std::sqrt(x);
@@ -41,7 +41,7 @@ namespace mp {
     {
 #if defined(USE_BOOST256)
         return boost::multiprecision::exp(x);
-#elif defined(USE_FLOAT128) && defined(__clang__)
+#elif defined(USE_FLOAT128) && (defined(__clang__) || defined(__aarch64__))
         return expq(x);
 #else
         return std::exp(x);
@@ -54,7 +54,7 @@ namespace mp {
     {
 #if defined(USE_BOOST256)
         return boost::multiprecision::log(x);
-#elif defined(USE_FLOAT128) && defined(__clang__)
+#elif defined(USE_FLOAT128) && (defined(__clang__) || defined(__aarch64__))
         return logq(x);
 #else
         return std::log(x);
@@ -65,7 +65,7 @@ namespace mp {
     {
 #if defined(USE_BOOST256)
         return boost::multiprecision::log10(x);
-#elif defined(USE_FLOAT128) && defined(__clang__)
+#elif defined(USE_FLOAT128) && (defined(__clang__) || defined(__aarch64__))
         return log10q(x);
 #else
         return std::log10(x);
@@ -76,7 +76,7 @@ namespace mp {
     {
 #if defined(USE_BOOST256)
         return boost::multiprecision::log1p(x);
-#elif defined(USE_FLOAT128) && defined(__clang__)
+#elif defined(USE_FLOAT128) && (defined(__clang__) || defined(__aarch64__))
         return log1pq(x);
 #else
         return std::log1p(x);
@@ -89,7 +89,7 @@ namespace mp {
     {
 #if defined(USE_BOOST256)
         return boost::multiprecision::sin(x);
-#elif defined(USE_FLOAT128) && defined(__clang__)
+#elif defined(USE_FLOAT128) && (defined(__clang__) || defined(__aarch64__))
         return sinq(x);
 #else
         return std::sin(x);
@@ -100,7 +100,7 @@ namespace mp {
     {
 #if defined(USE_BOOST256)
         return boost::multiprecision::cos(x);
-#elif defined(USE_FLOAT128) && defined(__clang__)
+#elif defined(USE_FLOAT128) && (defined(__clang__) || defined(__aarch64__))
         return cosq(x);
 #else
         return std::cos(x);
@@ -111,7 +111,7 @@ namespace mp {
     {
 #if defined(USE_BOOST256)
         return boost::multiprecision::cosh(x);
-#elif defined(USE_FLOAT128) && defined(__clang__)
+#elif defined(USE_FLOAT128) && (defined(__clang__) || defined(__aarch64__))
         return coshq(x);
 #else
         return std::cosh(x);
@@ -122,7 +122,7 @@ namespace mp {
     {
 #if defined(USE_BOOST256)
         return boost::multiprecision::tanh(x);
-#elif defined(USE_FLOAT128) && defined(__clang__)
+#elif defined(USE_FLOAT128) && (defined(__clang__) || defined(__aarch64__))
         return tanhq(x);
 #else
         return std::tanh(x);
@@ -135,7 +135,7 @@ namespace mp {
     {
 #if defined(USE_BOOST256)
         return boost::multiprecision::trunc(x);
-#elif defined(USE_FLOAT128) && defined(__clang__)
+#elif defined(USE_FLOAT128) && (defined(__clang__) || defined(__aarch64__))
         return truncq(x);
 #else
         return std::trunc(x);
@@ -146,7 +146,7 @@ namespace mp {
     {
 #if defined(USE_BOOST256)
         return boost::multiprecision::abs(x);
-#elif defined(USE_FLOAT128) && defined(__clang__)
+#elif defined(USE_FLOAT128) && (defined(__clang__) || defined(__aarch64__))
         return fabsq(x);
 #else
         return std::abs(x);
