@@ -11,9 +11,9 @@ HEADERS := $(wildcard $(TOP)/src/*.H)
 COMP ?= GCC
 
 ifeq ($(COMP), CLANG)
-  CC = clang++
+  CXX = clang++
 else
-  CC = g++
+  CXX = g++
 endif
 
 # select the precision
@@ -84,7 +84,7 @@ endif
 ifeq ($(USE_CLANG_TIDY),TRUE)
 	clang-tidy --config-file=$(TOP)/.clang-tidy --warnings-as-errors=* $< -- $(CXXFLAGS) $(DEFINES) $(INCLUDE_FLAGS) -I$(PATH_TO_QUADMATH)
 endif
-	$(CC) $(CXXFLAGS) $(EXTRA_CXXFLAGS) $(DEFINES) $(INCLUDE_FLAGS) -o $@ $< $(LIBS)
+	$(CXX) $(CXXFLAGS) $(EXTRA_CXXFLAGS) $(DEFINES) $(INCLUDE_FLAGS) -o $@ $< $(LIBS)
 
 clean:
 	rm -f $(EXECUTABLES)

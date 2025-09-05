@@ -22,7 +22,7 @@ namespace util {
     // these add coloring and support for boost floats (by casting down)
     // note: this will lose some precision in output
 
-#if defined(USE_BOOST256)
+#if defined(USE_BOOST256) || (defined(USE_FLOAT128) && (defined(__clang__) || defined(__aarch64__)))
     // Trait to detect our big-float type
     template<typename T>
     struct is_boost_real_t : std::false_type {};
