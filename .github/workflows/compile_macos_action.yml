@@ -23,7 +23,8 @@ jobs:
           clang++ --version
           python --version
           gmake --version | head -1
-          g++ --version
+          brew --prefix
+          g++-15 --version
           echo '::endgroup::'
 
       - name: Compile problems with long double
@@ -36,5 +37,5 @@ jobs:
         run: |
           cd tests
           gmake clean
-          gmake PRECISION=FLOAT128 COMP=GCC
+          gmake PRECISION=FLOAT128 CXX=g++-15 
 
