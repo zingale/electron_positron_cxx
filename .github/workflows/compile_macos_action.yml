@@ -30,3 +30,9 @@ jobs:
           gmake clean
           gmake PRECISION=LONG_DOUBLE COMP=CLANG
 
+      - name: Compile problems with __float128
+        run: |
+          cd tests
+          gmake clean
+          gmake PRECISION=FLOAT128 COMP=CLANG
+
