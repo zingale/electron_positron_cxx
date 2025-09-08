@@ -1,5 +1,8 @@
 [![DOI](https://zenodo.org/badge/1026869302.svg)](https://doi.org/10.5281/zenodo.16942327)
 
+[![Test compilation](https://github.com/zingale/electron_positron_cxx/actions/workflows/compile_action.yml/badge.svg)](https://github.com/zingale/electron_positron_cxx/actions/workflows/compile_action.yml)
+[![Test MacOS compilation](https://github.com/zingale/electron_positron_cxx/actions/workflows/compile_macos_action.yml/badge.svg)](https://github.com/zingale/electron_positron_cxx/actions/workflows/compile_macos_action.yml)
+[![Run tests](https://github.com/zingale/electron_positron_cxx/actions/workflows/run_tests.yml/badge.svg)](https://github.com/zingale/electron_positron_cxx/actions/workflows/run_tests.yml)
 
 # Electron-Positron Equation of State
 
@@ -25,6 +28,13 @@ to tabulate EOS properties.
 * [libquadmath](https://gcc.gnu.org/onlinedocs/libquadmath/) for 128-bit precision
 
 * [boost](https://www.boost.org/) for 256-bit precision
+
+* GNU make >= 4.0.
+
+> [!NOTE]
+> On a Mac, you will need to install make via brew, since Apple's
+> version is more than 10 years old.  Then use `gmake` instead of
+> `make` in the building examples below.
 
 
 ## Root-finding for degeneracy parameter
@@ -86,9 +96,10 @@ make PRECISION=FLOAT128
 ```
 
 > [!NOTE]
-> At the moment, this is only supported with GCC, and not
-> LLVM/clang++ because clang++'s math functions don't work with
-> `__float128` directly.
+> On x86 architectures, this is supported both with GCC and LLVM/clang.
+> On Apple ARM processors, apple-clang does not support `__float128`,
+> so you need to install the latest GCC via `brew` and then build with
+> `CXX=g++-15` on the compile line.
 
 
 ### 80-bit floating point
