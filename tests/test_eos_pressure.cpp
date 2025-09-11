@@ -476,7 +476,6 @@ test_pe_rho2T_derivs() {
     }
 }
 
-
 void
 test_pp_rho2T_derivs() {
 
@@ -510,6 +509,70 @@ test_pp_rho2T_derivs() {
 
 }
 
+// ∂³p/∂ρ∂T²
+
+void
+test_pe_rhoT2_derivs() {
+
+    ElectronPositronEOS<real_t> eos;
+    const real_t Ye{0.5_rt};
+
+    const real_t eps{0.01_rt};
+
+    std::println("");
+    util::green_println("testing ∂³p⁻/∂ρ∂T² via differencing");
+
+    for (auto T : Ts) {
+        for (auto rho : rhos) {
+            auto es = eos.pe_state(rho, T, Ye);
+            auto drho{eps * rho};
+            auto [deriv, _err] = fd::adaptive_diff<real_t>([&] (real_t _rho) -> real_t
+                {
+                    auto es_eps = eos.pe_state(_rho, T, Ye);
+                    return es_eps.d2pe_dT2;
+                }, rho, drho);
+
+            real_t err = mp::abs(es.d3pe_drhodT2 - deriv) / mp::abs(es.d3pe_drhodT2);
+            util::threshold_println(err,
+                                    "ρ = {:8.3g} T = {:8.3g},  ∂³p⁻/∂ρ∂T² = {:15.8g},  error = {:11.5g}",
+                                    rho, T, es.d3pe_drhodT2, err);
+        }
+    }
+}
+
+void
+test_pp_rhoT2_derivs() {
+
+    ElectronPositronEOS<real_t> eos;
+    const real_t Ye{0.5_rt};
+
+    const real_t eps{0.01_rt};
+
+    std::println("");
+    util::green_println("testing ∂³p⁺/∂ρ∂T² via differencing");
+
+    for (auto T : Ts) {
+        for (auto rho : rhos) {
+            auto es = eos.pe_state(rho, T, Ye);
+            if (es.n_pos == 0.0 && es.d3pp_drhodT2 == 0.0) {
+                continue;
+            }
+            auto drho{eps * rho};
+            auto [deriv, _err] = fd::adaptive_diff<real_t>([&] (real_t _rho) -> real_t
+                {
+                    auto es_eps = eos.pe_state(_rho, T, Ye);
+                    return es_eps.d2pp_dT2;
+                }, rho, drho);
+
+            real_t err = mp::abs(es.d3pp_drhodT2 - deriv) / mp::abs(es.d3pp_drhodT2);
+            util::threshold_println(err,
+                                    "ρ = {:8.3g} T = {:8.3g},  ∂³p⁺/∂ρ∂T² = {:15.8g},  error = {:11.5g}",
+                                    rho, T, es.d3pp_drhodT2, err);
+        }
+    }
+
+}
+
 
 
 auto main() -> int
@@ -530,12 +593,16 @@ auto main() -> int
 
     test_pe_rhoT_derivs();
     test_pp_rhoT_derivs();
-#endif
 
     test_pe_rho3_derivs();
     test_pp_rho3_derivs();
 
     test_pe_rho2T_derivs();
     test_pp_rho2T_derivs();
+
+#endif
+
+    test_pe_rhoT2_derivs();
+    test_pp_rhoT2_derivs();
 
 }
