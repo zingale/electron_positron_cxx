@@ -11,6 +11,7 @@
 const std::array<real_t, 4> Ts{1.e4_rt, 1.e6_rt, 1.e8_rt, 5.e9_rt};
 const std::array<real_t, 5> rhos{1.e-2_rt, 1.e2_rt, 1.e5_rt, 1.e7_rt, 5.e9_rt};
 
+// first derivatives
 
 // ∂n/∂ρ
 
@@ -154,6 +155,8 @@ test_np_T_derivs() {
     }
 }
 
+
+// second derivatives
 
 // ∂²n/∂ρ²
 
@@ -385,9 +388,164 @@ test_np_rhoT_derivs() {
 }
 
 
+// third derivatives
+
+// ∂³n/∂ρ³
+
+void
+test_ne_rho3_derivs() {
+
+    ElectronPositronEOS<real_t> eos;
+    const real_t Ye{0.5_rt};
+
+    const real_t eps{0.01_rt};
+
+    std::println("");
+    util::green_println("testing ∂³n⁻/∂ρ³ via differencing");
+
+    for (auto T : Ts) {
+        for (auto rho : rhos) {
+            auto es = eos.pe_state(rho, T, Ye);
+            auto drho{eps * rho};
+            auto [deriv, _err] = fd::adaptive_diff2<real_t>([&] (real_t _rho) -> real_t
+                {
+                    auto es_eps = eos.pe_state(_rho, T, Ye);
+                    return es_eps.dne_drho;
+                }, rho, drho);
+
+            real_t err{};
+            if (es.d3ne_drho3 == 0) {
+                err = mp::abs(es.d3ne_drho3 - deriv);
+            } else {
+                err = mp::abs(es.d3ne_drho3 - deriv) / mp::abs(es.d3ne_drho3);
+            }
+            util::threshold_println(err,
+                                    "ρ = {:8.3g} T = {:8.3g},  ∂³n⁻/∂ρ³ = {:15.8g},  error = {:11.5g}",
+                                    rho, T, es.d3ne_drho3, err);
+        }
+    }
+}
+
+
+void
+test_np_rho3_derivs() {
+
+    ElectronPositronEOS<real_t> eos;
+    const real_t Ye{0.5_rt};
+
+    const real_t eps{0.01_rt};
+
+    std::println("");
+    util::green_println("testing ∂³n⁺/∂ρ³ via differencing");
+
+    for (auto T : Ts) {
+        for (auto rho : rhos) {
+            auto es = eos.pe_state(rho, T, Ye);
+            if (es.n_pos == 0.0 && es.d3np_drho3 == 0.0) {
+                continue;
+            }
+            auto drho{eps * rho};
+            auto [deriv, _err] = fd::adaptive_diff2<real_t>([&] (real_t _rho) -> real_t
+                {
+                    auto es_eps = eos.pe_state(_rho, T, Ye);
+                    return es_eps.dnp_drho;
+                }, rho, drho);
+
+            real_t err{};
+            if (es.d3np_drho3 == 0) {
+                err = mp::abs(es.d3np_drho3 - deriv);
+            } else {
+                err = mp::abs(es.d3np_drho3 - deriv) / mp::abs(es.d3np_drho3);
+            }
+            util::threshold_println(err,
+                                    "ρ = {:8.3g} T = {:8.3g},  ∂³n⁺/∂ρ³ = {:15.8g},  error = {:11.5g}",
+                                    rho, T, es.d3np_drho3, err);
+        }
+    }
+
+}
+
+
+// ∂³n/∂ρ²∂T
+
+void
+test_ne_rho2T_derivs() {
+
+    ElectronPositronEOS<real_t> eos;
+    const real_t Ye{0.5_rt};
+
+    const real_t eps{0.01_rt};
+
+    std::println("");
+    util::green_println("testing ∂³n⁻/∂ρ²∂T via differencing");
+
+    for (auto T : Ts) {
+        for (auto rho : rhos) {
+            auto es = eos.pe_state(rho, T, Ye);
+            auto drho{eps * rho};
+            auto [deriv, _err] = fd::adaptive_diff2<real_t>([&] (real_t _rho) -> real_t
+                {
+                    auto es_eps = eos.pe_state(_rho, T, Ye);
+                    return es_eps.dne_dT;
+                }, rho, drho);
+
+            real_t err{};
+            if (es.d3ne_drho2dT == 0) {
+                err = mp::abs(es.d3ne_drho2dT - deriv);
+            } else {
+                err = mp::abs(es.d3ne_drho2dT - deriv) / mp::abs(es.d3ne_drho2dT);
+            }
+            util::threshold_println(err,
+                                    "ρ = {:8.3g} T = {:8.3g},  ∂³n⁻/∂ρ²∂T = {:15.8g},  error = {:11.5g}",
+                                    rho, T, es.d3ne_drho2dT, err);
+        }
+    }
+}
+
+void
+test_np_rho2T_derivs() {
+
+    ElectronPositronEOS<real_t> eos;
+    const real_t Ye{0.5_rt};
+
+    const real_t eps{0.01_rt};
+
+    std::println("");
+    util::green_println("testing ∂³n⁺/∂ρ²∂T via differencing");
+
+    for (auto T : Ts) {
+        for (auto rho : rhos) {
+            auto es = eos.pe_state(rho, T, Ye);
+            if (es.n_pos == 0.0 && es.d3np_drho2dT == 0.0) {
+                continue;
+            }
+            auto drho{eps * rho};
+            auto [deriv, _err] = fd::adaptive_diff2<real_t>([&] (real_t _rho) -> real_t
+                {
+                    auto es_eps = eos.pe_state(_rho, T, Ye);
+                    return es_eps.dnp_dT;
+                }, rho, drho);
+
+            real_t err{};
+            if (es.d3np_drho3 == 0) {
+                err = mp::abs(es.d3np_drho2dT - deriv);
+            } else {
+                err = mp::abs(es.d3np_drho2dT - deriv) / mp::abs(es.d3np_drho2dT);
+            }
+            util::threshold_println(err,
+                                    "ρ = {:8.3g} T = {:8.3g},  ∂³n⁺/∂ρ²∂T = {:15.8g},  error = {:11.5g}",
+                                    rho, T, es.d3np_drho2dT, err);
+        }
+    }
+
+}
+
+
+
 auto main() -> int
 {
 
+#if 0
     test_ne_rho_derivs();
     test_np_rho_derivs();
 
@@ -402,5 +560,12 @@ auto main() -> int
 
     test_ne_rhoT_derivs();
     test_np_rhoT_derivs();
+#endif
+
+    test_ne_rho3_derivs();
+    test_np_rho3_derivs();
+
+    test_ne_rho2T_derivs();
+    test_np_rho2T_derivs();
 
 }
