@@ -12,7 +12,7 @@ const std::array<real_t, 4> Ts{1.e4_rt, 1.e6_rt, 1.e8_rt, 5.e9_rt};
 const std::array<real_t, 5> rhos{1.e-2_rt, 1.e2_rt, 1.e5_rt, 1.e7_rt, 5.e9_rt};
 
 
-// ∂n⁻/∂ρ
+// ∂n/∂ρ
 
 void
 test_ne_rho_derivs() {
@@ -22,6 +22,7 @@ test_ne_rho_derivs() {
 
     const real_t eps{0.01_rt};
 
+    std::println("");
     util::green_println("testing ∂n⁻/∂ρ via differencing");
 
     for (auto T : Ts) {
@@ -77,7 +78,7 @@ test_np_rho_derivs() {
 }
 
 
-// ∂n⁻/∂T
+// ∂n/∂T
 
 void
 test_ne_T_derivs() {
@@ -154,7 +155,7 @@ test_np_T_derivs() {
 }
 
 
-// ∂²n⁻/∂ρ²
+// ∂²n/∂ρ²
 
 void
 test_ne_rho2_derivs() {
