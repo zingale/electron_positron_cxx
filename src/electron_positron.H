@@ -491,8 +491,8 @@ public:
         es.d3eta_drhodT2 = deta.drhodT2;
         es.d3eta_dT3 = deta.dT3;
 
-        // now we can compute the first and second derivatives of all
-        // the thermodynamic quantities
+        // now we can compute the derivatives of all the thermodynamic
+        // quantities
 
         auto dne_thermo = chain_rule(dn_e, deta);
         es.dne_drho = dne_thermo.drho;
@@ -531,6 +531,10 @@ public:
         es.d2pe_drho2 = dpe_thermo.drho2;
         es.d2pe_dT2 = dpe_thermo.dT2;
         es.d2pe_drhodT = dpe_thermo.drhodT;
+        es.d3pe_drho3 = dpe_thermo.drho3;
+        es.d3pe_drho2dT = dpe_thermo.drho2dT;
+        es.d3pe_drhodT2 = dpe_thermo.drhodT2;
+        es.d3pe_dT3 = dpe_thermo.dT3;
 
         auto dpp_thermo = chain_rule(dp_pos, deta);
         es.dpp_drho = dpp_thermo.drho;
@@ -538,6 +542,10 @@ public:
         es.d2pp_drho2 = dpp_thermo.drho2;
         es.d2pp_dT2 = dpp_thermo.dT2;
         es.d2pp_drhodT = dpp_thermo.drhodT;
+        es.d3pp_drho3 = dpp_thermo.drho3;
+        es.d3pp_drho2dT = dpp_thermo.drho2dT;
+        es.d3pp_drhodT2 = dpp_thermo.drhodT2;
+        es.d3pp_dT3 = dpp_thermo.dT3;
 
         // Compute partials of energy density with density and
         // temperature via the chain rule.
@@ -652,6 +660,10 @@ public:
         es.d2p_drho2 = es.d2pe_drho2 + es.d2pp_drho2;
         es.d2p_dT2 = es.d2pe_dT2 + es.d2pp_dT2;
         es.d2p_drhodT = es.d2pe_drhodT + es.d2pp_drhodT;
+        es.d3p_drho3 = es.d3pe_drho3 + es.d3pp_drho3;
+        es.d3p_drho2dT = es.d3pe_drho2dT + es.d3pp_drho2dT;
+        es.d3p_drhodT2 = es.d3pe_drhodT2 + es.d3pp_drhodT2;
+        es.d3p_dT3 = es.d3pe_dT3 + es.d3pp_dT3;
 
         es.e = es.e_e + es.e_pos;
         es.de_drho = es.dee_drho + es.dep_drho;
