@@ -694,7 +694,6 @@ test_np_T3_derivs() {
 auto main() -> int
 {
 
-#if 0
     test_ne_rho_derivs();
     test_np_rho_derivs();
 
@@ -719,10 +718,7 @@ auto main() -> int
     test_ne_rhoT2_derivs();
     test_np_rhoT2_derivs();
 
-#endif
-
     test_ne_T3_derivs();
     test_np_T3_derivs();
-
 
 }

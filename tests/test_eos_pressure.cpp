@@ -574,11 +574,86 @@ test_pp_rhoT2_derivs() {
 }
 
 
+// ∂³p/∂T³
+
+void
+test_pe_T3_derivs() {
+
+    ElectronPositronEOS<real_t> eos;
+    const real_t Ye{0.5_rt};
+
+    const real_t eps{0.01_rt};
+
+    std::println("");
+    util::green_println("testing ∂³p⁻/∂T³ via differencing");
+
+    for (auto T : Ts) {
+        for (auto rho : rhos) {
+            auto es = eos.pe_state(rho, T, Ye);
+            auto dT{eps * T};
+            auto [deriv, _err] = fd::adaptive_diff2<real_t>([&] (real_t T_) -> real_t
+                {
+                    auto es_eps = eos.pe_state(rho, T_, Ye);
+                    return es_eps.dpe_dT;
+                }, T, dT);
+
+            real_t err{};
+            if (es.d3pe_dT3 == 0.0_rt) {
+                const real_t scale = es.p_e / T / T / T;
+                err = mp::abs(es.d3pe_dT3 - deriv / scale) ;
+            } else {
+                err = mp::abs(es.d3pe_dT3 - deriv) / mp::abs(es.d3pe_dT3);
+            }
+            util::threshold_println(err,
+                                    "ρ = {:8.3g} T = {:8.3g},  ∂³p⁻/∂T³ = {:15.8g},  error = {:11.5g}",
+                                    rho, T, es.d3pe_dT3, err);
+        }
+    }
+}
+
+
+void
+test_pp_T3_derivs() {
+
+    ElectronPositronEOS<real_t> eos;
+    const real_t Ye{0.5_rt};
+
+    const real_t eps{0.01_rt};
+
+    std::println("");
+    util::green_println("testing ∂³p⁺/∂T³ via differencing");
+
+    for (auto T : Ts) {
+        for (auto rho : rhos) {
+            auto es = eos.pe_state(rho, T, Ye);
+            if (es.n_pos == 0.0 && es.d3pp_dT3 == 0.0) {
+                continue;
+            }
+            auto dT{eps * T};
+            auto [deriv, _err] = fd::adaptive_diff2<real_t>([&] (real_t T_) -> real_t
+                {
+                    auto es_eps = eos.pe_state(rho, T_, Ye);
+                    return es_eps.dpp_dT;
+                }, T, dT);
+
+            real_t err{};
+            if (es.d3pp_dT3 == 0.0_rt) {
+                const real_t scale = es.p_pos / T / T / T;
+                err = mp::abs(es.d3pp_dT3 - deriv / scale) ;
+            } else {
+                err = mp::abs(es.d3pp_dT3 - deriv) / mp::abs(es.d3pp_dT3);
+            }
+            util::threshold_println(err,
+                                    "ρ = {:8.3g} T = {:8.3g},  ∂³p⁺/∂T³ = {:15.8g},  error = {:11.5g}",
+                                    rho, T, es.d3pp_dT3, err);
+        }
+    }
+}
+
 
 auto main() -> int
 {
 
-#if 0
     test_pe_rho_derivs();
     test_pp_rho_derivs();
 
@@ -600,9 +675,10 @@ auto main() -> int
     test_pe_rho2T_derivs();
     test_pp_rho2T_derivs();
 
-#endif
-
     test_pe_rhoT2_derivs();
     test_pp_rhoT2_derivs();
+
+    test_pe_T3_derivs();
+    test_pp_T3_derivs();
 
 }
