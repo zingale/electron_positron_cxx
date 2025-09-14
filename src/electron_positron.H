@@ -577,18 +577,33 @@ public:
         es.e_e = E_e * rho_inv;
         es.dee_drho = (dEe_thermo.drho - E_e * rho_inv) * rho_inv;
         es.dee_dT = dEe_thermo.dT * rho_inv;
+
         es.d2ee_drho2 = (dEe_thermo.drho2 - 2.0_rt * dEe_thermo.drho * rho_inv +
                          2.0_rt * E_e * rho_inv * rho_inv) * rho_inv;
         es.d2ee_drhodT = (dEe_thermo.drhodT - dEe_thermo.dT * rho_inv) * rho_inv;
         es.d2ee_dT2 = dEe_thermo.dT2 * rho_inv;
 
+        es.d3ee_drho3 = (dEe_thermo.drho3 - 3.0_rt * dEe_thermo.drho2 * rho_inv +
+                         6.0_rt * dEe_thermo.drho * rho_inv * rho_inv - 6.0_rt * E_e * rho_inv * rho_inv * rho_inv) * rho_inv;
+        es.d3ee_drho2dT = (dEe_thermo.drho2dT - 2.0_rt * dEe_thermo.drhodT * rho_inv + 2.0_rt * dEe_thermo.dT * rho_inv * rho_inv) * rho_inv;
+        es.d3ee_drhodT2 = (dEe_thermo.drhodT2 - dEe_thermo.dT2 * rho_inv) * rho_inv;
+        es.d3ee_dT3 = dEe_thermo.dT3 * rho_inv;
+
         es.e_pos = E_pos * rho_inv;
+
         es.dep_drho = (dEp_thermo.drho - E_pos * rho_inv) * rho_inv;
         es.dep_dT = dEp_thermo.dT * rho_inv;
+
         es.d2ep_drho2 = (dEp_thermo.drho2 - 2.0_rt * dEp_thermo.drho * rho_inv +
                          2.0_rt * E_pos * rho_inv * rho_inv) * rho_inv;
         es.d2ep_drhodT = (dEp_thermo.drhodT - dEp_thermo.dT * rho_inv) * rho_inv;
         es.d2ep_dT2 = dEp_thermo.dT2 * rho_inv;
+
+        es.d3ep_drho3 = (dEp_thermo.drho3 - 3.0_rt * dEp_thermo.drho2 * rho_inv +
+                         6.0_rt * dEp_thermo.drho * rho_inv * rho_inv - 6.0_rt * E_pos * rho_inv * rho_inv * rho_inv) * rho_inv;
+        es.d3ep_drho2dT = (dEp_thermo.drho2dT - 2.0_rt * dEp_thermo.drhodT * rho_inv + 2.0_rt * dEp_thermo.dT * rho_inv * rho_inv) * rho_inv;
+        es.d3ep_drhodT2 = (dEp_thermo.drhodT2 - dEp_thermo.dT2 * rho_inv) * rho_inv;
+        es.d3ep_dT3 = dEp_thermo.dT3 * rho_inv;
 
         // compute entropy -- this follows from Arnett's text, Eq. B.6
         // also C&G 24.368d
@@ -681,6 +696,10 @@ public:
         es.d2e_drho2 = es.d2ee_drho2 + es.d2ep_drho2;
         es.d2e_drhodT = es.d2ee_drhodT + es.d2ep_drhodT;
         es.d2e_dT2 = es.d2ee_dT2 + es.d2ep_dT2;
+        es.d3e_drho3 = es.d3ee_drho3 + es.d3ep_drho3;
+        es.d3e_drho2dT = es.d3ee_drho2dT + es.d3ep_drho2dT;
+        es.d3e_drhodT2 = es.d3ee_drhodT2 + es.d3ep_drhodT2;
+        es.d3e_dT3 = es.d3ee_dT3 + es.d3ep_dT3;
 
         es.s = es.s_e + es.s_pos;
         es.ds_drho = es.dse_drho + es.dsp_drho;
