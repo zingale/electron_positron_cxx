@@ -1,5 +1,6 @@
 #include <format>
 #include <fstream>
+#include <print>
 #include <string>
 #include <vector>
 
@@ -10,15 +11,31 @@
 
 // create a table in the format of the Timmes & Swesty (2000) EOS.
 
+
+#define USE_FAST_MATH 1
+
 constexpr int rho_pts{421};  // density
 constexpr int T_pts{161};  // temperature
 
+#ifdef USE_FAST_MATH
+
+const real_t rho_lo{mp::fastlg2(str_to_real_t("1.e-10"))};
+const real_t rho_hi{mp::fastlg2(str_to_real_t("1.e11"))};
+
+const real_t T_lo{mp::fastlg2(str_to_real_t("1.e3_rt"))};
+const real_t T_hi{mp::fastlg2(str_to_real_t("1.e11_rt"))};
+
+#else
+
 const real_t rho_lo{-10.0e0_rt};
 const real_t rho_hi{11.0e0_rt};
-const real_t dlogrho = (rho_hi - rho_lo) / (static_cast<real_t>(rho_pts-1));
 
 const real_t T_lo{3.0e0_rt};
 const real_t T_hi{11.0e0_rt};
+
+#endif
+
+const real_t dlogrho = (rho_hi - rho_lo) / (static_cast<real_t>(rho_pts-1));
 const real_t dlogT = (T_hi - T_lo) / (static_cast<real_t>(T_pts-1));
 
 
@@ -64,10 +81,17 @@ auto main() -> int
 
     #pragma omp parallel for schedule(static, 1)
     for (int j = 0; j < T_pts; ++j) {
+#ifdef USE_FAST_MATH
+        real_t T = mp::fastpow2(T_lo + static_cast<real_t>(j) * dlogT);
+#else
         real_t T = std::pow(10.0_rt, T_lo + static_cast<real_t>(j) * dlogT);
-
+#endif
         for (int i = 0; i < rho_pts; ++i) {
+#ifdef USE_FAST_MATH
+            real_t rho = mp::fastpow2(rho_lo + static_cast<real_t>(i) * dlogrho);
+#else
             real_t rho = std::pow(10.0_rt, rho_lo + static_cast<real_t>(i) * dlogrho);
+#endif
 
             // in the table, density varies fastest
 
@@ -84,7 +108,11 @@ auto main() -> int
 
     }
 
+#ifdef USE_FAST_MATH
+    std::ofstream of(std::format("helm_table_fastmath_p{}_q{}.dat", precision, qnpts));
+#else
     std::ofstream of(std::format("helm_table_p{}_q{}.dat", precision, qnpts));
+#endif
 
     // there are 4 tables.  First is the free energy table
 
@@ -115,5 +143,17 @@ auto main() -> int
         of << util::format("{:32.24g}  {:32.24g}  {:32.24g}  {:32.24g}\n",
                            e.n, e.dn_drho, e.dn_dT, e.d2n_drhodT);
     }
+
+    // now some metadata
+    of << "# generated with electron_positron_cxx\n";
+#ifdef USE_FAST_MATH
+    of << "# fast-math approximate log2 and pow2 used\n";
+#endif
+    of << util::format("# rho_lo = {}, rho_hi = {}, rho_pts = {}",
+                       rho_lo, rho_hi, rho_pts);
+    of << util::format("# T_lo = {}, T_hi = {}, T_pts = {}",
+                       T_lo, T_hi, T_pts);
+    of << util::format("# precision = {} bits", precision);
+    of << util::format("# number of quadrature points = {}", qnpts);
 
 }
