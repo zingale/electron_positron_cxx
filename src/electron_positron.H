@@ -669,7 +669,7 @@ public:
 
         es.d3se_drho2dT = -C::k * rho_inv * (es.eta * es.d3ne_drho2dT + es.n_e * es.d3eta_drho2dT +
                                              es.deta_dT * es.d2ne_drho2 + 2.0_rt * es.deta_drho * es.d2ne_drhodT +
-                                             es.e2eta_drho2 * es.dne_dT + 2.0_rt * es.dne_drho * es.d2eta_drhodT) +
+                                             es.d2eta_drho2 * es.dne_dT + 2.0_rt * es.dne_drho * es.d2eta_drhodT) +
             2.0_rt * C::k * rho_inv * rho_inv * (es.eta * es.d2ne_drhodT + es.n_e * es.d2eta_drhodT +
                                                  es.deta_dT * es.dne_drho + es.deta_drho * es.dne_dT) +
             -2.0_rt * C::k * rho_inv * rho_inv * rho_inv * (es.eta * es.dne_dT + es.n_e * es.deta_dT) +
@@ -678,7 +678,7 @@ public:
         es.d3se_drhodT2 = -C::k * rho_inv * (es.eta * es.d3ne_drhodT2 + es.n_e * es.d3eta_drhodT2 +
                                              2.0_rt * es.deta_dT * es.d2ne_drhodT + es.d2eta_dT2 * es.dne_drho +
                                              es.deta_drho * es.d2ne_dT2 + 2.0_rt * es.dne_dT * es.d2eta_drhodT) +
-            C::k * rho_inv * rho_inv * (es.eta * es.d2ne_dT2 + es.ne * es.d2eta_dT2 + 2.0_rt * es.deta_dT * es.dne_dT) +
+            C::k * rho_inv * rho_inv * (es.eta * es.d2ne_dT2 + es.n_e * es.d2eta_dT2 + 2.0_rt * es.deta_dT * es.dne_dT) +
             temp_inv * (d3he_drhodT2 - 2.0_rt * temp_inv * d2he_drhodT + 2.0_rt * temp_inv * temp_inv * dhe_drho);
 
         es.d3se_dT3 = -C::k * rho_inv * (es.eta * es.d3ne_dT3 + es.n_e * es.d3eta_dT3 +
