@@ -146,21 +146,39 @@ public:
 
     T dse_drho{};
     T dse_dT{};
+
     T d2se_drho2{};
-    T d2se_dT2{};
     T d2se_drhodT{};
+    T d2se_dT2{};
+
+    T d3se_drho3{};
+    T d3se_drho2dT{};
+    T d3se_drhodT2{};
+    T d3se_dT3{};
 
     T dsp_drho{};
     T dsp_dT{};
+
     T d2sp_drho2{};
-    T d2sp_dT2{};
     T d2sp_drhodT{};
+    T d2sp_dT2{};
+
+    T d3sp_drho3{};
+    T d3sp_drho2dT{};
+    T d3sp_drhodT2{};
+    T d3sp_dT3{};
 
     T ds_drho{};
     T ds_dT{};
+
     T d2s_drho2{};
-    T d2s_dT2{};
     T d2s_drhodT{};
+    T d2s_dT2{};
+
+    T d3s_drho3{};
+    T d3s_drho2dT{};
+    T d3s_drhodT2{};
+    T d3s_dT3{};
 
     // degeneracy parameter
 
@@ -297,13 +315,15 @@ inline auto operator<< (std::ostream& os, const EOSState<T>& es) -> std::ostream
     out += util::format("       {:15}  ∂³e/∂ρ³  = {:15.8g}  ∂³e/∂ρ²∂T  = {:15.8g}  ∂³e/∂ρ∂T²  = {:15.8g}  ∂³e/∂T³  = {:15.8g}\n\n", " ", es.d3e_drho3, es.d3e_drho2dT, es.d3e_drhodT2, es.d3e_dT3);
 
     out += util::format("specific entropy:\n");
-    out += util::format("  s⁻ = {:15.8g}   ∂s⁻/∂ρ  = {:15.8g}   ∂s⁻/∂T  = {:15.8g}\n", es.s_e, es.dse_drho, es.dse_dT);
-    out += util::format("       {:15}  ∂²s⁻/∂ρ² = {:15.8g}  ∂²s⁻/∂T² = {:15.8g}  ∂²s⁻/∂ρ∂T = {:15.8g}\n", " ", es.d2se_drho2, es.d2se_dT2, es.d2se_drhodT);
-    out += util::format("  s⁺ = {:15.8g}   ∂s⁺/∂ρ  = {:15.8g}   ∂s⁺/∂T  = {:15.8g}\n", es.s_pos, es.dsp_drho, es.dsp_dT);
-    out += util::format("       {:15}  ∂²s⁺/∂ρ² = {:15.8g}  ∂²s⁺/∂T² = {:15.8g}  ∂²s⁺/∂ρ∂T = {:15.8g}\n", " ", es.d2sp_drho2, es.d2sp_dT2, es.d2sp_drhodT);
-    out += util::format("  s  = {:15.8g}   ∂s/∂ρ   = {:15.8g}   ∂s/∂T   = {:15.8g}\n", es.s, es.ds_drho, es.ds_dT);
-    out += util::format("       {:15}  ∂²s/∂ρ²  = {:15.8g}  ∂²s/∂T²  = {:15.8g}  ∂²s/∂ρ∂T  = {:15.8g}\n\n", " ", es.d2s_drho2, es.d2s_dT2, es.d2s_drhodT);
-
+    out += util::format("  s⁻ = {:15.8g}   ∂s⁻/∂ρ  = {:15.8g}   ∂s⁻/∂T    = {:15.8g}\n", es.s_e, es.dse_drho, es.dse_dT);
+    out += util::format("       {:15}  ∂²s⁻/∂ρ² = {:15.8g}  ∂²s⁻/∂ρ∂T  = {:15.8g}  ∂²s⁻/∂T²   = {:15.8g}\n", " ", es.d2se_drho2, es.d2se_drhodT, es.d2se_dT2);
+    out += util::format("       {:15}  ∂³s⁻/∂ρ³ = {:15.8g}  ∂³s⁻/∂ρ²∂T = {:15.8g}  ∂³s⁻/∂ρ∂T² = {:15.8g}  ∂³s⁻/∂T³ = {:15.8g}\n", " ", es.d3se_drho3, es.d3se_drho2dT, es.d3se_drhodT2, es.d3se_dT3);
+    out += util::format("  s⁺ = {:15.8g}   ∂s⁺/∂ρ  = {:15.8g}   ∂s⁺/∂T    = {:15.8g}\n", es.s_pos, es.dsp_drho, es.dsp_dT);
+    out += util::format("       {:15}  ∂²s⁺/∂ρ² = {:15.8g}  ∂²s⁺/∂ρ∂T  = {:15.8g}  ∂²s⁺/∂T²   = {:15.8g}\n", " ", es.d2sp_drho2, es.d2sp_drhodT, es.d2sp_dT2);
+    out += util::format("       {:15}  ∂³s⁺/∂ρ³ = {:15.8g}  ∂³s⁺/∂ρ²∂T = {:15.8g}  ∂³s⁺/∂ρ∂T² = {:15.8g}  ∂³s⁺/∂T³ = {:15.8g}\n", " ", es.d3sp_drho3, es.d3sp_drho2dT, es.d3sp_drhodT2, es.d3sp_dT3);
+    out += util::format("  s  = {:15.8g}   ∂s/∂ρ   = {:15.8g}   ∂s/∂T     = {:15.8g}\n", es.s, es.ds_drho, es.ds_dT);
+    out += util::format("       {:15}  ∂²s/∂ρ²  = {:15.8g}  ∂²s/∂ρ∂T   = {:15.8g}  ∂²s/∂T²    = {:15.8g}\n\n", " ", es.d2s_drho2, es.d2s_drhodT, es.d2s_dT2);
+    out += util::format("       {:15}  ∂³s/∂ρ³  = {:15.8g}  ∂³s/∂ρ²∂T  = {:15.8g}  ∂³s/∂ρ∂T²  = {:15.8g}  ∂³s/∂T³  = {:15.8g}\n\n", " ", es.d3s_drho3, es.d3s_drho2dT, es.d3s_drhodT2, es.d3s_dT3);
     os << out;
     return os;
 }
