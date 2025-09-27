@@ -652,7 +652,6 @@ test_sp_T3_derivs() {
 auto main() -> int
 {
 
-#if 0
     test_se_rho_derivs();
     test_se_T_derivs();
 
@@ -667,7 +666,6 @@ auto main() -> int
 
     test_se_rhoT_derivs();
     test_sp_rhoT_derivs();
-#endif
 
     test_se_rho3_derivs();
     test_sp_rho3_derivs();
