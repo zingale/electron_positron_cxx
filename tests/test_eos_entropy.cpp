@@ -670,15 +670,15 @@ auto main() -> int
 #endif
 
     test_se_rho3_derivs();
-    //test_sp_rho3_derivs();
+    test_sp_rho3_derivs();
 
     test_se_rho2T_derivs();
-    //test_sp_rho2T_derivs();
+    test_sp_rho2T_derivs();
 
     test_se_rhoT2_derivs();
-    //test_sp_rhoT2_derivs();
+    test_sp_rhoT2_derivs();
 
     test_se_T3_derivs();
-    //test_sp_T3_derivs();
+    test_sp_T3_derivs();
 
 }
