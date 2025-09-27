@@ -322,7 +322,7 @@ inline auto operator<< (std::ostream& os, const EOSState<T>& es) -> std::ostream
     out += util::format("       {:15}  ∂²s⁺/∂ρ² = {:15.8g}  ∂²s⁺/∂ρ∂T  = {:15.8g}  ∂²s⁺/∂T²   = {:15.8g}\n", " ", es.d2sp_drho2, es.d2sp_drhodT, es.d2sp_dT2);
     out += util::format("       {:15}  ∂³s⁺/∂ρ³ = {:15.8g}  ∂³s⁺/∂ρ²∂T = {:15.8g}  ∂³s⁺/∂ρ∂T² = {:15.8g}  ∂³s⁺/∂T³ = {:15.8g}\n", " ", es.d3sp_drho3, es.d3sp_drho2dT, es.d3sp_drhodT2, es.d3sp_dT3);
     out += util::format("  s  = {:15.8g}   ∂s/∂ρ   = {:15.8g}   ∂s/∂T     = {:15.8g}\n", es.s, es.ds_drho, es.ds_dT);
-    out += util::format("       {:15}  ∂²s/∂ρ²  = {:15.8g}  ∂²s/∂ρ∂T   = {:15.8g}  ∂²s/∂T²    = {:15.8g}\n\n", " ", es.d2s_drho2, es.d2s_drhodT, es.d2s_dT2);
+    out += util::format("       {:15}  ∂²s/∂ρ²  = {:15.8g}  ∂²s/∂ρ∂T   = {:15.8g}  ∂²s/∂T²    = {:15.8g}\n", " ", es.d2s_drho2, es.d2s_drhodT, es.d2s_dT2);
     out += util::format("       {:15}  ∂³s/∂ρ³  = {:15.8g}  ∂³s/∂ρ²∂T  = {:15.8g}  ∂³s/∂ρ∂T²  = {:15.8g}  ∂³s/∂T³  = {:15.8g}\n\n", " ", es.d3s_drho3, es.d3s_drho2dT, es.d3s_drhodT2, es.d3s_dT3);
     os << out;
     return os;
