@@ -18,7 +18,6 @@ void
 test_helm_rho_derivs() {
 
     const real_t Ye{0.5_rt};
-
     const real_t eps{0.01_rt};
 
     std::println("");
@@ -51,7 +50,6 @@ void
 test_helm_T_derivs() {
 
     const real_t Ye{0.5_rt};
-
     const real_t eps{0.01_rt};
 
     std::println("");
@@ -84,7 +82,6 @@ void
 test_helm_rho2_derivs() {
 
     const real_t Ye{0.5_rt};
-
     const real_t eps{0.01_rt};
 
     std::println("");
@@ -116,7 +113,6 @@ void
 test_helm_T2_derivs() {
 
     const real_t Ye{0.5_rt};
-
     const real_t eps{0.01_rt};
 
     std::println("");
@@ -142,13 +138,12 @@ test_helm_T2_derivs() {
 }
 
 
-// ∂²p/∂ρ∂T
+// ∂²F/∂ρ∂T
 
 void
 test_helm_rhoT_derivs() {
 
     const real_t Ye{0.5_rt};
-
     const real_t eps{0.01_rt};
 
     std::println("");
@@ -180,7 +175,6 @@ void
 test_helm_rhoT2_derivs() {
 
     const real_t Ye{0.5_rt};
-
     const real_t eps{0.01_rt};
 
     std::println("");
@@ -206,13 +200,12 @@ test_helm_rhoT2_derivs() {
 }
 
 
-// ∂³F/∂ρ²∂T²
+// ∂³F/∂ρ²∂T
 
 void
 test_helm_rho2T_derivs() {
 
     const real_t Ye{0.5_rt};
-
     const real_t eps{0.01_rt};
 
     std::println("");
@@ -238,6 +231,37 @@ test_helm_rho2T_derivs() {
 }
 
 
+// ∂⁴F/∂ρ²∂T²
+
+void
+test_helm_rho2T2_derivs() {
+
+    const real_t Ye{0.5_rt};
+    const real_t eps{0.01_rt};
+
+    std::println("");
+    util::green_println("testing ∂⁴F/∂ρ²∂T² via differencing");
+
+    for (auto T : Ts) {
+        for (auto rho : rhos) {
+            auto [helm, eos] = get_helmholtz_terms(rho, T, Ye);
+
+            auto dT{eps * T};
+            auto [deriv, _err] = fd::adaptive_diff2<real_t>([&] (real_t T_) -> real_t
+                {
+                    auto [helm_eps, eos_eps] = get_helmholtz_terms(rho, T_, Ye);
+                    return helm_eps.d2F_drho2;
+                }, T, dT);
+
+            real_t err = mp::abs(helm.d4F_drho2dT2 - deriv) / mp::abs(helm.d4F_drho2dT2);
+            util::threshold_println(err,
+                                    "ρ = {:8.3g} T = {:8.3g},  ∂⁴F/∂ρ²∂T² = {:15.8g},  error = {:11.5g}",
+                                    rho, T, helm.d4F_drho2dT2, err);
+        }
+    }
+}
+
+
 
 auto main() -> int
 {
@@ -251,5 +275,7 @@ auto main() -> int
 
     test_helm_rhoT2_derivs();
     test_helm_rho2T_derivs();
+
+    test_helm_rho2T2_derivs();
 
 }
