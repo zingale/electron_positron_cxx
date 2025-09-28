@@ -3,6 +3,6 @@ TOP := ..
 SOURCES := $(wildcard *.cpp)
 EXECUTABLES += $(SOURCES:.cpp=)
 
-EXTRA_CXXFLAGS := -fopenmp
+USE_OPENMP := TRUE
 
 include ../Make.eos

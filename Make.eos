@@ -7,6 +7,9 @@ ALL: $(EXECUTABLES)
 
 HEADERS := $(wildcard $(TOP)/src/*.H)
 
+# hostname
+UNAME_S := $(shell uname -s)
+
 # compiler -- allowed options are GCC or CLANG
 COMP ?= GCC
 
@@ -44,6 +47,7 @@ else
   DEFINES += -DQUAD400
 endif
 
+
 # for clang-tidy -- clang doesn't find quadmath.H
 # we'll look both in /usr and in ~/minicoda (for GCC installs via conda)
 PATH_TO_QUADMATH := $(shell dirname $(shell find /usr/ -name quadmath.h 2> /dev/null | grep $(shell gcc -dumpversion)))
@@ -71,8 +75,17 @@ else
 endif
 
 EXTRA_CXX_FLAGS ?=
+
 ifeq ($(COMP), GCC)
   EXTRA_CXXFLAGS += -fext-numeric-literals
+endif
+
+# openmp
+ifeq ($(USE_OPENMP),TRUE)
+  # openmp linking with Apple clang is not yet supported
+  ifneq ($(findstring Darwin,$(UNAME_S)),Darwin)
+    EXTRA_CXXFLAGS := -fopenmp
+  endif
 endif
 
 LIBS :=
