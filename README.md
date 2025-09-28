@@ -8,8 +8,8 @@
 
 This is an electron-positron equation of state that computes the
 number density, pressure, energy, and entropy of a Fermi gas (both the
-electron and positron contributions), along with the first- and
-second-derivatives with respect to ρ and T.
+electron and positron contributions), along with the first-, second-,
+and third-derivatives with respect to ρ and T.
 
 This uses the method of Gong et al. 2001 to compute the Fermi-Dirac
 integrals, and follows the notation from Timmes and Arnett 1999 for
@@ -244,8 +244,12 @@ specific entropy:
 
 The code in `generate_table/` will compute a
 Helmholtz-free-energy-based table in the format used by the popular
-Timmes & Swesty (2000) helmeos.  It uses OpenMP to parallelize over
-the points in the table.
+Timmes & Swesty (2000) helmeos.  No differencing is used to compute
+the high-order derivatives of the Helmholtz free energy, rather we
+directly compute all derivatives via integration of the
+(differentiated) Fermi-Dirac integrand.
+
+The driver uses OpenMP to parallelize over the points in the table.
 
 ## Tests
 
