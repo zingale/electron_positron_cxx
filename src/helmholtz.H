@@ -35,18 +35,7 @@ inline auto get_helmholtz_terms(T rho, T temp, T Ye)
     helm.d3F_drho2dT = (state.d2p_drhodT - 2.0_rt * rho_inv * state.dp_dT) * rho_inv * rho_inv;
     helm.d3F_drhodT2 = -state.d2s_drhodT;
 
-    // for the 4th derivative term, we need to do a differencing
-    // we'll do ∂/∂ρ(∂³F/∂ρ∂T²)
-    const real_t eps{0.01_rt};
-    auto drho{eps * rho};
-    auto [deriv, _err] = fd::adaptive_diff<real_t>([&] (real_t _rho) -> real_t
-       {
-           auto es_eps = eos.pe_state(_rho, temp, Ye);
-           // construct ∂³F/∂ρ∂T²
-           return -es_eps.d2s_drhodT;
-       }, rho, drho);
-
-    helm.d4F_drho2dT2 = deriv;
+    helm.d4F_drho2dT2 = -state.d3s_drho2dT;
 
     return {helm, state};
 
