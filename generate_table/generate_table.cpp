@@ -149,11 +149,11 @@ auto main() -> int
 #ifdef USE_FAST_MATH
     of << "# fast-math approximate log2 and pow2 used\n";
 #endif
-    of << util::format("# rho_lo = {}, rho_hi = {}, rho_pts = {}",
+    of << util::format("# rho_lo = {}, rho_hi = {}, rho_pts = {}\n",
                        rho_lo, rho_hi, rho_pts);
-    of << util::format("# T_lo = {}, T_hi = {}, T_pts = {}",
+    of << util::format("# T_lo = {}, T_hi = {}, T_pts = {}\n",
                        T_lo, T_hi, T_pts);
-    of << util::format("# precision = {} bits", precision);
-    of << util::format("# number of quadrature points = {}", qnpts);
+    of << util::format("# precision = {} bits\n", precision);
+    of << util::format("# number of quadrature points = {}\n", qnpts);
 
 }
