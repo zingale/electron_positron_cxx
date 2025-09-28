@@ -12,6 +12,7 @@ jobs:
           brew update
           brew install make
           brew install gcc
+          brew install libomp
 
       - name: Print system info
         run: |
@@ -37,5 +38,5 @@ jobs:
         run: |
           cd tests
           gmake clean
-          gmake PRECISION=FLOAT128 CXX=g++-15 
+          gmake PRECISION=FLOAT128 CXX=g++-15
 

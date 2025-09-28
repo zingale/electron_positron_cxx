@@ -111,7 +111,7 @@ inline auto get_n_derivs(const T beta,
 template <typename T>
 inline auto get_eta_beta_derivs(const T A, const T c, const T p, const T beta,
                                 const FermiIntegral<T>& fx, const FermiIntegral<T>& fy,
-                                const FermiIntegral<T>& fx_pos, const FermiIntegral<T>& fy_pos) 
+                                const FermiIntegral<T>& fx_pos, const FermiIntegral<T>& fy_pos)
     -> std::pair<EtaBetaDerivs<T>, EtaBetaDerivs<T>>
 {
     // we can write number density, pressure, and energy density for electrons as
@@ -616,6 +616,14 @@ public:
         T d2he_drhodT = es.d2ee_drhodT + rho_inv * (es.d2pe_drhodT - rho_inv * es.dpe_dT);
         T d2he_dT2 = es.d2ee_dT2 + rho_inv * es.d2pe_dT2;
 
+        T d3he_drho3 = es.d3ee_drho3 + rho_inv * (es.d3pe_drho3 + 3.0_rt * rho_inv *
+                                                  (-es.d2pe_drho2 + 2.0_rt * rho_inv *
+                                                   (es.dpe_drho - rho_inv * es.p_e)));
+        T d3he_drho2dT = es.d3ee_drho2dT + rho_inv * (es.d3pe_drho2dT + 2.0 * rho_inv *
+                                                      (-es.d2pe_drhodT + rho_inv * es.dpe_dT));
+        T d3he_drhodT2 = es.d3ee_drhodT2 + rho_inv * (es.d3pe_drhodT2 - rho_inv * es.d2pe_dT2);
+        T d3he_dT3 = es.d3ee_dT3 + rho_inv * es.d3pe_dT3;
+
         T h_pos = es.e_pos + es.p_pos * rho_inv;
         T dhp_drho = es.dep_drho + es.dpp_drho * rho_inv - es.p_pos * rho_inv * rho_inv;
         T dhp_dT = es.dep_dT + es.dpp_dT * rho_inv;
@@ -623,6 +631,16 @@ public:
         T d2hp_drho2 = es.d2ep_drho2 + (es.d2pp_drho2 + 2.0_rt * rho_inv * (-es.dpp_drho + rho_inv * es.p_pos)) * rho_inv;
         T d2hp_drhodT = es.d2ep_drhodT + rho_inv * (es.d2pp_drhodT - rho_inv * es.dpp_dT);
         T d2hp_dT2 = es.d2ep_dT2 + rho_inv * es.d2pp_dT2;
+
+        T d3hp_drho3 = es.d3ep_drho3 + rho_inv * (es.d3pp_drho3 + 3.0_rt * rho_inv *
+                                                  (-es.d2pp_drho2 + 2.0_rt * rho_inv *
+                                                   (es.dpp_drho - rho_inv * es.p_pos)));
+        T d3hp_drho2dT = es.d3ep_drho2dT + rho_inv * (es.d3pp_drho2dT + 2.0 * rho_inv *
+                                                      (-es.d2pp_drhodT + rho_inv * es.dpp_dT));
+        T d3hp_drhodT2 = es.d3ep_drhodT2 + rho_inv * (es.d3pp_drhodT2 - rho_inv * es.d2pp_dT2);
+        T d3hp_dT3 = es.d3ep_dT3 + rho_inv * es.d3pp_dT3;
+
+        // electrons
 
         es.s_e = h_e * temp_inv - es.n_e * C::k * es.eta * rho_inv;
 
@@ -644,6 +662,32 @@ public:
         es.d2se_dT2 = -C::k * rho_inv * (es.eta * es.d2ne_dT2 + es.n_e * es.d2eta_dT2 + 2.0_rt * es.deta_dT * es.dne_dT) +
             temp_inv * (d2he_dT2 - 2.0_rt * temp_inv * (dhe_dT - h_e * temp_inv));
 
+        es.d3se_drho3 = -C::k * rho_inv * (es.eta * es.d3ne_drho3 + es.n_e * es.d3eta_drho3 +
+                                           3.0_rt * (es.deta_drho * es.d2ne_drho2 + es.d2eta_drho2 * es.dne_drho)) +
+            3.0_rt * C::k * rho_inv * rho_inv * (es.eta * es.d2ne_drho2 + es.n_e * es.d2eta_drho2 + 2.0_rt * es.deta_drho * es.dne_drho) +
+            -6.0_rt * C::k * rho_inv * rho_inv * rho_inv * (es.eta * es.dne_drho + es.n_e * es.deta_drho) +
+            6.0_rt * C::k * rho_inv * rho_inv * rho_inv * rho_inv * es.eta * es.n_e +
+            temp_inv * d3he_drho3;
+
+        es.d3se_drho2dT = -C::k * rho_inv * (es.eta * es.d3ne_drho2dT + es.n_e * es.d3eta_drho2dT +
+                                             es.deta_dT * es.d2ne_drho2 + 2.0_rt * es.deta_drho * es.d2ne_drhodT +
+                                             es.d2eta_drho2 * es.dne_dT + 2.0_rt * es.dne_drho * es.d2eta_drhodT) +
+            2.0_rt * C::k * rho_inv * rho_inv * (es.eta * es.d2ne_drhodT + es.n_e * es.d2eta_drhodT +
+                                                 es.deta_dT * es.dne_drho + es.deta_drho * es.dne_dT) +
+            -2.0_rt * C::k * rho_inv * rho_inv * rho_inv * (es.eta * es.dne_dT + es.n_e * es.deta_dT) +
+            temp_inv * (d3he_drho2dT - temp_inv * d2he_drho2);
+
+        es.d3se_drhodT2 = -C::k * rho_inv * (es.eta * es.d3ne_drhodT2 + es.n_e * es.d3eta_drhodT2 +
+                                             2.0_rt * es.deta_dT * es.d2ne_drhodT + es.d2eta_dT2 * es.dne_drho +
+                                             es.deta_drho * es.d2ne_dT2 + 2.0_rt * es.dne_dT * es.d2eta_drhodT) +
+            C::k * rho_inv * rho_inv * (es.eta * es.d2ne_dT2 + es.n_e * es.d2eta_dT2 + 2.0_rt * es.deta_dT * es.dne_dT) +
+            temp_inv * (d3he_drhodT2 - 2.0_rt * temp_inv * d2he_drhodT + 2.0_rt * temp_inv * temp_inv * dhe_drho);
+
+        es.d3se_dT3 = -C::k * rho_inv * (es.eta * es.d3ne_dT3 + es.n_e * es.d3eta_dT3 +
+                                         3.0_rt * (es.deta_dT * es.d2ne_dT2 + es.d2eta_dT2 * es.dne_dT)) +
+            temp_inv * (d3he_dT3 + temp_inv * (-3.0_rt * d2he_dT2 + 6.0_rt * temp_inv * (dhe_dT - temp_inv * h_e)));
+
+        // positrons
 
         es.s_pos = h_pos * temp_inv - es.n_pos * C::k * eta_pos * rho_inv;
 
@@ -665,6 +709,30 @@ public:
         es.d2sp_dT2 = C::k * rho_inv * (es.eta * es.d2np_dT2 + es.n_pos * es.d2eta_dT2 + 2.0_rt * es.deta_dT * es.dnp_dT) +
             temp_inv * (d2hp_dT2 - 2.0_rt * temp_inv * (dhp_dT - h_pos * temp_inv));
 
+        es.d3sp_drho3 = C::k * rho_inv * (es.eta * es.d3np_drho3 + es.n_pos * es.d3eta_drho3 +
+                                          3.0_rt * (es.deta_drho * es.d2np_drho2 + es.d2eta_drho2 * es.dnp_drho)) +
+            -3.0_rt * C::k * rho_inv * rho_inv * (es.eta * es.d2np_drho2 + es.n_pos * es.d2eta_drho2 + 2.0_rt * es.deta_drho * es.dnp_drho) +
+            6.0_rt * C::k * rho_inv * rho_inv * rho_inv * (es.eta * es.dnp_drho + es.n_pos * es.deta_drho) +
+            -6.0_rt * C::k * rho_inv * rho_inv * rho_inv * rho_inv * es.eta * es.n_pos +
+            temp_inv * d3hp_drho3;
+
+        es.d3sp_drho2dT = C::k * rho_inv * (es.eta * es.d3np_drho2dT + es.n_pos * es.d3eta_drho2dT +
+                                            es.deta_dT * es.d2np_drho2 + 2.0_rt * es.deta_drho * es.d2np_drhodT +
+                                            es.d2eta_drho2 * es.dnp_dT + 2.0_rt * es.dnp_drho * es.d2eta_drhodT) +
+            -2.0_rt * C::k * rho_inv * rho_inv * (es.eta * es.d2np_drhodT + es.n_pos * es.d2eta_drhodT +
+                                                  es.deta_dT * es.dnp_drho + es.deta_drho * es.dnp_dT) +
+            2.0_rt * C::k * rho_inv * rho_inv * rho_inv * (es.eta * es.dnp_dT + es.n_pos * es.deta_dT) +
+            temp_inv * (d3hp_drho2dT - temp_inv * d2hp_drho2);
+
+        es.d3sp_drhodT2 = C::k * rho_inv * (es.eta * es.d3np_drhodT2 + es.n_pos * es.d3eta_drhodT2 +
+                                            2.0_rt * es.deta_dT * es.d2np_drhodT + es.d2eta_dT2 * es.dnp_drho +
+                                            es.deta_drho * es.d2np_dT2 + 2.0_rt * es.dnp_dT * es.d2eta_drhodT) +
+            -C::k * rho_inv * rho_inv * (es.eta * es.d2np_dT2 + es.n_pos * es.d2eta_dT2 + 2.0_rt * es.deta_dT * es.dnp_dT) +
+            temp_inv * (d3hp_drhodT2 - 2.0_rt * temp_inv * d2hp_drhodT + 2.0_rt * temp_inv * temp_inv * dhp_drho);
+
+        es.d3sp_dT3 = C::k * rho_inv * (es.eta * es.d3np_dT3 + es.n_pos * es.d3eta_dT3 +
+                                        3.0_rt * (es.deta_dT * es.d2np_dT2 + es.d2eta_dT2 * es.dnp_dT)) +
+            temp_inv * (d3hp_dT3 + temp_inv * (-3.0_rt * d2hp_dT2 + 6.0_rt * temp_inv * (dhp_dT - temp_inv * h_pos)));
 
         // now fill the total values of each of the thermodynamic quantities
 
@@ -707,6 +775,10 @@ public:
         es.d2s_drho2 = es.d2se_drho2 + es.d2sp_drho2;
         es.d2s_drhodT = es.d2se_drhodT + es.d2sp_drhodT;
         es.d2s_dT2 = es.d2se_dT2 + es.d2sp_dT2;
+        es.d3s_drho3 = es.d3se_drho3 + es.d3sp_drho3;
+        es.d3s_drho2dT = es.d3se_drho2dT + es.d3sp_drho2dT;
+        es.d3s_drhodT2 = es.d3se_drhodT2 + es.d3sp_drhodT2;
+        es.d3s_dT3 = es.d3se_dT3 + es.d3sp_dT3;
 
         return es;
     }
