@@ -254,6 +254,10 @@ directly compute all derivatives via integration of the
 
 The driver uses OpenMP to parallelize over the points in the table.
 
+> [!NOTE]
+> OpenMP is not currently supported on a Mac with Apple Clang.
+
+
 ## Tests
 
 There are a large number of tests that exercise different parts of the
