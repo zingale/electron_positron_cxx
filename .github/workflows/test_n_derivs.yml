@@ -1,8 +1,8 @@
-name: Run tests
+name: Run test_n_derivs
 
 on: [pull_request]
 jobs:
-  run-tests:
+  test_n_derivs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
@@ -36,22 +36,10 @@ jobs:
       - name: Compile tests
         run: |
           cd tests
-          make -j 4
+          make -j 4 test_n_derivs
 
       - name: Run test_n_derivs
         run: |
           cd tests
           ./test_n_derivs > test.out
           diff test.out ci-benchmarks/test_n_derivs.out
-
-      - name: Run test_fermi
-        run: |
-          cd tests
-          ./test_fermi > test2.out
-          diff test2.out ci-benchmarks/test_fermi.out
-
-      - name: Run test_maxwell
-        run: |
-          cd tests
-          ./test_maxwell > test3.out
-          diff test3.out ci-benchmarks/test_maxwell.out
