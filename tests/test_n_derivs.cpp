@@ -23,6 +23,7 @@ auto main() -> int
 
     {
 
+        constexpr int deriv_level{1};
         const real_t h = 0.05_rt;
 
         util::green_println("testing ∂n⁻/∂η");
@@ -34,19 +35,19 @@ auto main() -> int
 
                 // construct the needed Fermi integrals
                 FermiIntegral<real_t> f12(0.5_rt, eta, beta);
-                f12.evaluate(2);
+                f12.evaluate(deriv_level);
 
                 FermiIntegral<real_t> f32(1.5_rt, eta, beta);
-                f32.evaluate(2);
+                f32.evaluate(deriv_level);
 
                 FermiIntegral<real_t> f12_pos(0.5_rt, eta_tilde, beta);
-                f12_pos.evaluate(2);
+                f12_pos.evaluate(deriv_level);
 
                 FermiIntegral<real_t> f32_pos(1.5_rt, eta_tilde, beta);
-                f32_pos.evaluate(2);
+                f32_pos.evaluate(deriv_level);
 
                 // get the derivs
-                const auto [dn_e, dn_pos] = get_n_derivs<real_t>(beta, f12, f32, f12_pos, f32_pos);
+                const auto [dn_e, dn_pos] = get_n_derivs<real_t, deriv_level>(beta, f12, f32, f12_pos, f32_pos);
 
                 const real_t _h = (eta == 0) ? h : h * mp::abs(eta);
 
@@ -69,6 +70,7 @@ auto main() -> int
 
     {
 
+        constexpr int deriv_level{1};
         const real_t h = 0.05_rt;
 
         std::println("");
@@ -81,19 +83,19 @@ auto main() -> int
 
                 // construct the needed Fermi integrals
                 FermiIntegral<real_t> f12(0.5_rt, eta, beta);
-                f12.evaluate(2);
+                f12.evaluate(deriv_level);
 
                 FermiIntegral<real_t> f32(1.5_rt, eta, beta);
-                f32.evaluate(2);
+                f32.evaluate(deriv_level);
 
                 FermiIntegral<real_t> f12_pos(0.5_rt, eta_tilde, beta);
-                f12_pos.evaluate(2);
+                f12_pos.evaluate(deriv_level);
 
                 FermiIntegral<real_t> f32_pos(1.5_rt, eta_tilde, beta);
-                f32_pos.evaluate(2);
+                f32_pos.evaluate(deriv_level);
 
                 // get the derivs
-                const auto [dn_e, dn_pos] = get_n_derivs<real_t>(beta, f12, f32, f12_pos, f32_pos);
+                const auto [dn_e, dn_pos] = get_n_derivs<real_t, deriv_level>(beta, f12, f32, f12_pos, f32_pos);
 
                 if (mp::abs(dn_pos.deta) < pos_thresh) {
                     continue;
@@ -120,6 +122,7 @@ auto main() -> int
 
     {
 
+        constexpr int deriv_level{1};
         const real_t h = 0.05_rt;
 
         std::println("");
@@ -132,19 +135,19 @@ auto main() -> int
 
                 // construct the needed Fermi integrals
                 FermiIntegral<real_t> f12(0.5_rt, eta, beta);
-                f12.evaluate(2);
+                f12.evaluate(deriv_level);
 
                 FermiIntegral<real_t> f32(1.5_rt, eta, beta);
-                f32.evaluate(2);
+                f32.evaluate(deriv_level);
 
                 FermiIntegral<real_t> f12_pos(0.5_rt, eta_tilde, beta);
-                f12_pos.evaluate(2);
+                f12_pos.evaluate(deriv_level);
 
                 FermiIntegral<real_t> f32_pos(1.5_rt, eta_tilde, beta);
-                f32_pos.evaluate(2);
+                f32_pos.evaluate(deriv_level);
 
                 // get the derivs
-                const auto [dn_e, dn_pos] = get_n_derivs<real_t>(beta, f12, f32, f12_pos, f32_pos);
+                const auto [dn_e, dn_pos] = get_n_derivs<real_t, deriv_level>(beta, f12, f32, f12_pos, f32_pos);
 
                 const real_t _h = h * mp::abs(beta);
 
@@ -166,6 +169,8 @@ auto main() -> int
     }
 
     {
+
+        constexpr int deriv_level{1};
         const real_t h = 0.05_rt;
 
         std::println("");
@@ -178,19 +183,19 @@ auto main() -> int
 
                 // construct the needed Fermi integrals
                 FermiIntegral<real_t> f12(0.5_rt, eta, beta);
-                f12.evaluate(2);
+                f12.evaluate(deriv_level);
 
                 FermiIntegral<real_t> f32(1.5_rt, eta, beta);
-                f32.evaluate(2);
+                f32.evaluate(deriv_level);
 
                 FermiIntegral<real_t> f12_pos(0.5_rt, eta_tilde, beta);
-                f12_pos.evaluate(2);
+                f12_pos.evaluate(deriv_level);
 
                 FermiIntegral<real_t> f32_pos(1.5_rt, eta_tilde, beta);
-                f32_pos.evaluate(2);
+                f32_pos.evaluate(deriv_level);
 
                 // get the derivs
-                const auto [dn_e, dn_pos] = get_n_derivs<real_t>(beta, f12, f32, f12_pos, f32_pos);
+                const auto [dn_e, dn_pos] = get_n_derivs<real_t, deriv_level>(beta, f12, f32, f12_pos, f32_pos);
 
                 if (mp::abs(dn_pos.dbeta) < pos_thresh) {
                     continue;
@@ -219,6 +224,7 @@ auto main() -> int
 
     {
 
+        constexpr int deriv_level{2};
         const real_t h = 0.05_rt;
 
         std::println("");
@@ -231,19 +237,19 @@ auto main() -> int
 
                 // construct the needed Fermi integrals
                 FermiIntegral<real_t> f12(0.5_rt, eta, beta);
-                f12.evaluate(2);
+                f12.evaluate(deriv_level);
 
                 FermiIntegral<real_t> f32(1.5_rt, eta, beta);
-                f32.evaluate(2);
+                f32.evaluate(deriv_level);
 
                 FermiIntegral<real_t> f12_pos(0.5_rt, eta_tilde, beta);
-                f12_pos.evaluate(2);
+                f12_pos.evaluate(deriv_level);
 
                 FermiIntegral<real_t> f32_pos(1.5_rt, eta_tilde, beta);
-                f32_pos.evaluate(2);
+                f32_pos.evaluate(deriv_level);
 
                 // get the derivs
-                const auto [dn_e, dn_pos] = get_n_derivs<real_t>(beta, f12, f32, f12_pos, f32_pos);
+                const auto [dn_e, dn_pos] = get_n_derivs<real_t, deriv_level>(beta, f12, f32, f12_pos, f32_pos);
 
                 const real_t _h = (eta == 0) ? h : h * mp::abs(eta);
 
@@ -266,6 +272,7 @@ auto main() -> int
 
     {
 
+        constexpr int deriv_level{2};
         const real_t h = 0.05_rt;
 
         std::println("");
@@ -278,19 +285,19 @@ auto main() -> int
 
                 // construct the needed Fermi integrals
                 FermiIntegral<real_t> f12(0.5_rt, eta, beta);
-                f12.evaluate(2);
+                f12.evaluate(deriv_level);
 
                 FermiIntegral<real_t> f32(1.5_rt, eta, beta);
-                f32.evaluate(2);
+                f32.evaluate(deriv_level);
 
                 FermiIntegral<real_t> f12_pos(0.5_rt, eta_tilde, beta);
-                f12_pos.evaluate(2);
+                f12_pos.evaluate(deriv_level);
 
                 FermiIntegral<real_t> f32_pos(1.5_rt, eta_tilde, beta);
-                f32_pos.evaluate(2);
+                f32_pos.evaluate(deriv_level);
 
                 // get the derivs
-                const auto [dn_e, dn_pos] = get_n_derivs<real_t>(beta, f12, f32, f12_pos, f32_pos);
+                const auto [dn_e, dn_pos] = get_n_derivs<real_t, deriv_level>(beta, f12, f32, f12_pos, f32_pos);
 
                 if (mp::abs(dn_pos.deta2) < pos_thresh) {
                     continue;
@@ -317,6 +324,7 @@ auto main() -> int
 
     {
 
+        constexpr int deriv_level{2};
         const real_t h = 0.05_rt;
 
         std::println("");
@@ -329,20 +337,20 @@ auto main() -> int
 
                 // construct the needed Fermi integrals
                 FermiIntegral<real_t> f12(0.5_rt, eta, beta);
-                f12.evaluate(2);
+                f12.evaluate(deriv_level);
 
                 FermiIntegral<real_t> f32(1.5_rt, eta, beta);
-                f32.evaluate(2);
+                f32.evaluate(deriv_level);
 
                 FermiIntegral<real_t> f12_pos(0.5_rt, eta_tilde, beta);
-                f12_pos.evaluate(2);
+                f12_pos.evaluate(deriv_level);
 
                 FermiIntegral<real_t> f32_pos(1.5_rt, eta_tilde, beta);
-                f32_pos.evaluate(2);
+                f32_pos.evaluate(deriv_level);
 
                 // get the derivs
 
-                const auto [dn_e, dn_pos] = get_n_derivs<real_t>(beta, f12, f32, f12_pos, f32_pos);
+                const auto [dn_e, dn_pos] = get_n_derivs<real_t, deriv_level>(beta, f12, f32, f12_pos, f32_pos);
 
                 const real_t _h1 = (eta == 0) ? h : h * mp::abs(eta);
 
@@ -362,9 +370,9 @@ auto main() -> int
                         f12_pos_tmp.evaluate(1);
 
                         FermiIntegral<real_t> f32_pos_tmp(1.5_rt, eta_tilde_tmp, beta);
-                        f32_pos_tmp.evaluate(1);
+                        f32_pos_tmp.evaluate(deriv_level-1);
 
-                        const auto [dn_e_tmp, dn_pos_tmp] = get_n_derivs<real_t>(beta, f12_tmp, f32_tmp, f12_pos_tmp, f32_pos_tmp);
+                        const auto [dn_e_tmp, dn_pos_tmp] = get_n_derivs<real_t, 1>(beta, f12_tmp, f32_tmp, f12_pos_tmp, f32_pos_tmp);
                         return dn_e_tmp.dbeta;
                     }, eta, _h1);
 
@@ -392,7 +400,7 @@ auto main() -> int
                         FermiIntegral<real_t> f32_pos_tmp(1.5_rt, eta_tilde_tmp, _beta);
                         f32_pos_tmp.evaluate(1);
 
-                        const auto [dn_e_tmp, dn_pos_tmp] = get_n_derivs<real_t>(_beta, f12_tmp, f32_tmp, f12_pos_tmp, f32_pos_tmp);
+                        const auto [dn_e_tmp, dn_pos_tmp] = get_n_derivs<real_t, 1>(_beta, f12_tmp, f32_tmp, f12_pos_tmp, f32_pos_tmp);
                         return dn_e_tmp.deta;
                     }, beta, _h2);
 
@@ -407,6 +415,7 @@ auto main() -> int
 
     {
 
+        constexpr int deriv_level{2};
         const real_t h = 0.05_rt;
 
         std::println("");
@@ -419,16 +428,16 @@ auto main() -> int
 
                 // construct the needed Fermi integrals
                 FermiIntegral<real_t> f12(0.5_rt, eta, beta);
-                f12.evaluate(2);
+                f12.evaluate(deriv_level);
 
                 FermiIntegral<real_t> f32(1.5_rt, eta, beta);
-                f32.evaluate(2);
+                f32.evaluate(deriv_level);
 
                 FermiIntegral<real_t> f12_pos(0.5_rt, eta_tilde, beta);
-                f12_pos.evaluate(2);
+                f12_pos.evaluate(deriv_level);
 
                 FermiIntegral<real_t> f32_pos(1.5_rt, eta_tilde, beta);
-                f32_pos.evaluate(2);
+                f32_pos.evaluate(deriv_level);
 
                 // get the derivs
 
@@ -458,7 +467,7 @@ auto main() -> int
                         FermiIntegral<real_t> f32_pos_tmp(1.5_rt, eta_tilde_tmp, beta);
                         f32_pos_tmp.evaluate(1);
 
-                        const auto [dn_e_tmp, dn_pos_tmp] = get_n_derivs<real_t>(beta, f12_tmp, f32_tmp, f12_pos_tmp, f32_pos_tmp);
+                        const auto [dn_e_tmp, dn_pos_tmp] = get_n_derivs<real_t, 1>(beta, f12_tmp, f32_tmp, f12_pos_tmp, f32_pos_tmp);
                         return dn_pos_tmp.dbeta;
                     }, eta, _h1);
 
@@ -486,7 +495,7 @@ auto main() -> int
                         FermiIntegral<real_t> f32_pos_tmp(1.5_rt, eta_tilde_tmp, _beta);
                         f32_pos_tmp.evaluate(1);
 
-                        const auto [dn_e_tmp, dn_pos_tmp] = get_n_derivs<real_t>(_beta, f12_tmp, f32_tmp, f12_pos_tmp, f32_pos_tmp);
+                        const auto [dn_e_tmp, dn_pos_tmp] = get_n_derivs<real_t, 1>(_beta, f12_tmp, f32_tmp, f12_pos_tmp, f32_pos_tmp);
                         return dn_pos_tmp.deta;
                     }, beta, _h2);
 
@@ -501,6 +510,7 @@ auto main() -> int
 
     {
 
+        constexpr int deriv_level{2};
         const real_t h = 0.05_rt;
 
         std::println("");
@@ -513,19 +523,19 @@ auto main() -> int
 
                 // construct the needed Fermi integrals
                 FermiIntegral<real_t> f12(0.5_rt, eta, beta);
-                f12.evaluate(2);
+                f12.evaluate(deriv_level);
 
                 FermiIntegral<real_t> f32(1.5_rt, eta, beta);
-                f32.evaluate(2);
+                f32.evaluate(deriv_level);
 
                 FermiIntegral<real_t> f12_pos(0.5_rt, eta_tilde, beta);
-                f12_pos.evaluate(2);
+                f12_pos.evaluate(deriv_level);
 
                 FermiIntegral<real_t> f32_pos(1.5_rt, eta_tilde, beta);
-                f32_pos.evaluate(2);
+                f32_pos.evaluate(deriv_level);
 
                 // get the derivs
-                const auto [dn_e, dn_pos] = get_n_derivs<real_t>(beta, f12, f32, f12_pos, f32_pos);
+                const auto [dn_e, dn_pos] = get_n_derivs<real_t, deriv_level>(beta, f12, f32, f12_pos, f32_pos);
 
                 const real_t _h = h * mp::abs(beta);
 
@@ -548,6 +558,7 @@ auto main() -> int
 
     {
 
+        constexpr int deriv_level{2};
         const real_t h = 0.05_rt;
 
         std::println("");
@@ -560,19 +571,19 @@ auto main() -> int
 
                 // construct the needed Fermi integrals
                 FermiIntegral<real_t> f12(0.5_rt, eta, beta);
-                f12.evaluate(2);
+                f12.evaluate(deriv_level);
 
                 FermiIntegral<real_t> f32(1.5_rt, eta, beta);
-                f32.evaluate(2);
+                f32.evaluate(deriv_level);
 
                 FermiIntegral<real_t> f12_pos(0.5_rt, eta_tilde, beta);
-                f12_pos.evaluate(2);
+                f12_pos.evaluate(deriv_level);
 
                 FermiIntegral<real_t> f32_pos(1.5_rt, eta_tilde, beta);
-                f32_pos.evaluate(2);
+                f32_pos.evaluate(deriv_level);
 
                 // get the derivs
-                const auto [dn_e, dn_pos] = get_n_derivs<real_t>(beta, f12, f32, f12_pos, f32_pos);
+                const auto [dn_e, dn_pos] = get_n_derivs<real_t, deriv_level>(beta, f12, f32, f12_pos, f32_pos);
 
                 if (mp::abs(dn_pos.dbeta2) < pos_thresh) {
                     continue;
@@ -601,6 +612,7 @@ auto main() -> int
 
     {
 
+        constexpr int deriv_level{3};
         const real_t h = 0.05_rt;
 
         std::println("");
@@ -613,19 +625,19 @@ auto main() -> int
 
                 // construct the needed Fermi integrals
                 FermiIntegral<real_t> f12(0.5_rt, eta, beta);
-                f12.evaluate(3);
+                f12.evaluate(deriv_level);
 
                 FermiIntegral<real_t> f32(1.5_rt, eta, beta);
-                f32.evaluate(3);
+                f32.evaluate(deriv_level);
 
                 FermiIntegral<real_t> f12_pos(0.5_rt, eta_tilde, beta);
-                f12_pos.evaluate(3);
+                f12_pos.evaluate(deriv_level);
 
                 FermiIntegral<real_t> f32_pos(1.5_rt, eta_tilde, beta);
-                f32_pos.evaluate(3);
+                f32_pos.evaluate(deriv_level);
 
                 // get the derivs
-                const auto [dn_e, dn_pos] = get_n_derivs<real_t>(beta, f12, f32, f12_pos, f32_pos);
+                const auto [dn_e, dn_pos] = get_n_derivs<real_t, deriv_level>(beta, f12, f32, f12_pos, f32_pos);
 
                 if (mp::abs(dn_e.deta3) < pos_thresh) {
                     continue;
@@ -651,7 +663,7 @@ auto main() -> int
                         FermiIntegral<real_t> f32_pos_tmp(1.5_rt, eta_tilde_tmp, beta);
                         f32_pos_tmp.evaluate(1);
 
-                        const auto [dn_e_tmp, dn_pos_tmp] = get_n_derivs<real_t>(beta, f12_tmp, f32_tmp, f12_pos_tmp, f32_pos_tmp);
+                        const auto [dn_e_tmp, dn_pos_tmp] = get_n_derivs<real_t, 1>(beta, f12_tmp, f32_tmp, f12_pos_tmp, f32_pos_tmp);
                         return dn_e_tmp.deta;
                     }, eta, _h);
 
@@ -666,6 +678,7 @@ auto main() -> int
 
     {
 
+        constexpr int deriv_level{3};
         const real_t h = 0.05_rt;
 
         std::println("");
@@ -678,19 +691,19 @@ auto main() -> int
 
                 // construct the needed Fermi integrals
                 FermiIntegral<real_t> f12(0.5_rt, eta, beta);
-                f12.evaluate(3);
+                f12.evaluate(deriv_level);
 
                 FermiIntegral<real_t> f32(1.5_rt, eta, beta);
-                f32.evaluate(3);
+                f32.evaluate(deriv_level);
 
                 FermiIntegral<real_t> f12_pos(0.5_rt, eta_tilde, beta);
-                f12_pos.evaluate(3);
+                f12_pos.evaluate(deriv_level);
 
                 FermiIntegral<real_t> f32_pos(1.5_rt, eta_tilde, beta);
-                f32_pos.evaluate(3);
+                f32_pos.evaluate(deriv_level);
 
                 // get the derivs
-                const auto& [dn_e, dn_pos] = get_n_derivs<real_t>(beta, f12, f32, f12_pos, f32_pos);
+                const auto& [dn_e, dn_pos] = get_n_derivs<real_t, deriv_level>(beta, f12, f32, f12_pos, f32_pos);
 
                 if (mp::abs(dn_pos.deta3) < pos_thresh) {
                     continue;
@@ -716,7 +729,7 @@ auto main() -> int
                         FermiIntegral<real_t> f32_pos_tmp(1.5_rt, eta_tilde_tmp, beta);
                         f32_pos_tmp.evaluate(1);
 
-                        const auto [dn_e_tmp, dn_pos_tmp] = get_n_derivs<real_t>(beta, f12_tmp, f32_tmp, f12_pos_tmp, f32_pos_tmp);
+                        const auto [dn_e_tmp, dn_pos_tmp] = get_n_derivs<real_t, 1>(beta, f12_tmp, f32_tmp, f12_pos_tmp, f32_pos_tmp);
                         return dn_pos_tmp.deta;
                     }, eta, _h);
 
@@ -731,6 +744,7 @@ auto main() -> int
 
     {
 
+        constexpr int deriv_level{3};
         const real_t h = 0.05_rt;
 
         std::println("");
@@ -743,19 +757,19 @@ auto main() -> int
 
                 // construct the needed Fermi integrals
                 FermiIntegral<real_t> f12(0.5_rt, eta, beta);
-                f12.evaluate(3);
+                f12.evaluate(deriv_level);
 
                 FermiIntegral<real_t> f32(1.5_rt, eta, beta);
-                f32.evaluate(3);
+                f32.evaluate(deriv_level);
 
                 FermiIntegral<real_t> f12_pos(0.5_rt, eta_tilde, beta);
-                f12_pos.evaluate(3);
+                f12_pos.evaluate(deriv_level);
 
                 FermiIntegral<real_t> f32_pos(1.5_rt, eta_tilde, beta);
-                f32_pos.evaluate(3);
+                f32_pos.evaluate(deriv_level);
 
                 // get the derivs
-                const auto [dn_e, dn_pos] = get_n_derivs<real_t>(beta, f12, f32, f12_pos, f32_pos);
+                const auto [dn_e, dn_pos] = get_n_derivs<real_t, deriv_level>(beta, f12, f32, f12_pos, f32_pos);
 
                 if (mp::abs(dn_e.deta2dbeta) < pos_thresh) {
                     continue;
@@ -781,7 +795,7 @@ auto main() -> int
                         FermiIntegral<real_t> f32_pos_tmp(1.5_rt, eta_tilde_tmp, beta);
                         f32_pos_tmp.evaluate(1);
 
-                        const auto [dn_e_tmp, dn_pos_tmp] = get_n_derivs<real_t>(beta, f12_tmp, f32_tmp, f12_pos_tmp, f32_pos_tmp);
+                        const auto [dn_e_tmp, dn_pos_tmp] = get_n_derivs<real_t, 1>(beta, f12_tmp, f32_tmp, f12_pos_tmp, f32_pos_tmp);
                         return dn_e_tmp.dbeta;
                     }, eta, _h);
 
@@ -796,6 +810,7 @@ auto main() -> int
 
     {
 
+        constexpr int deriv_level{3};
         const real_t h = 0.05_rt;
 
         std::println("");
@@ -808,19 +823,19 @@ auto main() -> int
 
                 // construct the needed Fermi integrals
                 FermiIntegral<real_t> f12(0.5_rt, eta, beta);
-                f12.evaluate(3);
+                f12.evaluate(deriv_level);
 
                 FermiIntegral<real_t> f32(1.5_rt, eta, beta);
-                f32.evaluate(3);
+                f32.evaluate(deriv_level);
 
                 FermiIntegral<real_t> f12_pos(0.5_rt, eta_tilde, beta);
-                f12_pos.evaluate(3);
+                f12_pos.evaluate(deriv_level);
 
                 FermiIntegral<real_t> f32_pos(1.5_rt, eta_tilde, beta);
-                f32_pos.evaluate(3);
+                f32_pos.evaluate(deriv_level);
 
                 // get the derivs
-                const auto& [dn_e, dn_pos] = get_n_derivs<real_t>(beta, f12, f32, f12_pos, f32_pos);
+                const auto& [dn_e, dn_pos] = get_n_derivs<real_t, deriv_level>(beta, f12, f32, f12_pos, f32_pos);
 
                 if (mp::abs(dn_pos.deta2dbeta) < pos_thresh) {
                     continue;
@@ -846,7 +861,7 @@ auto main() -> int
                         FermiIntegral<real_t> f32_pos_tmp(1.5_rt, eta_tilde_tmp, beta);
                         f32_pos_tmp.evaluate(1);
 
-                        const auto [dn_e_tmp, dn_pos_tmp] = get_n_derivs<real_t>(beta, f12_tmp, f32_tmp, f12_pos_tmp, f32_pos_tmp);
+                        const auto [dn_e_tmp, dn_pos_tmp] = get_n_derivs<real_t, 1>(beta, f12_tmp, f32_tmp, f12_pos_tmp, f32_pos_tmp);
                         return dn_pos_tmp.dbeta;
                     }, eta, _h);
 
@@ -861,6 +876,7 @@ auto main() -> int
 
     {
 
+        constexpr int deriv_level{3};
         const real_t h = 0.05_rt;
 
         std::println("");
@@ -873,19 +889,19 @@ auto main() -> int
 
                 // construct the needed Fermi integrals
                 FermiIntegral<real_t> f12(0.5_rt, eta, beta);
-                f12.evaluate(3);
+                f12.evaluate(deriv_level);
 
                 FermiIntegral<real_t> f32(1.5_rt, eta, beta);
-                f32.evaluate(3);
+                f32.evaluate(deriv_level);
 
                 FermiIntegral<real_t> f12_pos(0.5_rt, eta_tilde, beta);
-                f12_pos.evaluate(3);
+                f12_pos.evaluate(deriv_level);
 
                 FermiIntegral<real_t> f32_pos(1.5_rt, eta_tilde, beta);
-                f32_pos.evaluate(3);
+                f32_pos.evaluate(deriv_level);
 
                 // get the derivs
-                const auto [dn_e, dn_pos] = get_n_derivs<real_t>(beta, f12, f32, f12_pos, f32_pos);
+                const auto [dn_e, dn_pos] = get_n_derivs<real_t, deriv_level>(beta, f12, f32, f12_pos, f32_pos);
 
                 if (mp::abs(dn_e.detadbeta2) < pos_thresh) {
                     continue;
@@ -911,7 +927,7 @@ auto main() -> int
                         FermiIntegral<real_t> f32_pos_tmp(1.5_rt, eta_tilde_tmp, beta);
                         f32_pos_tmp.evaluate(2);
 
-                        const auto [dn_e_tmp, dn_pos_tmp] = get_n_derivs<real_t>(beta, f12_tmp, f32_tmp, f12_pos_tmp, f32_pos_tmp);
+                        const auto [dn_e_tmp, dn_pos_tmp] = get_n_derivs<real_t, 2>(beta, f12_tmp, f32_tmp, f12_pos_tmp, f32_pos_tmp);
                         return dn_e_tmp.dbeta2;
                     }, eta, _h);
 
@@ -926,6 +942,7 @@ auto main() -> int
 
     {
 
+        constexpr int deriv_level{3};
         const real_t h = 0.05_rt;
 
         std::println("");
@@ -938,19 +955,19 @@ auto main() -> int
 
                 // construct the needed Fermi integrals
                 FermiIntegral<real_t> f12(0.5_rt, eta, beta);
-                f12.evaluate(3);
+                f12.evaluate(deriv_level);
 
                 FermiIntegral<real_t> f32(1.5_rt, eta, beta);
-                f32.evaluate(3);
+                f32.evaluate(deriv_level);
 
                 FermiIntegral<real_t> f12_pos(0.5_rt, eta_tilde, beta);
-                f12_pos.evaluate(3);
+                f12_pos.evaluate(deriv_level);
 
                 FermiIntegral<real_t> f32_pos(1.5_rt, eta_tilde, beta);
-                f32_pos.evaluate(3);
+                f32_pos.evaluate(deriv_level);
 
                 // get the derivs
-                const auto& [dn_e, dn_pos] = get_n_derivs<real_t>(beta, f12, f32, f12_pos, f32_pos);
+                const auto& [dn_e, dn_pos] = get_n_derivs<real_t, deriv_level>(beta, f12, f32, f12_pos, f32_pos);
 
                 if (mp::abs(dn_pos.detadbeta2) < pos_thresh) {
                     continue;
@@ -976,7 +993,7 @@ auto main() -> int
                         FermiIntegral<real_t> f32_pos_tmp(1.5_rt, eta_tilde_tmp, beta);
                         f32_pos_tmp.evaluate(2);
 
-                        const auto [dn_e_tmp, dn_pos_tmp] = get_n_derivs<real_t>(beta, f12_tmp, f32_tmp, f12_pos_tmp, f32_pos_tmp);
+                        const auto [dn_e_tmp, dn_pos_tmp] = get_n_derivs<real_t, 2>(beta, f12_tmp, f32_tmp, f12_pos_tmp, f32_pos_tmp);
                         return dn_pos_tmp.dbeta2;
                     }, eta, _h);
 
@@ -991,6 +1008,7 @@ auto main() -> int
 
     {
 
+        constexpr int deriv_level{3};
         const real_t h = 0.05_rt;
 
         std::println("");
@@ -1003,19 +1021,19 @@ auto main() -> int
 
                 // construct the needed Fermi integrals
                 FermiIntegral<real_t> f12(0.5_rt, eta, beta);
-                f12.evaluate(3);
+                f12.evaluate(deriv_level);
 
                 FermiIntegral<real_t> f32(1.5_rt, eta, beta);
-                f32.evaluate(3);
+                f32.evaluate(deriv_level);
 
                 FermiIntegral<real_t> f12_pos(0.5_rt, eta_tilde, beta);
-                f12_pos.evaluate(3);
+                f12_pos.evaluate(deriv_level);
 
                 FermiIntegral<real_t> f32_pos(1.5_rt, eta_tilde, beta);
-                f32_pos.evaluate(3);
+                f32_pos.evaluate(deriv_level);
 
                 // get the derivs
-                const auto [dn_e, dn_pos] = get_n_derivs<real_t>(beta, f12, f32, f12_pos, f32_pos);
+                const auto [dn_e, dn_pos] = get_n_derivs<real_t, deriv_level>(beta, f12, f32, f12_pos, f32_pos);
 
                 if (mp::abs(dn_e.dbeta3) < pos_thresh) {
                     continue;
@@ -1041,7 +1059,7 @@ auto main() -> int
                         FermiIntegral<real_t> f32_pos_tmp(1.5_rt, eta_tilde_tmp, _beta);
                         f32_pos_tmp.evaluate(2);
 
-                        const auto [dn_e_tmp, dn_pos_tmp] = get_n_derivs<real_t>(_beta, f12_tmp, f32_tmp, f12_pos_tmp, f32_pos_tmp);
+                        const auto [dn_e_tmp, dn_pos_tmp] = get_n_derivs<real_t, 2>(_beta, f12_tmp, f32_tmp, f12_pos_tmp, f32_pos_tmp);
                         return dn_e_tmp.dbeta2;
                     }, beta, _h);
 
@@ -1056,6 +1074,7 @@ auto main() -> int
 
     {
 
+        constexpr int deriv_level{3};
         const real_t h = 0.05_rt;
 
         std::println("");
@@ -1068,19 +1087,19 @@ auto main() -> int
 
                 // construct the needed Fermi integrals
                 FermiIntegral<real_t> f12(0.5_rt, eta, beta);
-                f12.evaluate(3);
+                f12.evaluate(deriv_level);
 
                 FermiIntegral<real_t> f32(1.5_rt, eta, beta);
-                f32.evaluate(3);
+                f32.evaluate(deriv_level);
 
                 FermiIntegral<real_t> f12_pos(0.5_rt, eta_tilde, beta);
-                f12_pos.evaluate(3);
+                f12_pos.evaluate(deriv_level);
 
                 FermiIntegral<real_t> f32_pos(1.5_rt, eta_tilde, beta);
-                f32_pos.evaluate(3);
+                f32_pos.evaluate(deriv_level);
 
                 // get the derivs
-                const auto& [dn_e, dn_pos] = get_n_derivs<real_t>(beta, f12, f32, f12_pos, f32_pos);
+                const auto& [dn_e, dn_pos] = get_n_derivs<real_t, deriv_level>(beta, f12, f32, f12_pos, f32_pos);
 
                 if (mp::abs(dn_pos.dbeta3) < pos_thresh) {
                     continue;
@@ -1106,7 +1125,7 @@ auto main() -> int
                         FermiIntegral<real_t> f32_pos_tmp(1.5_rt, eta_tilde_tmp, _beta);
                         f32_pos_tmp.evaluate(2);
 
-                        const auto [dn_e_tmp, dn_pos_tmp] = get_n_derivs<real_t>(_beta, f12_tmp, f32_tmp, f12_pos_tmp, f32_pos_tmp);
+                        const auto [dn_e_tmp, dn_pos_tmp] = get_n_derivs<real_t, deriv_level>(_beta, f12_tmp, f32_tmp, f12_pos_tmp, f32_pos_tmp);
                         return dn_pos_tmp.dbeta2;
                     }, beta, _h);
 

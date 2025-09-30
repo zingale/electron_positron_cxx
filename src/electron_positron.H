@@ -95,7 +95,7 @@ inline auto get_eta(T rhoYe, T temp) -> T
 }
 
 
-template <typename T>
+template <typename T, int deriv_level=3>
 inline auto get_n_derivs(const T beta,
                          const FermiIntegral<T>& fx, const FermiIntegral<T>& fy,
                          const FermiIntegral<T>& fx_pos, const FermiIntegral<T>& fy_pos)
@@ -104,7 +104,7 @@ inline auto get_n_derivs(const T beta,
     // convenience wrapper for testing number density derivatives with respect
     // to η and β
 
-    return get_eta_beta_derivs<T>(coeff, 1.0_rt, 3.0_rt, beta, fx, fy, fx_pos, fy_pos);
+    return get_eta_beta_derivs<T, deriv_level>(coeff, 1.0_rt, 3.0_rt, beta, fx, fy, fx_pos, fy_pos);
 }
 
 
