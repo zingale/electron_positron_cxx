@@ -23,9 +23,11 @@ struct TestState {
 };
 
 
-template <int deriv_level=3, typename TestMemberPtr, typename DiffMemberPtr>
+template <int deriv_level=1, typename TestMemberPtr, typename DiffMemberPtr>
 void test_rho_deriv(TestMemberPtr test_member, DiffMemberPtr diff_member,
                     std::string_view name) {
+
+    // compute ∂/∂ρ via first order differencing in ρ
 
     // TestMemberPtr is what we are testing (the reference)
     // DiffMemberPtr is what we are differentiating to compare with the reference
@@ -80,9 +82,11 @@ void test_rho_deriv(TestMemberPtr test_member, DiffMemberPtr diff_member,
 }
 
 
-template <int deriv_level=3, typename TestMemberPtr, typename DiffMemberPtr>
+template <int deriv_level=1, typename TestMemberPtr, typename DiffMemberPtr>
 void test_T_deriv(TestMemberPtr test_member, DiffMemberPtr diff_member,
                     std::string_view name) {
+
+    // compute ∂/∂T via first-order differencing in T
 
     // TestMemberPtr is what we are testing (the reference)
     // DiffMemberPtr is what we are differentiating to compare with the reference
@@ -143,9 +147,11 @@ void test_T_deriv(TestMemberPtr test_member, DiffMemberPtr diff_member,
 }
 
 
-template <int deriv_level=3, typename TestMemberPtr, typename DiffMemberPtr>
+template <int deriv_level=2, typename TestMemberPtr, typename DiffMemberPtr>
 void test_rho2_deriv(TestMemberPtr test_member, DiffMemberPtr diff_member,
                      std::string_view name) {
+
+    // compute ∂²/∂ρ² via second-order differencing in ρ
 
     // TestMemberPtr is what we are testing (the reference)
     // DiffMemberPtr is what we are differentiating to compare with the reference
@@ -205,9 +211,11 @@ void test_rho2_deriv(TestMemberPtr test_member, DiffMemberPtr diff_member,
 }
 
 
-template <int deriv_level=3, typename TestMemberPtr, typename DiffMemberPtr>
+template <int deriv_level=2, typename TestMemberPtr, typename DiffMemberPtr>
 void test_T2_deriv(TestMemberPtr test_member, DiffMemberPtr diff_member,
                    std::string_view name) {
+
+    // compute ∂²/∂T² via second-order differencing in T
 
     // TestMemberPtr is what we are testing (the reference)
     // DiffMemberPtr is what we are differentiating to compare with the reference
@@ -268,9 +276,11 @@ void test_T2_deriv(TestMemberPtr test_member, DiffMemberPtr diff_member,
 }
 
 
-template <int deriv_level=3, typename TestMemberPtr, typename DiffMemberPtr>
+template <int deriv_level=2, typename TestMemberPtr, typename DiffMemberPtr>
 void test_rhoT_deriv(TestMemberPtr test_member, DiffMemberPtr diff_member,
                      std::string_view name) {
+
+    // compute ∂²/∂ρ∂T via first-order differencing in ρ on ∂/∂T
 
     // TestMemberPtr is what we are testing (the reference)
     // DiffMemberPtr is what we are differentiating to compare with the reference
@@ -335,6 +345,8 @@ template <typename TestMemberPtr, typename DiffMemberPtr, int deriv_level=3>
 void test_rho3_deriv(TestMemberPtr test_member, DiffMemberPtr diff_member,
                      std::string_view name) {
 
+    // compute ∂³{}/∂ρ³ via second-order differencing on ∂/∂ρ
+
     // TestMemberPtr is what we are testing (the reference)
     // DiffMemberPtr is what we are differentiating to compare with the reference
 
@@ -396,6 +408,8 @@ void test_rho3_deriv(TestMemberPtr test_member, DiffMemberPtr diff_member,
 template <typename TestMemberPtr, typename DiffMemberPtr, int deriv_level=3>
 void test_rho2T_deriv(TestMemberPtr test_member, DiffMemberPtr diff_member,
                       std::string_view name) {
+
+    // compute ∂³/∂ρ²∂T via second-order differencing in ρ on ∂/∂T
 
     // TestMemberPtr is what we are testing (the reference)
     // DiffMemberPtr is what we are differentiating to compare with the reference
@@ -459,6 +473,8 @@ template <typename TestMemberPtr, typename DiffMemberPtr, int deriv_level=3>
 void test_rhoT2_deriv(TestMemberPtr test_member, DiffMemberPtr diff_member,
                       std::string_view name) {
 
+    // compute ∂³/∂ρ∂T² via firstr-order differencing in ρ on ∂²/∂T²
+
     // TestMemberPtr is what we are testing (the reference)
     // DiffMemberPtr is what we are differentiating to compare with the reference
 
@@ -520,6 +536,8 @@ void test_rhoT2_deriv(TestMemberPtr test_member, DiffMemberPtr diff_member,
 template <typename TestMemberPtr, typename DiffMemberPtr, int deriv_level=3>
 void test_T3_deriv(TestMemberPtr test_member, DiffMemberPtr diff_member,
                    std::string_view name) {
+
+    // compute ∂³/∂T³ via second-order differencing in T on testing ∂/∂T
 
     // TestMemberPtr is what we are testing (the reference)
     // DiffMemberPtr is what we are differentiating to compare with the reference
