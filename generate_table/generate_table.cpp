@@ -14,8 +14,8 @@
 
 #define USE_FAST_MATH 1
 
-constexpr int rho_pts{421};  // density
-constexpr int T_pts{161};  // temperature
+constexpr int rho_pts{841};  // density
+constexpr int T_pts{321};  // temperature
 
 #ifdef USE_FAST_MATH
 

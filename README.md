@@ -23,7 +23,7 @@ to tabulate EOS properties.
 
 ## Requirements
 
-* a C++23 compiler.  For GCC, you need GCC >= 15.1.
+* a C++23 compiler.  For GCC, you need GCC >= 14.1.
 
 * [libquadmath](https://gcc.gnu.org/onlinedocs/libquadmath/) for 128-bit precision
 
