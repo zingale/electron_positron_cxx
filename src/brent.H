@@ -77,10 +77,10 @@ inline auto brent(const std::function<T(T)>& f, T a, T b, T atol=1.e-100_rt) -> 
             return b;
         }
 
-        T p{};
-        T q{};
-
         if (mp::abs(e) >= tol && mp::abs(fa) > mp::abs(fb)) {
+            T p{};
+            T q{};
+
             // attempt interpolation
             if (a == c) {
                 // secant method
