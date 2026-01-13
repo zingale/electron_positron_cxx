@@ -12,7 +12,7 @@
 // create a table in the format of the Timmes & Swesty (2000) EOS.
 
 
-#define USE_FAST_MATH 1
+#define USE_FAST_MATH 0
 
 constexpr int rho_pts{841};  // density
 constexpr int T_pts{321};  // temperature
@@ -146,6 +146,7 @@ auto main() -> int
 
     // now some metadata
     of << "# generated with electron_positron_cxx\n";
+    of << util::format("# git version: {}\n", GIT_VERSION);
 #ifdef USE_FAST_MATH
     of << "# fast-math approximate log2 and pow2 used\n";
 #endif
