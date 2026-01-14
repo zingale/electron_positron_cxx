@@ -12,7 +12,7 @@
 // create a table in the format of the Timmes & Swesty (2000) EOS.
 
 
-#define USE_FAST_MATH 0
+//#define USE_FAST_MATH 1
 
 constexpr int rho_pts{841};  // density
 constexpr int T_pts{321};  // temperature
@@ -149,10 +149,14 @@ auto main() -> int
     of << util::format("# git version: {}\n", GIT_VERSION);
 #ifdef USE_FAST_MATH
     of << "# fast-math approximate log2 and pow2 used\n";
-#endif
-    of << util::format("# rho_lo = {}, rho_hi = {}, rho_pts = {}\n",
+    of << util::format("# log2_f(rho_lo) = {}, log2_f(rho_hi) = {}, rho_pts = {}\n",
                        rho_lo, rho_hi, rho_pts);
-    of << util::format("# T_lo = {}, T_hi = {}, T_pts = {}\n",
+    of << util::format("# log2_f(T_lo) = {}, log2_f(T_hi) = {}, T_pts = {}\n",
+                       T_lo, T_hi, T_pts);
+#endif
+    of << util::format("# log10(rho_lo) = {}, log10(rho_hi) = {}, rho_pts = {}\n",
+                       rho_lo, rho_hi, rho_pts);
+    of << util::format("# log10(T_lo) = {}, log10(T_hi) = {}, T_pts = {}\n",
                        T_lo, T_hi, T_pts);
     of << util::format("# precision = {} bits\n", precision);
     of << util::format("# number of quadrature points = {}\n", qnpts);
