@@ -47,12 +47,13 @@ else
   DEFINES += -DQUAD400
 endif
 
+DEFINES += -DGIT_VERSION=\"$(shell git describe)\"
 
 # for clang-tidy -- clang doesn't find quadmath.H
 # we'll look both in /usr and in ~/minicoda (for GCC installs via conda)
-PATH_TO_QUADMATH := $(shell dirname $(shell find /usr/ -name quadmath.h 2> /dev/null | grep $(shell gcc -dumpversion)))
+PATH_TO_QUADMATH := $(shell dirname $(shell find /usr/ -name quadmath.h 2> /dev/null | grep $(shell gcc -dumpversion)) 2> /dev/null)
 ifeq ($(strip $(PATH_TO_QUADMATH)),)
-  PATH_TO_QUADMATH := $(shell dirname $(shell find ~/miniconda/ -name quadmath.h 2> /dev/null | grep $(shell gcc -dumpversion)))
+  PATH_TO_QUADMATH := $(shell dirname $(shell find ~/miniconda/ -name quadmath.h 2> /dev/null | grep $(shell gcc -dumpversion)) 2> /dev/null)
 endif
 
 INCLUDES := $(TOP)/src
@@ -101,3 +102,12 @@ endif
 
 clean:
 	rm -f $(EXECUTABLES)
+
+
+# for debugging.  To see the value of a Makefile variable,
+# e.g. COMP, simply do "make print-COMP".  This will print out the
+# value.
+
+print-%::
+	@echo "$* is $($*)"
+	@$(RM) AMReX_buildInfo.cpp

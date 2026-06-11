@@ -20,6 +20,10 @@ To get good results, this can use 128- or 256-bit precision.
 Overall, this code is slow, and it is mainly intended to be used
 to tabulate EOS properties.
 
+The figure below shows the thermodynamic consistency (via the Maxwell relations)
+as it depends on the precision and number of quadrature points:
+
+![maxwell fig](figs/maxwell_precision.png)
 
 ## Requirements
 
