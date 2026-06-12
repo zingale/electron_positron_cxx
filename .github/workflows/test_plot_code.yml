@@ -19,6 +19,10 @@ jobs:
           echo '::group::GCC version'
           gcc --version
           echo '::endgroup::'
+          echo '::group::key compiler flags'
+          g++ -Q --help=optimizers -O2 | grep tree-vectorize
+          g++ -Q --help=optimizers -O2 | grep fp-contract
+          echo '::endgroup::'
 
       - name: Compile plot generator
         run: |
