@@ -3,7 +3,7 @@
 
 #include "real_type.H"
 #include <cmath>
-#if defined(USE_BOOST256)
+#ifdef USE_BOOST256
 #include <boost/multiprecision/cpp_bin_float.hpp>
 #elif defined(USE_FLOAT128) && (defined(__clang__) || defined(__aarch64__))
 #include <quadmath.h>
@@ -15,7 +15,7 @@ namespace mp {
 
     inline auto pow(const real_t& x, const real_t& y) -> real_t
     {
-#if defined(USE_BOOST256)
+#ifdef USE_BOOST256
         return boost::multiprecision::pow(x, y);
 #elif defined(USE_FLOAT128) && (defined(__clang__) || defined(__aarch64__))
         return powq(x, y);
@@ -26,7 +26,7 @@ namespace mp {
 
     inline auto sqrt(const real_t& x) -> real_t
     {
-#if defined(USE_BOOST256)
+#ifdef USE_BOOST256
         return boost::multiprecision::sqrt(x);
 #elif defined(USE_FLOAT128) && (defined(__clang__) || defined(__aarch64__))
         return sqrtq(x);
@@ -39,7 +39,7 @@ namespace mp {
 
     inline auto exp(const real_t& x) -> real_t
     {
-#if defined(USE_BOOST256)
+#ifdef USE_BOOST256
         return boost::multiprecision::exp(x);
 #elif defined(USE_FLOAT128) && (defined(__clang__) || defined(__aarch64__))
         return expq(x);
@@ -52,7 +52,7 @@ namespace mp {
 
     inline auto log(const real_t& x) -> real_t
     {
-#if defined(USE_BOOST256)
+#ifdef USE_BOOST256
         return boost::multiprecision::log(x);
 #elif defined(USE_FLOAT128) && (defined(__clang__) || defined(__aarch64__))
         return logq(x);
@@ -63,7 +63,7 @@ namespace mp {
 
     inline auto log10(const real_t& x) -> real_t
     {
-#if defined(USE_BOOST256)
+#ifdef USE_BOOST256
         return boost::multiprecision::log10(x);
 #elif defined(USE_FLOAT128) && (defined(__clang__) || defined(__aarch64__))
         return log10q(x);
@@ -74,7 +74,7 @@ namespace mp {
 
     inline auto log1p(const real_t& x) -> real_t
     {
-#if defined(USE_BOOST256)
+#ifdef USE_BOOST256
         return boost::multiprecision::log1p(x);
 #elif defined(USE_FLOAT128) && (defined(__clang__) || defined(__aarch64__))
         return log1pq(x);
@@ -87,7 +87,7 @@ namespace mp {
 
     inline auto sin(const real_t& x) -> real_t
     {
-#if defined(USE_BOOST256)
+#ifdef USE_BOOST256
         return boost::multiprecision::sin(x);
 #elif defined(USE_FLOAT128) && (defined(__clang__) || defined(__aarch64__))
         return sinq(x);
@@ -98,7 +98,7 @@ namespace mp {
 
     inline auto cos(const real_t& x) -> real_t
     {
-#if defined(USE_BOOST256)
+#ifdef USE_BOOST256
         return boost::multiprecision::cos(x);
 #elif defined(USE_FLOAT128) && (defined(__clang__) || defined(__aarch64__))
         return cosq(x);
@@ -109,7 +109,7 @@ namespace mp {
 
     inline auto cosh(const real_t& x) -> real_t
     {
-#if defined(USE_BOOST256)
+#ifdef USE_BOOST256
         return boost::multiprecision::cosh(x);
 #elif defined(USE_FLOAT128) && (defined(__clang__) || defined(__aarch64__))
         return coshq(x);
@@ -120,7 +120,7 @@ namespace mp {
 
     inline auto tanh(const real_t& x) -> real_t
     {
-#if defined(USE_BOOST256)
+#ifdef USE_BOOST256
         return boost::multiprecision::tanh(x);
 #elif defined(USE_FLOAT128) && (defined(__clang__) || defined(__aarch64__))
         return tanhq(x);
@@ -133,7 +133,7 @@ namespace mp {
 
     inline auto trunc(const real_t& x) -> real_t
     {
-#if defined(USE_BOOST256)
+#ifdef USE_BOOST256
         return boost::multiprecision::trunc(x);
 #elif defined(USE_FLOAT128) && (defined(__clang__) || defined(__aarch64__))
         return truncq(x);
@@ -144,7 +144,7 @@ namespace mp {
 
     inline auto abs(const real_t& x) -> real_t
     {
-#if defined(USE_BOOST256)
+#ifdef USE_BOOST256
         return boost::multiprecision::abs(x);
 #elif defined(USE_FLOAT128) && (defined(__clang__) || defined(__aarch64__))
         return fabsq(x);
@@ -161,7 +161,7 @@ namespace mp {
     inline auto fastlg2(const real_t& x) -> real_t {
         // split into mant + exp
         int n{};
-#if defined(USE_BOOST256)
+#ifdef USE_BOOST256
         const real_t m = boost::multiprecision::frexp(x, &n);
 #elif defined(USE_FLOAT128) && (defined(__clang__) || defined(__aarch64__))
         const real_t m = frexpq(x, &n);
@@ -174,7 +174,7 @@ namespace mp {
     // approximation to 2**x
     inline auto fastpow2(const real_t& x) -> real_t {
         // create a mantissa and exp compatible with our log
-#if defined(USE_BOOST256)
+#ifdef USE_BOOST256
         const int flr = static_cast<int>(boost::multiprecision::floor(x));
 #elif defined(USE_FLOAT128) && (defined(__clang__) || defined(__aarch64__))
         const int flr = floorq(x);
@@ -184,7 +184,7 @@ namespace mp {
         const real_t rem = x - flr;
         const real_t mant = 0.5_rt * (rem + 1.0_rt);
         const int exponent = flr + 1;
-#if defined(USE_BOOST256)
+#ifdef USE_BOOST256
         return boost::multiprecision::ldexp(mant, exponent);
 #elif defined(USE_FLOAT128) && (defined(__clang__) || defined(__aarch64__))
         return ldexpq(mant, exponent);

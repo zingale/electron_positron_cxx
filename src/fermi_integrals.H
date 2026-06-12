@@ -25,15 +25,15 @@
 #include "real_type.H"
 #include "mp_math.H"
 
-#if defined(QUAD20)
+#ifdef QUAD20
 #include "quadrature_weights_20.H"
-#elif defined(QUAD50)
+#elifdef QUAD50
 #include "quadrature_weights_50.H"
-#elif defined(QUAD100)
+#elifdef QUAD100
 #include "quadrature_weights_100.H"
-#elif defined(QUAD400)
+#elifdef QUAD400
 #include "quadrature_weights_400.H"
-#elif defined(QUAD800)
+#elifdef QUAD800
 #include "quadrature_weights_800.H"
 #else
 #include "quadrature_weights_200.H"
