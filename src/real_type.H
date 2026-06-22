@@ -3,15 +3,15 @@
 
 #include <string>
 
-#if defined (USE_BOOST256)
+#ifdef USE_BOOST256
 #include <boost/multiprecision/cpp_bin_float.hpp>
   using real_t = boost::multiprecision::cpp_bin_float_oct;
 
-#elif defined(USE_FLOAT128)
+#elifdef USE_FLOAT128
 #include <quadmath.h>
 using real_t = __float128;
 
-#elif defined(USE_LONG_DOUBLE)
+#elifdef USE_LONG_DOUBLE
 using real_t = long double;
 
 #else
@@ -38,11 +38,11 @@ inline namespace literals {
 
 inline auto str_to_real_t(const char* s) -> real_t
 {
-#if defined(USE_BOOST256)
+#ifdef USE_BOOST256
     return real_t(s);
-#elif defined(USE_FLOAT128)
+#elifdef USE_FLOAT128
     return strtoflt128(s, nullptr);
-#elif defined (USE_LONG_DOUBLE)
+#elifdef USE_LONG_DOUBLE
     return std::stold(s);
 #else
     return std::stod(s);

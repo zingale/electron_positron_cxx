@@ -72,7 +72,7 @@ FULL_OPTIMIZE ?= TRUE
 ifeq ($(FULL_OPTIMIZE), TRUE)
    CXXFLAGS += -O3 -DNDEBUG
 else
-   CXXFLAGS += -O2
+   CXXFLAGS += -O2 -ffp-contract=off -fno-tree-vectorize
 endif
 
 EXTRA_CXX_FLAGS ?=

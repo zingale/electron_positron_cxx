@@ -20,6 +20,9 @@ def check_file(filename):
     # this checks something of the form "#ifdef NAME"
     ifdef_re = re.compile(r"^#if[n]*def\s+([a-z_0-9]+)", re.IGNORECASE|re.DOTALL)
 
+    # this checks something of the form "#elifdef NAME"
+    elifdef_re = re.compile(r"^#elif[n]*def\s+([a-z_0-9]+)", re.IGNORECASE|re.DOTALL)
+
     # this checks something of the form
     # #if (NAME == X)
     if_re = re.compile(r"^(?:#if|#elif)\s+[\(]?([a-z_0-9]+)", re.IGNORECASE|re.DOTALL)
@@ -43,6 +46,10 @@ def check_file(filename):
                     continue
 
                 if g := ifdef_re.search(line):
+                    defines.append(g.group(1))
+                    continue
+
+                if g := elifdef_re.search(line):
                     defines.append(g.group(1))
                     continue
 
