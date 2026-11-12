@@ -14,8 +14,8 @@
 
 //#define USE_FAST_MATH 1
 
-constexpr int rho_pts{841};  // density
-constexpr int T_pts{321};  // temperature
+constexpr int rho_pts{301};  // density
+constexpr int T_pts{101};  // temperature
 
 #ifdef USE_FAST_MATH
 
@@ -27,11 +27,11 @@ const real_t T_hi{mp::fastlg2(str_to_real_t("1.e11_rt"))};
 
 #else
 
-const real_t rho_lo{-10.0e0_rt};
-const real_t rho_hi{11.0e0_rt};
+const real_t rho_lo{-15.0e0_rt};
+const real_t rho_hi{15.0e0_rt};
 
 const real_t T_lo{3.0e0_rt};
-const real_t T_hi{11.0e0_rt};
+const real_t T_hi{13.0e0_rt};
 
 #endif
 
