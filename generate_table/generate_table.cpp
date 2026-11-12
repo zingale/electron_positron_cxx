@@ -9,6 +9,8 @@
 #include "helmholtz.H"
 #include "util.H"
 
+#include "progressbar.hpp"
+
 // create a table in the format of the Timmes & Swesty (2000) EOS.
 
 
@@ -79,6 +81,8 @@ auto main() -> int
     // we will have OpenMP schedule things such that each thread is
     // working on similar temperatures, to better load balance
 
+    progressbar bar(T_pts * rho_pts);
+
     #pragma omp parallel for schedule(static, 1)
     for (int j = 0; j < T_pts; ++j) {
 #ifdef USE_FAST_MATH
@@ -97,13 +101,15 @@ auto main() -> int
 
             int index = j * rho_pts + i;
 
-            util::println("rho = {}, T = {}", rho, T);
+            //util::println("rho = {}, T = {}", rho, T);
 
             auto [helm, eos] = get_helmholtz_terms<real_t>(rho, T, Ye);
 
             helm_v[index] = helm;
             eos_v[index] = eos;
 
+            #pragma omp critical
+            bar.update();
         }
 
     }
