@@ -1,3 +1,4 @@
+#include <cstddef>
 #include <vector>
 #include <fstream>
 #include <string>
@@ -66,13 +67,13 @@ auto main() -> int
     std::vector<MaxwellError> max_err(Ts.size() * rhos.size());
 
     #pragma omp parallel for collapse(2)
-    for (int it = 0; it < static_cast<int>(Ts.size()); ++it) {
-        for (int ir = 0; ir < static_cast<int>(rhos.size()); ++ir) {
+    for (std::size_t it = 0; it < Ts.size(); ++it) {
+        for (std::size_t ir = 0; ir < rhos.size(); ++ir) {
 
             const auto T = Ts[it];
             const auto rho = rhos[ir];
 
-            const int idx = it * rhos.size() + ir;
+            const std::size_t idx = it * rhos.size() + ir;
 
             auto [scale1, error1] = maxwell_1<real_t>(rho, T, Ye);
             auto [scale2, error2] = maxwell_2<real_t>(rho, T, Ye);
