@@ -106,14 +106,17 @@ const std::array<real_t, 61> rhoYes{
 
         const auto *const ip = std::upper_bound(rhoYes.cbegin(), rhoYes.cend(), rhoYe0);
         int ir{-1};
-        if (ip != rhoYes.cend()) {
+        if (ip != rhoYes.cend() || rhoYe0 == rhoYes.back()) {
             ir = std::clamp(static_cast<int>(std::distance(rhoYes.cbegin(), ip)) - 1,
                               1, static_cast<int>(rhoYes.size())-3);
         }
 
         const auto *const ip2 = std::upper_bound(Ts.cbegin(), Ts.cend(), temp0);
         int it{-1};
-        if (ip2 != Ts.cend()) {
+        if (temp0 == Ts.back()) {
+            // At the upper endpoint, use the final temperature interval.
+            it = static_cast<int>(Ts.size()) - 2;
+        } else if (ip2 != Ts.cend()) {
             it = std::clamp(static_cast<int>(std::distance(Ts.cbegin(), ip2)) - 1,
                                1, static_cast<int>(Ts.size())-3);
         }

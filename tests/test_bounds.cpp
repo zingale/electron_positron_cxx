@@ -18,6 +18,18 @@ auto main() -> int
 
     const real_t Ye(0.5);
 
+    // Exact upper table endpoints must be accepted and their tabulated eta
+    // must be included in the returned bracket.
+    const auto check_endpoint = [] (real_t rhoYe, real_t temp, real_t eta) {
+        const auto [eta_min, eta_max] = bounds::get_eta_bounds(rhoYe, temp);
+        if (eta < eta_min || eta > eta_max) {
+            throw std::runtime_error("Upper endpoint eta is outside its bracket");
+        }
+    };
+    check_endpoint(bounds::rhoYes.back(), bounds::Ts[10], bounds::eta_pos.back()[10]);
+    check_endpoint(bounds::rhoYes[30], bounds::Ts.back(), bounds::eta_pos[30].back());
+    check_endpoint(bounds::rhoYes.back(), bounds::Ts.back(), bounds::eta_pos.back().back());
+
     for (auto T : Ts) {
         for (auto rho : rhos) {
 
