@@ -3,7 +3,7 @@ name: Plot generation
 on: [pull_request]
 jobs:
   plot-generator:
-    runs-on: ubuntu-26.04
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
 

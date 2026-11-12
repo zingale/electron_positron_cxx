@@ -3,7 +3,7 @@ name: Compare results
 on: [pull_request]
 jobs:
   compare:
-    runs-on: ubuntu-26.04
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
 

@@ -3,7 +3,7 @@ name: Run test_n_derivs
 on: [pull_request]
 jobs:
   test_n_derivs:
-    runs-on: ubuntu-26.04
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
 
