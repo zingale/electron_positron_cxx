@@ -99,8 +99,10 @@ namespace bounds {
         const auto *const ip2 = std::upper_bound(Ts.cbegin(), Ts.cend(), temp0);
         int it{-1};
         if (ip2 != Ts.cend()) {
+            // Temperature bounds use it and it+1 only, so both edge
+            // intervals are valid (unlike the wider density stencil).
             it = std::clamp(static_cast<int>(std::distance(Ts.cbegin(), ip2)) - 1,
-                               1, static_cast<int>(Ts.size())-3);
+                               0, static_cast<int>(Ts.size())-2);
         }
 
         if (it < 0 || ir < 0) {
