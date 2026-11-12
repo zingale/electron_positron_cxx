@@ -30,7 +30,8 @@ inline auto brent(const std::function<T(T)>& f, T a, T b, T atol=1.e-100_rt) -> 
     T fa = f(a);
     T fb = f(b);
 
-    if (fa * fb > 0.0_rt) {
+    // Compare signs directly so tiny residuals cannot underflow in a product.
+    if ((fa > 0.0_rt && fb > 0.0_rt) || (fa < 0.0_rt && fb < 0.0_rt)) {
         throw std::out_of_range("root is not contained in bounds");
     }
 
@@ -126,7 +127,7 @@ inline auto brent(const std::function<T(T)>& f, T a, T b, T atol=1.e-100_rt) -> 
         }
 
         fb = f(b);
-        if (fb * fc > 0.0_rt) {
+        if ((fb > 0.0_rt && fc > 0.0_rt) || (fb < 0.0_rt && fc < 0.0_rt)) {
             c = a;
             fc = fa;
             e = d = b - a;
