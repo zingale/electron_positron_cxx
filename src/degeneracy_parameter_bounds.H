@@ -102,8 +102,10 @@ namespace bounds {
             // At the upper endpoint, use the final temperature interval.
             it = static_cast<int>(Ts.size()) - 2;
         } else if (ip2 != Ts.cend()) {
+            // Temperature bounds use it and it+1 only, so both edge
+            // intervals are valid (unlike the wider density stencil).
             it = std::clamp(static_cast<int>(std::distance(Ts.cbegin(), ip2)) - 1,
-                               1, static_cast<int>(Ts.size())-3);
+                               0, static_cast<int>(Ts.size())-2);
         }
 
         if (it < 0 || ir < 0) {
