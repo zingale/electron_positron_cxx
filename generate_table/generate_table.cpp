@@ -1,12 +1,13 @@
+#include <cstddef>
 #include <format>
 #include <fstream>
-#include <print>
 #include <string>
 #include <vector>
 
+#include "eos_types.H"
 #include "real_type.H"
-#include "electron_positron.H"
 #include "helmholtz.H"
+#include "mp_math.H"
 #include "util.H"
 
 #include "progressbar.hpp"
@@ -16,8 +17,8 @@
 
 //#define USE_FAST_MATH 1
 
-constexpr int rho_pts{301};  // density
-constexpr int T_pts{101};  // temperature
+constexpr std::size_t rho_pts{301};  // density
+constexpr std::size_t T_pts{101};  // temperature
 
 #ifdef USE_FAST_MATH
 
@@ -84,22 +85,22 @@ auto main() -> int
     progressbar bar(T_pts * rho_pts);
 
     #pragma omp parallel for schedule(static, 1)
-    for (int j = 0; j < T_pts; ++j) {
+    for (std::size_t j = 0; j < T_pts; ++j) {
 #ifdef USE_FAST_MATH
-        real_t T = mp::fastpow2(T_lo + static_cast<real_t>(j) * dlogT);
+        const real_t T = mp::fastpow2(T_lo + static_cast<real_t>(j) * dlogT);
 #else
-        real_t T = std::pow(10.0_rt, T_lo + static_cast<real_t>(j) * dlogT);
+        const real_t T = mp::pow(10.0_rt, T_lo + static_cast<real_t>(j) * dlogT);
 #endif
-        for (int i = 0; i < rho_pts; ++i) {
+        for (std::size_t i = 0; i < rho_pts; ++i) {
 #ifdef USE_FAST_MATH
-            real_t rho = mp::fastpow2(rho_lo + static_cast<real_t>(i) * dlogrho);
+            const real_t rho = mp::fastpow2(rho_lo + static_cast<real_t>(i) * dlogrho);
 #else
-            real_t rho = std::pow(10.0_rt, rho_lo + static_cast<real_t>(i) * dlogrho);
+            const real_t rho = mp::pow(10.0_rt, rho_lo + static_cast<real_t>(i) * dlogrho);
 #endif
 
             // in the table, density varies fastest
 
-            int index = j * rho_pts + i;
+            const std::size_t index = j * rho_pts + i;
 
             //util::println("rho = {}, T = {}", rho, T);
 

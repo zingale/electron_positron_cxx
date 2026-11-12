@@ -72,8 +72,8 @@ inline auto get_eta(T rhoYe, T temp) -> T
     try {
         eta = brent<T>([=] (T _eta) -> T
             {
-                auto n_e = n_e_constraint(_eta, beta);
-                auto n_pos = n_p_constraint(_eta, beta);
+                const auto n_e = n_e_constraint(_eta, beta);
+                const auto n_pos = n_p_constraint(_eta, beta);
                 return n_e_net - (n_e - n_pos);
             }, eta_min, eta_max);
     } catch (const std::out_of_range& e) {
@@ -81,8 +81,8 @@ inline auto get_eta(T rhoYe, T temp) -> T
         try {
             eta = brent<T>([=] (T _eta) -> T
                 {
-                    auto n_e = n_e_constraint(_eta, beta);
-                    auto n_pos = n_p_constraint(_eta, beta);
+                    const auto n_e = n_e_constraint(_eta, beta);
+                    const auto n_pos = n_p_constraint(_eta, beta);
                     return n_e_net - (n_e - n_pos);
                 }, -100.0_rt, 3.e9_rt);
         } catch (...) {
@@ -440,7 +440,7 @@ public:
         // get the degeneracy parameter for these thermodynamic
         // conditions
 
-        auto eta = get_eta(rho * Ye, temp);
+        const auto eta = get_eta(rho * Ye, temp);
 
         es.eta = eta;
         es.beta = beta;
@@ -498,7 +498,7 @@ public:
 
         // now get the derivatives of η with respect to ρ and T
 
-        auto deta = get_eta_thermo_derivs<T, deriv_level>(Ye, dn_e, dn_pos);
+        const auto deta = get_eta_thermo_derivs<T, deriv_level>(Ye, dn_e, dn_pos);
 
         // store the derivatives
 
@@ -521,7 +521,7 @@ public:
         // now we can compute the derivatives of all the thermodynamic
         // quantities
 
-        auto dne_thermo = chain_rule<T, deriv_level>(dn_e, deta);
+        const auto dne_thermo = chain_rule<T, deriv_level>(dn_e, deta);
         es.dne_drho = dne_thermo.drho;
         es.dne_dT = dne_thermo.dT;
         if constexpr (deriv_level >= 2) {
@@ -536,7 +536,7 @@ public:
             es.d3ne_dT3 = dne_thermo.dT3;
         }
 
-        auto dnp_thermo = chain_rule<T, deriv_level>(dn_pos, deta);
+        const auto dnp_thermo = chain_rule<T, deriv_level>(dn_pos, deta);
         es.dnp_drho = dnp_thermo.drho;
         es.dnp_dT = dnp_thermo.dT;
         if constexpr (deriv_level >= 2) {
@@ -560,7 +560,7 @@ public:
             get_eta_beta_derivs<T, deriv_level>(pcoeff, 0.5_rt, 5.0_rt,
                                                 beta, f32, f52, f32_pos, f52_pos);
 
-        auto dpe_thermo = chain_rule<T, deriv_level>(dp_e, deta);
+        const auto dpe_thermo = chain_rule<T, deriv_level>(dp_e, deta);
         es.dpe_drho = dpe_thermo.drho;
         es.dpe_dT = dpe_thermo.dT;
         if constexpr (deriv_level >= 2) {
@@ -575,7 +575,7 @@ public:
             es.d3pe_dT3 = dpe_thermo.dT3;
         }
 
-        auto dpp_thermo = chain_rule<T, deriv_level>(dp_pos, deta);
+        const auto dpp_thermo = chain_rule<T, deriv_level>(dp_pos, deta);
         es.dpp_drho = dpp_thermo.drho;
         es.dpp_dT = dpp_thermo.dT;
         if constexpr (deriv_level >= 2) {
@@ -599,7 +599,7 @@ public:
             get_eta_beta_derivs<T, deriv_level>(ecoeff, 1.0_rt, 5.0_rt,
                                                 beta, f32, f52, f32_pos, f52_pos);
 
-        auto dEe_thermo = chain_rule<T, deriv_level>(dE_e, deta);
+        const auto dEe_thermo = chain_rule<T, deriv_level>(dE_e, deta);
         auto dEp_thermo = chain_rule<T, deriv_level>(dE_pos, deta);
 
         // add in rest mass term for positrons

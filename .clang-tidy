@@ -25,6 +25,8 @@ Checks: >
        -readability-identifier-length,
        -readability-magic-numbers,
        -readability-math-missing-parentheses,
+       -readability-trailing-comma,
+       -readability-use-concise-preprocessor-directives,
 
 HeaderFileExtensions: ["H"]
 
