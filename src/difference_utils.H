@@ -29,7 +29,7 @@ namespace fd {
 
         std::vector<T> fvals;
 
-        for (auto i : {-2, -1, 0, 1, 2}) {
+        for (const auto i : {-2, -1, 0, 1, 2}) {
             if (i == 0) {
                 fvals.push_back(0.0_rt);
                 continue;
@@ -56,7 +56,7 @@ namespace fd {
 
         std::vector<T> fvals;
 
-        for (auto i : {-3, -2, -1, 0, 1, 2, 3}) {
+        for (const auto i : {-3, -2, -1, 0, 1, 2, 3}) {
             if (i == 0) {
                 fvals.push_back(0.0_rt);
                 continue;
@@ -84,7 +84,7 @@ namespace fd {
 
         std::vector<T> fvals;
 
-        for (auto i : {-4, -3, -2, -1, 0, 1, 2, 3, 4}) {
+        for (const auto i : {-4, -3, -2, -1, 0, 1, 2, 3, 4}) {
             if (i == 0) {
                 fvals.push_back(0.0_rt);
                 continue;

@@ -529,16 +529,16 @@ private:
         BreakPoints<T> bp(eta_der);
         auto [S_1, S_2, S_3] = bp.get_points(eta);
 
-        auto I0 = compute_legendre(0, 0.0_rt, mp::sqrt(S_1),
-                                   eta_der, beta_der);
+        const auto I0 = compute_legendre(0, 0.0_rt, mp::sqrt(S_1),
+                                         eta_der, beta_der);
 
-        auto I1 = compute_legendre(1, S_1, S_2,
-                                   eta_der, beta_der);
+        const auto I1 = compute_legendre(1, S_1, S_2,
+                                         eta_der, beta_der);
 
-        auto I2 = compute_legendre(1, S_2, S_3,
-                                   eta_der, beta_der);
+        const auto I2 = compute_legendre(1, S_2, S_3,
+                                         eta_der, beta_der);
 
-        auto I3 = compute_laguerre(S_3, eta_der, beta_der);
+        const auto I3 = compute_laguerre(S_3, eta_der, beta_der);
 
         return I0 + I1 + I2 + I3;
     }

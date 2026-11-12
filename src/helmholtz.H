@@ -18,7 +18,7 @@ inline auto get_helmholtz_terms(T rho, T temp, T Ye)
 
     // get the thermodynamics for this state
     ElectronPositronEOS<T> eos;
-    auto state = eos.pe_state(rho, temp, Ye);
+    const auto state = eos.pe_state(rho, temp, Ye);
 
     // fill in the derivatives we know
     helm.F = state.e - temp * state.s;
