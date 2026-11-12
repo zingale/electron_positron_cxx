@@ -521,21 +521,6 @@ public:
         // now we can compute the derivatives of all the thermodynamic
         // quantities
 
-        auto dne_thermo = chain_rule<T, deriv_level>(dn_e, deta);
-        es.dne_drho = dne_thermo.drho;
-        es.dne_dT = dne_thermo.dT;
-        if constexpr (deriv_level >= 2) {
-            es.d2ne_drho2 = dne_thermo.drho2;
-            es.d2ne_drhodT = dne_thermo.drhodT;
-            es.d2ne_dT2 = dne_thermo.dT2;
-        }
-        if constexpr (deriv_level == 3) {
-            es.d3ne_drho3 = dne_thermo.drho3;
-            es.d3ne_drho2dT = dne_thermo.drho2dT;
-            es.d3ne_drhodT2 = dne_thermo.drhodT2;
-            es.d3ne_dT3 = dne_thermo.dT3;
-        }
-
         auto dnp_thermo = chain_rule<T, deriv_level>(dn_pos, deta);
         es.dnp_drho = dnp_thermo.drho;
         es.dnp_dT = dnp_thermo.dT;
@@ -549,6 +534,26 @@ public:
             es.d3np_drho2dT = dnp_thermo.drho2dT;
             es.d3np_drhodT2 = dnp_thermo.drhodT2;
             es.d3np_dT3 = dnp_thermo.dT3;
+        }
+
+        // Charge neutrality gives n_e = rho * Ye * N_A + n_pos.  At fixed
+        // Ye, the linear density term contributes only to the first rho
+        // derivative; every other electron derivative equals the positron
+        // derivative.  Use this identity instead of applying the chain rule
+        // to n_e: when positrons are scarce, large electron terms cancel to
+        // give a tiny derivative, which can be overwhelmed by roundoff.
+        es.dne_drho = Ye * C::N_A + es.dnp_drho;
+        es.dne_dT = es.dnp_dT;
+        if constexpr (deriv_level >= 2) {
+            es.d2ne_drho2 = es.d2np_drho2;
+            es.d2ne_drhodT = es.d2np_drhodT;
+            es.d2ne_dT2 = es.d2np_dT2;
+        }
+        if constexpr (deriv_level == 3) {
+            es.d3ne_drho3 = es.d3np_drho3;
+            es.d3ne_drho2dT = es.d3np_drho2dT;
+            es.d3ne_drhodT2 = es.d3np_drhodT2;
+            es.d3ne_dT3 = es.d3np_dT3;
         }
 
         // Compute partials of pressure with density and temperature
@@ -809,18 +814,21 @@ public:
         // now fill the total values of each of the thermodynamic quantities
 
         es.n = es.n_e + es.n_pos;
-        es.dn_drho = es.dne_drho + es.dnp_drho;
-        es.dn_dT = es.dne_dT + es.dnp_dT;
+        // Likewise n = rho * Ye * N_A + 2 * n_pos.  Form its derivatives
+        // directly so tiny pair contributions survive in electron-dominated
+        // states, including all mixed derivatives of the total density.
+        es.dn_drho = Ye * C::N_A + 2.0_rt * es.dnp_drho;
+        es.dn_dT = 2.0_rt * es.dnp_dT;
         if constexpr (deriv_level >= 2) {
-            es.d2n_drho2 = es.d2ne_drho2 + es.d2np_drho2;
-            es.d2n_drhodT = es.d2ne_drhodT + es.d2np_drhodT;
-            es.d2n_dT2 = es.d2ne_dT2 + es.d2np_dT2;
+            es.d2n_drho2 = 2.0_rt * es.d2np_drho2;
+            es.d2n_drhodT = 2.0_rt * es.d2np_drhodT;
+            es.d2n_dT2 = 2.0_rt * es.d2np_dT2;
         }
         if constexpr (deriv_level == 3) {
-            es.d3n_drho3 = es.d3ne_drho3 + es.d3np_drho3;
-            es.d3n_drho2dT = es.d3ne_drho2dT + es.d3np_drho2dT;
-            es.d3n_drhodT2 = es.d3ne_drhodT2 + es.d3np_drhodT2;
-            es.d3n_dT3 = es.d3ne_dT3 + es.d3np_dT3;
+            es.d3n_drho3 = 2.0_rt * es.d3np_drho3;
+            es.d3n_drho2dT = 2.0_rt * es.d3np_drho2dT;
+            es.d3n_drhodT2 = 2.0_rt * es.d3np_drhodT2;
+            es.d3n_dT3 = 2.0_rt * es.d3np_dT3;
         }
 
         es.p = es.p_e + es.p_pos;
