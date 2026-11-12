@@ -55,3 +55,7 @@ The following tests exercise different parts of the EOS algorithm:
 * `test_precision.cpp` : print out the details of the floating point
   representation and test the printing tools in `util.H`.
 
+* `test_math_precision.cpp` : verify literal conversion and `mp::` math
+  functions against reference values using the selected type's machine
+  epsilon.  Run with each `PRECISION` setting to detect narrowing.
+

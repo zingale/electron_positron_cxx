@@ -199,7 +199,7 @@ inline auto get_eta_beta_derivs(const T A, const T c, const T p, const T beta,
 
         // ∂³q/∂η²∂β
         dq.deta2dbeta = 0.5_rt * A * betap2 * betai * (p * (fx.d2F_deta2 + c * beta * fy.d2F_deta2) +
-                                                       2.0 * beta * (fx.d3F_deta2dbeta + c * beta * fy.d3F_deta2dbeta + c * fy.d2F_deta2));
+                                                       2.0_rt * beta * (fx.d3F_deta2dbeta + c * beta * fy.d3F_deta2dbeta + c * fy.d2F_deta2));
 
         // ∂³q/∂η∂β²
         dq.detadbeta2 = 0.25_rt * A * betap2 / beta2 *
@@ -225,12 +225,12 @@ inline auto get_eta_beta_derivs(const T A, const T c, const T p, const T beta,
              4.0_rt * fx_pos.d3F_deta3);
 
         // ∂³w/∂η∂β²
-        dw.detadbeta2 = 0.25 * A * betap2 / beta4 *
+        dw.detadbeta2 = 0.25_rt * A * betap2 / beta4 *
             (-c * p * p * beta3 * fy_pos.dF_deta - 4.0_rt * c * p * beta4 * fy_pos.d2F_detadbeta +
              -2.0_rt * c * p * beta3 * fy_pos.dF_deta - 8.0_rt * c * p * beta2 * fy_pos.d2F_deta2 +
-             -4.0_rt * c * beta4 * (beta * fy_pos.d3F_detadbeta2 + 2.0 * fy_pos.d2F_detadbeta) +
+             -4.0_rt * c * beta4 * (beta * fy_pos.d3F_detadbeta2 + 2.0_rt * fy_pos.d2F_detadbeta) +
              -16.0_rt * c * beta * (beta2 * fy_pos.d3F_deta2dbeta + fy_pos.d3F_deta3) +
-             -p * p * beta2 * fx_pos.dF_deta - 4.0 * p * beta3 * fx_pos.d2F_detadbeta +
+             -p * p * beta2 * fx_pos.dF_deta - 4.0_rt * p * beta3 * fx_pos.d2F_detadbeta +
              2.0_rt * p * beta2 * fx_pos.dF_deta - 8.0_rt * p * beta * fx_pos.d2F_deta2 - 4.0_rt * beta4 * fx_pos.d3F_detadbeta2
              -16.0_rt * (beta2 * fx_pos.d3F_deta2dbeta - beta * fx_pos.d2F_deta2 + fx_pos.d3F_deta3));
 
@@ -677,7 +677,7 @@ public:
             d3he_drho3 = es.d3ee_drho3 + rho_inv * (es.d3pe_drho3 + 3.0_rt * rho_inv *
                                                     (-es.d2pe_drho2 + 2.0_rt * rho_inv *
                                                      (es.dpe_drho - rho_inv * es.p_e)));
-            d3he_drho2dT = es.d3ee_drho2dT + rho_inv * (es.d3pe_drho2dT + 2.0 * rho_inv *
+            d3he_drho2dT = es.d3ee_drho2dT + rho_inv * (es.d3pe_drho2dT + 2.0_rt * rho_inv *
                                                         (-es.d2pe_drhodT + rho_inv * es.dpe_dT));
             d3he_drhodT2 = es.d3ee_drhodT2 + rho_inv * (es.d3pe_drhodT2 - rho_inv * es.d2pe_dT2);
             d3he_dT3 = es.d3ee_dT3 + rho_inv * es.d3pe_dT3;
@@ -702,7 +702,7 @@ public:
             d3hp_drho3 = es.d3ep_drho3 + rho_inv * (es.d3pp_drho3 + 3.0_rt * rho_inv *
                                                     (-es.d2pp_drho2 + 2.0_rt * rho_inv *
                                                      (es.dpp_drho - rho_inv * es.p_pos)));
-            d3hp_drho2dT = es.d3ep_drho2dT + rho_inv * (es.d3pp_drho2dT + 2.0 * rho_inv *
+            d3hp_drho2dT = es.d3ep_drho2dT + rho_inv * (es.d3pp_drho2dT + 2.0_rt * rho_inv *
                                                         (-es.d2pp_drhodT + rho_inv * es.dpp_dT));
             d3hp_drhodT2 = es.d3ep_drhodT2 + rho_inv * (es.d3pp_drhodT2 - rho_inv * es.d2pp_dT2);
             d3hp_dT3 = es.d3ep_dT3 + rho_inv * es.d3pp_dT3;

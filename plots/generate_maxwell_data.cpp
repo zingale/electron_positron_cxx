@@ -22,7 +22,7 @@ auto main() -> int
 
     const real_t Ye{0.5_rt};
 
-    const std::vector<real_t> Ts{1.e4, 1.e5, 1.e6, 1.e7, 1.e8, 1.e9, 1.e10, 1.e11};
+    const std::vector<real_t> Ts{1.e4_rt, 1.e5_rt, 1.e6_rt, 1.e7_rt, 1.e8_rt, 1.e9_rt, 1.e10_rt, 1.e11_rt};
 
     const real_t rho_min = 1.e-4_rt;
     const real_t rho_max = 1.e10_rt;
@@ -30,7 +30,7 @@ auto main() -> int
 
     const real_t dlogrho = (mp::log10(rho_max) - mp::log10(rho_min)) / static_cast<real_t>(npts-1);
 
-    std::vector<real_t> rhos(npts, 0.0);
+    std::vector<real_t> rhos(npts, 0.0_rt);
 
     for (int i = 0; i < npts; ++i) {
         rhos[i] = mp::pow(10.0_rt, mp::log10(rho_min) + i * dlogrho);

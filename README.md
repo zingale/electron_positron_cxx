@@ -61,6 +61,12 @@ EOS is templated on a `real_t` type, which enables any real data type
 to be used.  The precision can be changed via the `PRECISION`, as
 described below.
 
+Use `mp::` math functions and `_rt` numeric literals in EOS calculations.
+For 128- and 256-bit builds, floating-point `_rt` literals are parsed directly
+in `real_t` precision and cached on first use; they are not constant
+expressions.  `str_to_real_t()` also converts decimal input directly to the
+selected precision.
+
 ### 256-bit floating point
 
 256-bit is enabled via the Boost library, `boost::multiprecision`.

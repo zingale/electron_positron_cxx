@@ -22,8 +22,8 @@ constexpr int T_pts{101};  // temperature
 const real_t rho_lo{mp::fastlg2(str_to_real_t("1.e-10"))};
 const real_t rho_hi{mp::fastlg2(str_to_real_t("1.e11"))};
 
-const real_t T_lo{mp::fastlg2(str_to_real_t("1.e3_rt"))};
-const real_t T_hi{mp::fastlg2(str_to_real_t("1.e11_rt"))};
+const real_t T_lo{mp::fastlg2(1.e3_rt)};
+const real_t T_hi{mp::fastlg2(1.e11_rt)};
 
 #else
 
@@ -84,13 +84,13 @@ auto main() -> int
 #ifdef USE_FAST_MATH
         real_t T = mp::fastpow2(T_lo + static_cast<real_t>(j) * dlogT);
 #else
-        real_t T = std::pow(10.0_rt, T_lo + static_cast<real_t>(j) * dlogT);
+        real_t T = mp::pow(10.0_rt, T_lo + static_cast<real_t>(j) * dlogT);
 #endif
         for (int i = 0; i < rho_pts; ++i) {
 #ifdef USE_FAST_MATH
             real_t rho = mp::fastpow2(rho_lo + static_cast<real_t>(i) * dlogrho);
 #else
-            real_t rho = std::pow(10.0_rt, rho_lo + static_cast<real_t>(i) * dlogrho);
+            real_t rho = mp::pow(10.0_rt, rho_lo + static_cast<real_t>(i) * dlogrho);
 #endif
 
             // in the table, density varies fastest

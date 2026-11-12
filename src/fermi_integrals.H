@@ -351,7 +351,7 @@ private:
         } else if (eta_der == 0 && beta_der == 3) {
             // this is IB = 9 from Gong et al.
             // this corresponds to eq A.9 in terms of x**2
-            result  = (3.0_rt / 32.0_rt) * mp::pow(x, 2.0 * k + 7.0_rt) *
+            result  = (3.0_rt / 32.0_rt) * mp::pow(x, 2.0_rt * k + 7.0_rt) *
                 denomi / mp::pow(sqrt_term, 5);
         }
 
