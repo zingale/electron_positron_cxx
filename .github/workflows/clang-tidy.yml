@@ -3,7 +3,7 @@ name: Run clang-tidy
 on: [pull_request]
 jobs:
   clang-tidy:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.06
     steps:
       - uses: actions/checkout@v7
 

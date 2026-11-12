@@ -3,7 +3,7 @@ name: Run test Fermi
 on: [pull_request]
 jobs:
   test_fermi:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.06
     steps:
       - uses: actions/checkout@v7
 

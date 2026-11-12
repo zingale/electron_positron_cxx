@@ -3,7 +3,7 @@ name: Test compilation
 on: [pull_request]
 jobs:
   compilation:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.06
     steps:
       - uses: actions/checkout@v7
 
