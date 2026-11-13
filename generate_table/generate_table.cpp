@@ -17,8 +17,8 @@
 
 //#define USE_FAST_MATH 1
 
-constexpr std::size_t rho_pts{301};  // density
-constexpr std::size_t T_pts{101};  // temperature
+constexpr std::size_t rho_pts{3001};  // density
+constexpr std::size_t T_pts{1001};  // temperature
 
 #ifdef USE_FAST_MATH
 
