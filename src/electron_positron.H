@@ -199,7 +199,7 @@ inline auto get_eta_beta_derivs(const T A, const T c, const T p, const T beta,
 
         // ∂³q/∂η²∂β
         dq.deta2dbeta = 0.5_rt * A * betap2 * betai * (p * (fx.d2F_deta2 + c * beta * fy.d2F_deta2) +
-                                                       2.0 * beta * (fx.d3F_deta2dbeta + c * beta * fy.d3F_deta2dbeta + c * fy.d2F_deta2));
+                                                       2.0_rt * beta * (fx.d3F_deta2dbeta + c * beta * fy.d3F_deta2dbeta + c * fy.d2F_deta2));
 
         // ∂³q/∂η∂β²
         dq.detadbeta2 = 0.25_rt * A * betap2 / beta2 *
@@ -225,12 +225,12 @@ inline auto get_eta_beta_derivs(const T A, const T c, const T p, const T beta,
              4.0_rt * fx_pos.d3F_deta3);
 
         // ∂³w/∂η∂β²
-        dw.detadbeta2 = 0.25 * A * betap2 / beta4 *
+        dw.detadbeta2 = 0.25_rt * A * betap2 / beta4 *
             (-c * p * p * beta3 * fy_pos.dF_deta - 4.0_rt * c * p * beta4 * fy_pos.d2F_detadbeta +
              -2.0_rt * c * p * beta3 * fy_pos.dF_deta - 8.0_rt * c * p * beta2 * fy_pos.d2F_deta2 +
-             -4.0_rt * c * beta4 * (beta * fy_pos.d3F_detadbeta2 + 2.0 * fy_pos.d2F_detadbeta) +
+             -4.0_rt * c * beta4 * (beta * fy_pos.d3F_detadbeta2 + 2.0_rt * fy_pos.d2F_detadbeta) +
              -16.0_rt * c * beta * (beta2 * fy_pos.d3F_deta2dbeta + fy_pos.d3F_deta3) +
-             -p * p * beta2 * fx_pos.dF_deta - 4.0 * p * beta3 * fx_pos.d2F_detadbeta +
+             -p * p * beta2 * fx_pos.dF_deta - 4.0_rt * p * beta3 * fx_pos.d2F_detadbeta +
              2.0_rt * p * beta2 * fx_pos.dF_deta - 8.0_rt * p * beta * fx_pos.d2F_deta2 - 4.0_rt * beta4 * fx_pos.d3F_detadbeta2
              -16.0_rt * (beta2 * fx_pos.d3F_deta2dbeta - beta * fx_pos.d2F_deta2 + fx_pos.d3F_deta3));
 
@@ -521,21 +521,6 @@ public:
         // now we can compute the derivatives of all the thermodynamic
         // quantities
 
-        const auto dne_thermo = chain_rule<T, deriv_level>(dn_e, deta);
-        es.dne_drho = dne_thermo.drho;
-        es.dne_dT = dne_thermo.dT;
-        if constexpr (deriv_level >= 2) {
-            es.d2ne_drho2 = dne_thermo.drho2;
-            es.d2ne_drhodT = dne_thermo.drhodT;
-            es.d2ne_dT2 = dne_thermo.dT2;
-        }
-        if constexpr (deriv_level == 3) {
-            es.d3ne_drho3 = dne_thermo.drho3;
-            es.d3ne_drho2dT = dne_thermo.drho2dT;
-            es.d3ne_drhodT2 = dne_thermo.drhodT2;
-            es.d3ne_dT3 = dne_thermo.dT3;
-        }
-
         const auto dnp_thermo = chain_rule<T, deriv_level>(dn_pos, deta);
         es.dnp_drho = dnp_thermo.drho;
         es.dnp_dT = dnp_thermo.dT;
@@ -549,6 +534,26 @@ public:
             es.d3np_drho2dT = dnp_thermo.drho2dT;
             es.d3np_drhodT2 = dnp_thermo.drhodT2;
             es.d3np_dT3 = dnp_thermo.dT3;
+        }
+
+        // Charge neutrality gives n_e = rho * Ye * N_A + n_pos.  At fixed
+        // Ye, the linear density term contributes only to the first rho
+        // derivative; every other electron derivative equals the positron
+        // derivative.  Use this identity instead of applying the chain rule
+        // to n_e: when positrons are scarce, large electron terms cancel to
+        // give a tiny derivative, which can be overwhelmed by roundoff.
+        es.dne_drho = Ye * C::N_A + es.dnp_drho;
+        es.dne_dT = es.dnp_dT;
+        if constexpr (deriv_level >= 2) {
+            es.d2ne_drho2 = es.d2np_drho2;
+            es.d2ne_drhodT = es.d2np_drhodT;
+            es.d2ne_dT2 = es.d2np_dT2;
+        }
+        if constexpr (deriv_level == 3) {
+            es.d3ne_drho3 = es.d3np_drho3;
+            es.d3ne_drho2dT = es.d3np_drho2dT;
+            es.d3ne_drhodT2 = es.d3np_drhodT2;
+            es.d3ne_dT3 = es.d3np_dT3;
         }
 
         // Compute partials of pressure with density and temperature
@@ -677,7 +682,7 @@ public:
             d3he_drho3 = es.d3ee_drho3 + rho_inv * (es.d3pe_drho3 + 3.0_rt * rho_inv *
                                                     (-es.d2pe_drho2 + 2.0_rt * rho_inv *
                                                      (es.dpe_drho - rho_inv * es.p_e)));
-            d3he_drho2dT = es.d3ee_drho2dT + rho_inv * (es.d3pe_drho2dT + 2.0 * rho_inv *
+            d3he_drho2dT = es.d3ee_drho2dT + rho_inv * (es.d3pe_drho2dT + 2.0_rt * rho_inv *
                                                         (-es.d2pe_drhodT + rho_inv * es.dpe_dT));
             d3he_drhodT2 = es.d3ee_drhodT2 + rho_inv * (es.d3pe_drhodT2 - rho_inv * es.d2pe_dT2);
             d3he_dT3 = es.d3ee_dT3 + rho_inv * es.d3pe_dT3;
@@ -702,7 +707,7 @@ public:
             d3hp_drho3 = es.d3ep_drho3 + rho_inv * (es.d3pp_drho3 + 3.0_rt * rho_inv *
                                                     (-es.d2pp_drho2 + 2.0_rt * rho_inv *
                                                      (es.dpp_drho - rho_inv * es.p_pos)));
-            d3hp_drho2dT = es.d3ep_drho2dT + rho_inv * (es.d3pp_drho2dT + 2.0 * rho_inv *
+            d3hp_drho2dT = es.d3ep_drho2dT + rho_inv * (es.d3pp_drho2dT + 2.0_rt * rho_inv *
                                                         (-es.d2pp_drhodT + rho_inv * es.dpp_dT));
             d3hp_drhodT2 = es.d3ep_drhodT2 + rho_inv * (es.d3pp_drhodT2 - rho_inv * es.d2pp_dT2);
             d3hp_dT3 = es.d3ep_dT3 + rho_inv * es.d3pp_dT3;
@@ -809,18 +814,21 @@ public:
         // now fill the total values of each of the thermodynamic quantities
 
         es.n = es.n_e + es.n_pos;
-        es.dn_drho = es.dne_drho + es.dnp_drho;
-        es.dn_dT = es.dne_dT + es.dnp_dT;
+        // Likewise n = rho * Ye * N_A + 2 * n_pos.  Form its derivatives
+        // directly so tiny pair contributions survive in electron-dominated
+        // states, including all mixed derivatives of the total density.
+        es.dn_drho = Ye * C::N_A + 2.0_rt * es.dnp_drho;
+        es.dn_dT = 2.0_rt * es.dnp_dT;
         if constexpr (deriv_level >= 2) {
-            es.d2n_drho2 = es.d2ne_drho2 + es.d2np_drho2;
-            es.d2n_drhodT = es.d2ne_drhodT + es.d2np_drhodT;
-            es.d2n_dT2 = es.d2ne_dT2 + es.d2np_dT2;
+            es.d2n_drho2 = 2.0_rt * es.d2np_drho2;
+            es.d2n_drhodT = 2.0_rt * es.d2np_drhodT;
+            es.d2n_dT2 = 2.0_rt * es.d2np_dT2;
         }
         if constexpr (deriv_level == 3) {
-            es.d3n_drho3 = es.d3ne_drho3 + es.d3np_drho3;
-            es.d3n_drho2dT = es.d3ne_drho2dT + es.d3np_drho2dT;
-            es.d3n_drhodT2 = es.d3ne_drhodT2 + es.d3np_drhodT2;
-            es.d3n_dT3 = es.d3ne_dT3 + es.d3np_dT3;
+            es.d3n_drho3 = 2.0_rt * es.d3np_drho3;
+            es.d3n_drho2dT = 2.0_rt * es.d3np_drho2dT;
+            es.d3n_drhodT2 = 2.0_rt * es.d3np_drhodT2;
+            es.d3n_dT3 = 2.0_rt * es.d3np_dT3;
         }
 
         es.p = es.p_e + es.p_pos;

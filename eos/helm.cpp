@@ -1,6 +1,7 @@
 #include <cassert>
 #include <iostream>
 #include <print>
+#include <string>
 
 #include "real_type.H"
 #include "helmholtz.H"
@@ -10,17 +11,17 @@ auto main() -> int
 {
 
     std::println("Enter rho, T, Ye (space-separated): ");
-    double rho_{};
-    double T_{};
-    double Ye_{};
+    std::string rho_;
+    std::string T_;
+    std::string Ye_;
 
     std::cin >> rho_ >> T_ >> Ye_;
 
-    assert (rho_ != 0.0 && T_ != 0.0 && Ye_ != 0.0);
+    const real_t rho = str_to_real_t(rho_.c_str());
+    const real_t T = str_to_real_t(T_.c_str());
+    const real_t Ye = str_to_real_t(Ye_.c_str());
 
-    auto rho = static_cast<real_t>(rho_);
-    auto T = static_cast<real_t>(T_);
-    auto Ye = static_cast<real_t>(Ye_);
+    assert (rho != 0.0_rt && T != 0.0_rt && Ye != 0.0_rt);
 
     auto [helm, eos] = get_helmholtz_terms(rho, T, Ye);
 

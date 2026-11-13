@@ -25,8 +25,8 @@ constexpr std::size_t T_pts{101};  // temperature
 const real_t rho_lo{mp::fastlg2(str_to_real_t("1.e-10"))};
 const real_t rho_hi{mp::fastlg2(str_to_real_t("1.e11"))};
 
-const real_t T_lo{mp::fastlg2(str_to_real_t("1.e3_rt"))};
-const real_t T_hi{mp::fastlg2(str_to_real_t("1.e11_rt"))};
+const real_t T_lo{mp::fastlg2(1.e3_rt)};
+const real_t T_hi{mp::fastlg2(1.e11_rt)};
 
 #else
 

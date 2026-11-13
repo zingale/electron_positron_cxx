@@ -29,6 +29,11 @@ The following tests exercise different parts of the EOS algorithm:
   second-derivatives of number density (with respect to ρ and T) by
   comparing to finite-difference approximations.
 
+* `test_number_density_precision.cpp` : check tiny number-density
+  derivatives in an electron-dominated state against reference values,
+  and the mixed third derivative in a state with appreciable pairs
+  against finite differences.  Run with each `PRECISION` setting.
+
 * `test_eos_pressure.cpp` : test the first- and second-derivatives of
   pressure (with respect to ρ and T) by comparing to finite-difference
   approximations.
@@ -54,4 +59,8 @@ The following tests exercise different parts of the EOS algorithm:
 
 * `test_precision.cpp` : print out the details of the floating point
   representation and test the printing tools in `util.H`.
+
+* `test_math_precision.cpp` : verify literal conversion and `mp::` math
+  functions against reference values using the selected type's machine
+  epsilon.  Run with each `PRECISION` setting to detect narrowing.
 
