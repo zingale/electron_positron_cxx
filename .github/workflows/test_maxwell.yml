@@ -3,7 +3,7 @@ name: Run Maxwell tests
 on: [pull_request]
 jobs:
   test_maxwell:
-    runs-on: ubuntu-26.04
+    runs-on: ubuntu-26.06
     steps:
       - uses: actions/checkout@v7
 
