@@ -34,7 +34,7 @@ const std::array<real_t, 61> rhoYes_v{
 auto main() -> int
 {
 
-    const real_t Ye(1.0);
+    const real_t Ye(1.0_rt);
 
     for (auto [ir, rho] : std::views::enumerate(rhoYes_v)) {
         for (auto [it, T] : std::views::enumerate(Ts_v)) {

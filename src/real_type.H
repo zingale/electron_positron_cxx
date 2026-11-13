@@ -18,22 +18,6 @@ using real_t = long double;
 using real_t = double;
 #endif
 
-inline namespace literals {
-
-// literal for floating-point constants
-// one is for 1.0_rt, and the other is for 1_rt
-
-    constexpr auto operator""_rt(long double x) -> real_t
-    {
-        return static_cast<real_t>(x);
-    }
-
-    constexpr auto operator""_rt(unsigned long long x) -> real_t
-    {
-        return static_cast<real_t>(x);
-    }
-}
-
 // std::numbers does not work with __float128
 
 inline auto str_to_real_t(const char* s) -> real_t
@@ -48,6 +32,44 @@ inline auto str_to_real_t(const char* s) -> real_t
     return std::stod(s);
 #endif
 
+}
+
+inline namespace literals {
+
+    // Parse wide floating-point literals directly in the selected precision.
+    // The cooked operator below takes a long double, which would round the
+    // literal before conversion to a 128- or 256-bit real_t.
+#if defined(USE_BOOST256) || defined(USE_FLOAT128)
+    // This numeric literal operator template is standard C++11.  The compiler
+    // passes the original spelling as a character pack: for 1.25_rt, Digits
+    // contains '1', '.', '2', '5'.  No floating-point conversion happens first.
+    template <char... Digits>
+    inline auto operator""_rt() -> real_t
+    {
+        // Turn the character pack into a null-terminated string.  The existing
+        // converter uses strtoflt128 for 128 bits or Boost's string constructor
+        // for 256 bits, so all supplied digits reach the selected backend.
+        static constexpr char text[]{Digits..., '\0'};
+
+        // Each spelling instantiates its own function and cached value, shared
+        // by uses of that spelling.  Function-local static initialization is
+        // thread-safe and parses only on first use, even inside EOS kernels.
+        // Parsing is a runtime operation: 1.25_rt can initialize a const real_t,
+        // but cannot be used in a constexpr initializer in these builds.
+        static const real_t value = str_to_real_t(text);
+        return value;
+    }
+#else
+    constexpr auto operator""_rt(long double x) -> real_t
+    {
+        return static_cast<real_t>(x);
+    }
+#endif
+
+    constexpr auto operator""_rt(unsigned long long x) -> real_t
+    {
+        return static_cast<real_t>(x);
+    }
 }
 
 namespace constants {

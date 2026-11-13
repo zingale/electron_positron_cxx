@@ -28,10 +28,10 @@ jobs:
         run: |
           cd plots
           make clean
-          make PRECISION=DOUBLE FULL_OPTIMIZE=FALSE
+          make FULL_OPTIMIZE=FALSE
 
       - name: check results
         run: |
           cd plots
           ./generate_maxwell_data
-          diff maxwell_p64_npts200.txt ci-benchmarks/maxwell_p64_npts200.txt
+          diff maxwell_p128_npts200.txt ci-benchmarks/maxwell_p128_npts200.txt
