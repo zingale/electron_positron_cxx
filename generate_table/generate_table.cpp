@@ -124,7 +124,7 @@ auto main() -> int
     // there are 4 tables.  First is the free energy table
 
     for (auto & h : helm_v) {
-        of << util::format("{:32.24g}  {:32.24g}  {:32.24g}  {:32.24g}  {:32.24g}  {:32.24g}  {:32.24g}  {:32.24g}  {:32.24g}\n",
+        of << util::format("{:.17g}  {:.17g}  {:.17g}  {:.17g}  {:.17g}  {:.17g}  {:.17g}  {:.17g}  {:.17g}\n",
                            h.F, h.dF_drho, h.dF_dT,
                            h.d2F_drho2, h.d2F_dT2, h.d2F_drhodT,
                            h.d3F_drho2dT, h.d3F_drhodT2, h.d4F_drho2dT2);
@@ -133,21 +133,21 @@ auto main() -> int
     // next is the pressure derivative table
 
     for (auto & e : eos_v) {
-        of << util::format("{:32.24g}  {:32.24g}  {:32.24g}  {:32.24g}\n",
+        of << util::format("{:.17g}  {:.17g}  {:.17g}  {:.17g}\n",
                            e.dp_drho, e.d2p_drho2, e.d2p_drhodT, e.d3p_drho2dT);
     }
 
     // next is degeneracy parameter
 
     for (auto & e : eos_v) {
-        of << util::format("{:32.24g}  {:32.24g}  {:32.24g}  {:32.24g}\n",
+        of << util::format("{:.17g}  {:.17g}  {:.17g}  {:.17g}\n",
                            e.eta, e.deta_drho, e.deta_dT, e.d2eta_drhodT);
     }
 
     // finally number density
 
     for (auto & e : eos_v) {
-        of << util::format("{:32.24g}  {:32.24g}  {:32.24g}  {:32.24g}\n",
+        of << util::format("{:.17g}  {:.17g}  {:.17g}  {:.17g}\n",
                            e.n, e.dn_drho, e.dn_dT, e.d2n_drhodT);
     }
 
